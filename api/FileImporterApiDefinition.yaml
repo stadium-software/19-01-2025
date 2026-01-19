@@ -1,0 +1,2962 @@
+openapi: 3.0.1
+info:
+  title: FileImporterApi
+  version: 0.0.1
+servers:
+  - url: http://localhost:10002
+paths:
+  /configurations:
+    get:
+      tags:
+        - Configuration
+      operationId: ConfigurationsGet
+      summary: Get all configurations
+      responses:
+        '200':
+          description: A list of all configurations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ReportBatchId: 
+                    type: integer
+                  ReportDate: 
+                    type: string 
+                  ReportMonth: 
+                    type: string
+                  ReportYear: 
+                    type: integer
+                  ReportBatchWorkflowInstanceId: 
+                    type: string
+                  ReportBatchWorkflowInstanceCurrentActivity: 
+                    type: string
+                  ReportDates: 
+                    type: array 
+                    items: 
+                      type: object
+                      properties:
+                        Id: 
+                          type: integer
+                        ReportDate: 
+                          type: string
+                        WorkflowInstanceId: 
+                          type: string
+                  Classifications:
+                    $ref: '#/components/schemas/Classifications'
+                  CreditRating: 
+                    $ref: '#/components/schemas/CreditRating'
+                  PortfoliosWithECICExternalCode: 
+                    type: array 
+                    items: 
+                      $ref: '#/components/schemas/PortfolioWithECICExternalCode'
+                  InstrumentsStartingWithFIXEDDEPOSIT: 
+                    type: array 
+                    items: 
+                      $ref: '#/components/schemas/InstrumentStartingWithFIXEDDEPOSIT'
+                        
+        '500':
+         description: Internal Server Error
+         content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/Message'
+              
+           
+  /portfolio-files:
+    get:
+      tags:
+        - Portfolio File
+      operationId: PortfolioFilesGet
+      summary: Get a list of all portfolios
+      description: Retrieve all portfolios based on the report month and year.
+      parameters:
+        - name: ReportMonth
+          in: query
+          description: Month of the Report Batch
+          required: true
+          schema:
+            type: string
+            example: 'March'
+        - name: ReportYear
+          in: query
+          description: Year of the Report Batch
+          required: true
+          schema:
+            type: integer
+            example: 2024
+            minimum: 1000
+            maximum: 9999
+      responses:
+        '200':
+          description: A list of all portfolios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Portfolios:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Portfolio'
+  
+  /portfolio-file:
+    get:
+      tags:
+        - Portfolio File
+      operationId: PortfolioFileGet
+      summary: Get file details by FileType and PortfolioId
+      description: Retrieve details of files based on FileType and PortfolioId.
+      parameters:
+        - name: ReportMonth
+          in: query
+          description: Month of the Report Batch
+          required: true
+          schema:
+            type: string
+            example: 'March'
+        - name: ReportYear
+          in: query
+          description: Year of the Report Batch
+          required: true
+          schema:
+            type: integer
+            example: 2024
+            minimum: 1000
+            maximum: 9999
+        - name: PortfolioId
+          in: query
+          description: PortfolioId of the requested file
+          required: true
+          schema:
+            type: integer
+        - name: FileTypeId
+          in: query
+          description: FileTypeId of the requested file
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Returns file details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  FileDetails:
+                    $ref: '#/components/schemas/PortfolioFile'
+  /other-files:
+    get:
+      tags:
+        - Other File
+      operationId: OtherFilesGet
+      summary: Get a list of all file
+      description: Retrieve all portfolios based on the report month and year.
+      parameters:
+        - name: ReportMonth
+          in: query
+          description: Month of the Report Batch
+          required: true
+          schema:
+            type: string
+            example: 'March'
+        - name: ReportYear
+          in: query
+          description: Year of the Report Batch
+          required: true
+          schema:
+            type: integer
+            example: 2024
+            minimum: 1000
+            maximum: 9999
+      responses:
+        '200':
+          description: A list of all portfolios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OtherFile'
+  
+  /other-file:
+    get:
+      tags:
+        - Other File
+      operationId: OtherFileGet
+      summary: Get file details by FileType 
+      description: Retrieve details of files based on FileType 
+      parameters:
+        - name: ReportMonth
+          in: query
+          description: Month of the Report Batch
+          required: true
+          schema:
+            type: string
+            example: 'March'
+        - name: ReportYear
+          in: query
+          description: Year of the Report Batch
+          required: true
+          schema:
+            type: integer
+            example: 2024
+            minimum: 1000
+            maximum: 9999
+        - name: FileType
+          in: query
+          description: FileType of the requested file
+          required: true
+          schema:
+            type: string
+        - name: FileSource
+          in: query
+          description: FileSource of the requested file
+          required: true
+          schema:
+            type: string
+        - name: FileFormat
+          in: query
+          description: FileFormat of the requested file
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns file details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  FileDetails:
+                    $ref: '#/components/schemas/OtherFile'
+  /file:  
+    delete:
+      tags:
+        - All Files
+      operationId: FileDelete
+      summary: Cancel a file by FileLogId
+      description: Deactivate and delete a file from the staging table using its FileLogId.
+      parameters:
+        - name: FileLogId
+          in: query
+          description: The FileLogId of the file to be deleted
+          required: true
+          schema:
+            type: integer
+        - name: FileSettingId
+          in: query
+          description: The FileSettingId of the file to be deleted
+          required: true
+          schema:
+            type: integer
+        - name: ReportBatchId
+          in: query
+          description: The ReportBatchId of the file to be deleted
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: File successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  
+    post:
+      tags:
+        - All Files
+      operationId: FileRetryValidationPost
+      summary: Retry validation for a file
+      description: Retry validation for a file and attempt to fix data.
+      parameters:
+        - name: FileLogId
+          in: query
+          description: The FileLogId of the file to retry validation
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: FileSettingId
+          in: query
+          description: The FileSettingId of the file to retry validation
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: FileFormatId
+          in: query
+          description: The FileFormatId of the file to retry validation
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Validation retry initiated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                    example: 'Validation retry initiated'
+                    
+      
+    get:
+      tags:
+        - All Files
+      operationId: FileExport
+      summary: Export file that have been uploaded
+      parameters:
+        - name: FilePath
+          in: query
+          description: The  FilePath of the file to export
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns file that have been uploaded
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+    
+    
+  /file/upload:
+    post:
+      tags:
+        - All Files
+      operationId: FilePost
+      summary: Upload a file 
+      description: Upload a file.
+      parameters:
+        - name: FileSettingId
+          in: query
+          description: The FileSettingId associated with the file
+          required: true
+          schema:
+            type: integer
+        - name: FilelogId
+          in: query
+          description: The FilelogId associated with the file
+          required: true
+          schema:
+            type: integer
+        - name: FileName
+          in: query
+          description: The name of the file being uploaded
+          required: true
+          schema:
+            type: string
+        - name: User
+          in: query
+          description: Name of the user uploading the file
+          required: true
+          schema:
+            type: string
+        - name: ReportBatchId
+          in: query
+          description: The ID of the report batch
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '201':
+          description: File successfully uploaded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  FileLogId:
+                    type: string
+                    example: 1
+                    
+  /file/faults:  
+    get:
+      tags:
+        - All Files
+      operationId: FileFaultsGet
+      summary: Get all faults of file that have been uploaded
+      parameters:
+        - name: FileLogId
+          in: query
+          description: The  FilePath of the file to export
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of all file faults
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  FileFault:
+                    type: array
+                    items:
+                       $ref: '#/components/schemas/FileFault'
+                       
+                       
+  /file-reimport/{PortfolioId}:
+    post:
+      tags:
+        - All Files
+      operationId: FilesReImportPost
+      summary: Reimport all files of a given portfolioId
+      description: Re-Import all files.
+      parameters:
+        - name: PortfolioId
+          in: path
+          description: PortfolioId of files to ReImport
+          required: true
+          schema:
+            type: integer
+        - name: ReportBatchId
+          in: query
+          description: ReportBatchId of files to ReImport
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: File re-import successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Message:
+                    type: string
+                   
+
+  
+  /isin/export:
+    get:
+      tags:
+        - Other File
+      operationId: ISINExport
+      summary: Export all ISINs whose instruments are not yet completed to an Excel file
+      description: Returns an Excel file containing ISINs of incomplete instruments.
+      responses:
+        '200':
+          description: Returns the Excel file stream containing ISINs of incomplete instruments.
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+  /instruments:
+    get:
+      tags:
+        - Instrument
+      operationId: InstrumentsGet
+      summary: Get all instruments
+      responses:
+        '200':
+          description: A list of all instruments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Instruments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InstrumentRead'
+    post:
+      tags:
+        - Instrument
+      operationId: InstrumentPost
+      summary: Create a new Instrument
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstrumentWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /instruments/{Id}:
+    get:
+      tags:
+        - Instrument
+      operationId: InstrumentGet
+      summary: Get an instrument by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested instrument
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstrumentRead'
+              
+    put:
+      tags:
+        - Instrument
+      operationId: InstrumentPut
+      summary: Update an existing instrument by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the instrument to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstrumentWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Instrument
+      operationId: InstrumentDelete
+      summary: Delete an instrument by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the instrument to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+                 
+  /instruments-audit-trail/{InstrumentId}:
+    get:
+      tags:
+        - Instrument
+      operationId: InstrumentAuditTrailGet
+      summary: Get an Instrument Audit Trail by Id
+      parameters:
+        - name: InstrumentId
+          in: path
+          description: Id of the requested Instrument Audit Trail
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of Instrument Audit Trails
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  InstrumentAuditTrail:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InstrumentAuditTrailRead'
+                      
+  /instruments-full-audit-trail:
+    get:
+      tags:
+        - Instrument
+      operationId: InstrumentFullAuditTrailGet
+      summary: Get an Instrument Audit Trail
+      responses:
+        '200':
+          description: A list of Instrument Audit Trails
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  InstrumentAuditTrail:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InstrumentAuditTrailRead'  
+                      
+  /instruments-assetclassid:
+    get:
+      tags:
+        - Instrument
+      operationId: InstrumentAssetClassTreeIdGet
+      summary: Get an AssetClassTreeId by InstrumentId
+      parameters:
+        - name: CicCountryCode
+          in: query
+          description: CicCountryCode of instrument
+          required: false
+          schema:
+            type: string
+        - name: CurrencyCode
+          in: query
+          description: CurrencyCode of instrument
+          required: false
+          schema:
+            type: string
+        - name: MaturityDate
+          in: query
+          description: MaturityDate of instrument
+          required: false
+          schema:
+            type: string
+        - name: SecuritySubType
+          in: query
+          description: SecuritySubType of instrument
+          required: false
+          schema:
+            type: string
+        - name: Description
+          in: query
+          description: Description of instrument
+          required: false
+          schema:
+            type: string
+        - name: CicNodeLevel1Name
+          in: query
+          description: CicNodeLevel1Name of instrument
+          required: false
+          schema:
+            type: string
+        - name: CicNodeLevel2Name
+          in: query
+          description: CicNodeLevel2Name of instrument
+          required: false
+          schema:
+            type: string
+      
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetClassTreeIdRead'
+  
+  /instrument-duration:
+    get:
+      tags:
+        - Instrument
+      operationId: InstrumentDurationsGet
+      summary: Get all instrument durations for the currenct batch
+      responses:
+        '200':
+          description: All instrument durations for the currenct batch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  InstrumentDurations:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InstrumentDurationRead'
+    post:
+      tags:
+        - Instrument
+      operationId: InstrumentDurationPost
+      summary: Create a new Instrument Duration Entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstrumentDurationWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /instrument-duration/{Id}:
+    get:
+      tags:
+        - Instrument
+      operationId: InstrumentDurationGet
+      summary: Get an instrument duration by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested instrument duration
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstrumentDurationRead'
+              
+    put:
+      tags:
+        - Instrument
+      operationId: InstrumentDurationPut
+      summary: Update an existing instrument duration by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the instrument duration to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstrumentDurationWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Instrument
+      operationId: InstrumentDurationDelete
+      summary: Delete an instrument by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the instrument to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+  
+  /instrument-duration-outstanding:
+    get:
+      tags:
+        - Instrument
+      operationId: InstrumentDurationOutstandingGet
+      summary: Get all instrument details for instruments missing duration for the current batch
+      responses:
+        '200':
+          description: Get all instrument details for instruments missing duration for the current batch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  InstrumentDurationsOutstanding:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InstrumentDurationOutstandingRead'
+                      
+  /instrument-duration-audit-trail/{InstrumentDurationId}:
+    get:
+      tags:
+        - Instrument
+      operationId: InstrumentDurationAuditTrailGet
+      summary: Get an Instrument Duration Audit Trail by Id
+      parameters:
+        - name: InstrumentDurationId
+          in: path
+          description: Id of the requested Instrument Duration Audit Trail
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of Instrument Duration Audit Trails
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  InstrumentDurationAuditTrail:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InstrumentDurationAuditTrailRead'
+                      
+  /instrument-duration-full-audit-trail:
+    get:
+      tags:
+        - Instrument
+      operationId: InstrumentDurationFullAuditTrailGet
+      summary: Get an Instrument Duration Audit Trail
+      responses:
+        '200':
+          description: A list of Instrument Duration Audit Trails
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  InstrumentDurationAuditTrail:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InstrumentDurationAuditTrailRead'
+                      
+  /instrument-beta-audit-trail/{InstrumentBetaId}:
+    get:
+      tags:
+        - Instrument
+      operationId: InstrumentBetaAuditTrailGet
+      summary: Get an Instrument Beta Audit Trail by Id
+      parameters:
+        - name: InstrumentBetaId
+          in: path
+          description: Id of the requested Instrument Beta Audit Trail
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of Instrument Beta Audit Trails
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  InstrumentBetaAuditTrail:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InstrumentBetaAuditTrailRead'
+                      
+  /instrument-beta-full-audit-trail:
+    get:
+      tags:
+        - Instrument
+      operationId: InstrumentBetaFullAuditTrailGet
+      summary: Get an Instrument Beta Audit Trail
+      responses:
+        '200':
+          description: A list of Instrument Beta Audit Trails
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  InstrumentBetaAuditTrail:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InstrumentBetaAuditTrailRead'
+                      
+  /instrument-beta:
+    get:
+      tags:
+        - Instrument
+      operationId: InstrumentBetasGet
+      summary: Get all instrument betas for the currenct batch
+      responses:
+        '200':
+          description: All instrument betas for the currenct batch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  InstrumentBetas:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InstrumentBetaRead'
+    post:
+      tags:
+        - Instrument
+      operationId: InstrumentBetaPost
+      summary: Create a new Instrument Beta Entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstrumentBetaWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /instrument-beta/{Id}:
+    get:
+      tags:
+        - Instrument
+      operationId: InstrumentBetaGet
+      summary: Get an instrument beta by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested instrument beta
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstrumentBetaRead'
+              
+    put:
+      tags:
+        - Instrument
+      operationId: InstrumentBetaPut
+      summary: Update an existing instrument beta by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the instrument beta to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstrumentBetaWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Instrument
+      operationId: InstrumentBetaDelete
+      summary: Delete an instrument beta by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the instrument beta to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+  
+  /instrument-beta-outstanding:
+    get:
+      tags:
+        - Instrument
+      operationId: InstrumentBetaOutstandingGet
+      summary: Get all instrument details for instruments missing beta for the current batch
+      responses:
+        '200':
+          description: Get all instrument details for instruments missing beta for the current batch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  InstrumentBetasOutstanding:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InstrumentBetaOutstandingRead'
+                 
+  /credit-ratings:
+    get:
+      tags:
+        - Credit Rating
+      operationId: CreditRatingsGet
+      summary: Get all CreditRatings
+      responses:
+        '200':
+          description: A list of all CreditRatings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  CreditRatings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CreditRatingRead'
+    post:
+      tags:
+        - Credit Rating
+      operationId: CreditRatingPost
+      summary: Create a new CreditRating
+      parameters:
+        - name: Currency
+          in: query
+          description: Currency of instrument
+          required: true
+          schema:
+            type: string
+        - name: RatingAgency
+          in: query
+          description: RatingAgency of instrument
+          required: true
+          schema:
+            type: string
+        - name: CreditRatingScaleId
+          in: query
+          description: CreditRatingScaleId of instrument
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditRatingWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /credit-ratings/{Id}:
+    get:
+      tags:
+        - Credit Rating
+      operationId: CreditRatingGet
+      summary: Get an CreditRating by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested CreditRating
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditRatingRead'
+    put:
+      tags:
+        - Credit Rating
+      operationId: CreditRatingPut
+      summary: Update an existing CreditRating by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the CreditRating to update
+          required: true
+          schema:
+            type: integer
+        - name: Currency
+          in: query
+          description: Currency of instrument
+          required: true
+          schema:
+            type: string
+        - name: RatingAgency
+          in: query
+          description: RatingAgency of instrument
+          required: true
+          schema:
+            type: string
+        - name: CreditRatingScaleId
+          in: query
+          description: CreditRatingScaleId of instrument
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditRatingWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Credit Rating
+      operationId: CreditRatingDelete
+      summary: Delete an CreditRating by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the CreditRating to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  
+  /credit-rating-audit-trail/{Id}:
+    get:
+      tags:
+        - Credit Rating
+      operationId: CreditRatingAuditTrailGet
+      summary: Get an CreditRating by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested Credit Rating Audit Trail
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of Credit Rating Audit Trail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  CreditRatingAuditTrail:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CreditRatingAuditTrailRead'
+                      
+  /credit-rating-full-audit-trail:
+    get:
+      tags:
+        - Credit Rating
+      operationId: CreditRatingFullAuditTrailGet
+      summary: Get full credit rating audit trail
+      responses:
+        '200':
+          description: A list of Credit Rating Audit Trail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  CreditRatingAuditTrail:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CreditRatingAuditTrailRead'
+  
+  /credit-ratings-history/{InstrumentId}:
+    get:
+      tags:
+        - Credit Rating
+      operationId: CreditRatingHistoryGet
+      summary: Get an CreditRating by Id
+      parameters:
+        - name: InstrumentId
+          in: path
+          description: InstrumentId of the requested CreditRating
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of records of Credit Ratings of all report batched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  CreditRatingHistory:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CreditRatingRead'
+  /credit-ratings-decision-flow/{ReportBatchId}:
+    post:
+      tags:
+        - Credit Rating
+      operationId: CreditRatingsDecisionFlowPost
+      summary: Retry Credit Rating Decision Flow
+      parameters:
+        - name: ReportBatchId
+          in: path
+          description: Current Report Batch Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+                
+  /process-logs:
+    get:
+      tags:
+        - Process Logs
+      operationId: ProcessLogsGet
+      summary: Get all File Process Logs
+      parameters:
+        - name: ReportBatchId
+          in: query
+          description: Id of historical cash flow 
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of all File Process Logs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  FileProcesslogs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileProcessLogRead'
+            
+  /custom-holding:
+    get:
+      tags:
+        - Custom Holding
+      operationId: CustomHoldingsGet
+      responses:
+        '200':
+          description: A list of all Custom Holding
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  CustomHoldingAudits:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CustomHoldingRead'
+    post:
+      tags:
+        - Custom Holding
+      operationId: CustomHoldingPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomHoldingWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /custom-holding/{Id}:
+    get:
+      tags:
+        - Custom Holding
+      operationId: CustomHoldingGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the Custom Holding
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomHoldingRead'
+    put:
+      tags:
+        - Custom Holding
+      operationId: CustomHoldingPut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomHoldingWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Custom Holding
+      operationId: CustomHoldingDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Insert Custom Holding with matching Id
+          required: true
+          schema:
+            type: string
+        - name: ActionUser
+          in: query
+          description: Insert Custom Holding with matching Action User
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+                
+  /custom-holding-audit:
+    get:
+      tags:
+        - Custom Holding
+      operationId: CustomHoldingAuditTrailGet
+      parameters:
+        - name: InstrumentId
+          in: query
+          description: Instrument Id of the record chosen
+          required: true
+          schema:
+            type: integer
+        - name: PortfolioId
+          in: query
+          description: Portfolio Id of the record chosen
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of all Custom Holding Audits
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  CustomHoldingAuditTrails:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CustomHoldingAuditTrailRead'
+                      
+  /custom-holding-full-audit:
+    get:
+      tags:
+        - Custom Holding
+      operationId: CustomHoldingFullAuditTrailGet
+      responses:
+        '200':
+          description: A list of all Custom Holding Audits
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  CustomHoldingAuditTrails:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CustomHoldingAuditTrailRead'
+                      
+  /sftp-import:
+    post:
+      tags:
+        - SFTP
+      operationId: SftpImportPost
+      summary: Import files from SFTP folder into system folders
+      description: Import files from SFTP folder into system folders
+      responses:
+        '200':
+          description: Files have successfully been imported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+                      
+components:
+  schemas:
+    PortfolioFile:
+      type: object
+      properties:
+        FileLogId:
+          type: integer
+          example: 1
+        FileSettingId:
+          type: integer
+          example: 1
+        FileFormatId:
+          type: integer
+          example: 1
+        FileTypeId:
+          type: integer
+          example: 1
+        ReportBatchId:
+          type: integer
+          example: 1
+        FileType:
+          type: string
+          example: 'Instrument Static'
+        FileName:
+          type: string
+          example: '202403_CORONATION_InstrumentStatic.csv'
+        FileNamePattern:
+          type: string
+          example: 'CORONATION_InstrumentStatic_*.csv'
+        StatusColor:
+          type: string
+          example: 'Red'
+        Message:
+          type: string
+          example: 'Format was incorrect'
+        Action:
+          type: string
+          example: 'Retry Validation'
+        WorkflowInstanceId:
+          type: string
+          example: '07b35ec8cc41450ea87089a1cbb7dc1d'
+        WorkflowStatusId:
+          type: integer
+          example: 1
+        StartDate:
+          type: string
+          example: '2024-03-01T00:00:00.000Z'
+        EndDate: 
+          type: string
+          example: '2024-03-01T00:00:00.000Z'
+        InvalidReasons:
+          type: string
+    OtherFile:
+      type: object
+      properties:
+        FileLogId:
+          type: integer
+          example: 1
+        FileSettingId:
+          type: integer
+          example: 1
+        FileSource:
+          type: string
+          example: 'Custodian'
+        FileFormat:
+          type: string
+          example: 'Zar'
+        FileFormatId:
+          type: integer
+          example: 1
+        FileType:
+          type: string
+          example: 'Holdings'
+        ReportBatchId:
+          type: integer
+          example: 1
+        FileName:
+          type: string
+          example: '202303_ZAR Transactions.xlsx'
+        FileNamePattern:
+          type: string
+          example: '*ZAR Transactions*.xlsx'
+        StatusColor:
+          type: string
+          example: 'Red'
+        Message:
+          type: string
+          example: 'Format was incorrect'
+        Action:
+          type: string
+          example: 'Retry Validation'
+        WorkflowInstanceId:
+          type: string
+          example: '07b35ec8cc41450ea87089a1cbb7dc1d'
+        WorkflowStatusName:
+          type: string
+          example: 'Complete'
+        StartDate:
+          type: string
+          example: '2024-03-01T00:00:00.000Z'
+        EndDate: 
+          type: string
+          example: '2024-03-01T00:00:00.000Z'
+        InvalidReasons:
+          type: string
+
+
+    Portfolio:
+      type: object
+      properties:
+        PortfolioId:
+          type: integer
+          example: 1
+        PortfolioName:
+          type: string
+          example: 'Ashburton'
+        Action:
+          type: string
+          example: 'Retry Validation'
+        Files:
+          type: array
+          items:
+            $ref: '#/components/schemas/PortfolioFile'
+    InstrumentRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+          nullable: true
+        ISIN:
+          type: string
+        InstrumentCode:
+          type: string
+          nullable: true
+        BloombergTicker:
+          type: string
+          nullable: true
+        CreditRatingScale:
+          type: string
+          nullable: true
+        CUSIP:
+          type: string
+          nullable: true
+        SEDOL:
+          type: string
+          nullable: true
+        Name:
+          type: string
+          nullable: true
+        ShortName:
+          type: string
+          nullable: true
+        Description:
+          type: string
+          nullable: true
+        Ticker:
+          type: string
+          nullable: true
+        ParentCompanyName:
+          type: string
+          nullable: true
+        SecurityType:
+          type: string
+          nullable: true
+        SecuritySubType:
+          type: string
+          nullable: true
+        MarketSector:
+          type: string
+          nullable: true
+        SecurityClass:
+          type: string
+          nullable: true
+        IssuerIndustry:
+          type: string
+          nullable: true
+        CountryId:
+          type: integer
+          nullable: true
+        CountryName:
+          type: string
+          nullable: true
+        CurrencyId:
+          type: integer
+          nullable: true
+        CurrencyName:
+          type: string
+          nullable: true
+        AmountIssued:
+          type: number
+          format: double
+          nullable: true
+        CouponType:
+          type: string
+          nullable: true
+        Coupon:
+          type: number
+          format: double
+          nullable: true
+        CouponFrequency:
+          type: string
+          nullable: true
+        PreviousCouponDate:
+          type: string
+          nullable: true
+        FirstCouponDate:
+          type: string
+          nullable: true
+        NextCouponDate:
+          type: string
+          nullable: true
+        PenultimateCouponDate:
+          type: string
+          nullable: true
+        IssueDate:
+          type: string
+          nullable: true
+        IssuePrice:
+          type: number
+          format: double
+          nullable: true
+        MaturityDate:
+          type: string
+          nullable: true
+        CouponTypeResetDate:
+          type: string
+          nullable: true
+        NextRefixDate:
+          type: string
+          nullable: true
+        PriceMethod:
+          type: string
+          nullable: true
+        StockExchangeCode:
+          type: string
+          nullable: true
+        DayCountDescription:
+          type: string
+          nullable: true
+        InflationLinkedIndicator:
+          type: string
+          nullable: true
+        RedemptionValue:
+          type: number
+          format: double
+          nullable: true
+        IssuerName: 
+          type: string
+          nullable: true
+        IssuerCode:
+          type: string
+          nullable: true
+        IsCashEquivalent:
+          type: boolean
+          nullable: true
+        CicCountryCode:
+          type: string
+          nullable: true
+        IsNew:
+          type: string
+          nullable: true
+        Status:
+          type: string
+          nullable: true
+        CicTreeId:
+          type: integer
+          nullable: true
+        CicTree:
+          type: string
+          nullable: true
+        IcbTreeId:
+          type: integer
+          nullable: true
+        IcbTree:
+          type: string
+          nullable: true
+        GicsTreeId:
+          type: integer
+          nullable: true
+        GicsTree:
+          type: string
+          nullable: true
+        C68TreeId:
+          type: integer
+          nullable: true
+        C68Tree:
+          type: string
+          nullable: true
+        AssetClassTreeId:
+          type: integer
+          nullable: true
+        AssetClassTree:
+          type: string
+          nullable: true
+        LastChangedUser:
+          type: string
+          description: The Name of the LastChangedUser (mandatory)
+        CicCheck:
+          type: string
+          nullable: true
+        AssetClassCheck:
+          type: string
+          nullable: true
+        C68Check:
+          type: string
+          nullable: true
+        GicsCheck:
+          type: string
+          nullable: true
+        IcbCheck:
+          type: string
+          nullable: true
+        CountryCheck:
+          type: string
+          nullable: true
+        QuotedCurrencyCheck:
+          type: string
+          nullable: true
+        IssuerNameCheck:
+          type: string
+          nullable: true
+        IssueDateCheck:
+          type: string
+          nullable: true
+        MaturityDateCheck:
+          type: string
+          nullable: true
+          
+    InstrumentAuditTrailRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+          nullable: true
+        ISIN:
+          type: string
+        InstrumentCode:
+          type: string
+          nullable: true
+        BloombergTicker:
+          type: string
+          nullable: true
+        CreditRatingScale:
+          type: string
+          nullable: true
+        CUSIP:
+          type: string
+          nullable: true
+        SEDOL:
+          type: string
+          nullable: true
+        Name:
+          type: string
+          nullable: true
+        ShortName:
+          type: string
+          nullable: true
+        Description:
+          type: string
+          nullable: true
+        Ticker:
+          type: string
+          nullable: true
+        ParentCompanyName:
+          type: string
+          nullable: true
+        SecurityType:
+          type: string
+          nullable: true
+        SecuritySubType:
+          type: string
+          nullable: true
+        MarketSector:
+          type: string
+          nullable: true
+        SecurityClass:
+          type: string
+          nullable: true
+        IssuerIndustry:
+          type: string
+          nullable: true
+        CountryId:
+          type: integer
+          nullable: true
+        CountryName:
+          type: string
+          nullable: true
+        CurrencyId:
+          type: integer
+          nullable: true
+        CurrencyName:
+          type: string
+          nullable: true
+        AmountIssued:
+          type: number
+          format: double
+          nullable: true
+        CouponType:
+          type: string
+          nullable: true
+        Coupon:
+          type: number
+          format: double
+          nullable: true
+        CouponFrequency:
+          type: string
+          nullable: true
+        PreviousCouponDate:
+          type: string
+          nullable: true
+        FirstCouponDate:
+          type: string
+          nullable: true
+        NextCouponDate:
+          type: string
+          nullable: true
+        PenultimateCouponDate:
+          type: string
+          nullable: true
+        IssueDate:
+          type: string
+          nullable: true
+        IssuePrice:
+          type: number
+          format: double
+          nullable: true
+        MaturityDate:
+          type: string
+          nullable: true
+        CouponTypeResetDate:
+          type: string
+          nullable: true
+        NextRefixDate:
+          type: string
+          nullable: true
+        PriceMethod:
+          type: string
+          nullable: true
+        StockExchangeCode:
+          type: string
+          nullable: true
+        DayCountDescription:
+          type: string
+          nullable: true
+        InflationLinkedIndicator:
+          type: string
+          nullable: true
+        RedemptionValue:
+          type: number
+          format: double
+          nullable: true
+        IssuerName: 
+          type: string
+          nullable: true
+        IssuerCode:
+          type: string
+          nullable: true
+        IsCashEquivalent:
+          type: boolean
+          nullable: true
+        CicCountryCode:
+          type: string
+          nullable: true
+        CicTreeId:
+          type: integer
+          nullable: true
+        CicTree:
+          type: string
+          nullable: true
+        IcbTreeId:
+          type: integer
+          nullable: true
+        IcbTree:
+          type: string
+          nullable: true
+        GicsTreeId:
+          type: integer
+          nullable: true
+        GicsTree:
+          type: string
+          nullable: true
+        C68TreeId:
+          type: integer
+          nullable: true
+        C68Tree:
+          type: string
+          nullable: true
+        AssetClassTreeId:
+          type: integer
+          nullable: true
+        AssetClassTree:
+          type: string
+          nullable: true
+        LastChangedUser:
+          type: string
+          description: The Name of the LastChangedUser (mandatory)
+        ValidFrom:
+          type: string
+          nullable: true
+        ValidTo:
+          type: string
+          nullable: true
+
+    InstrumentWrite:
+      type: object
+      required:
+        - LastChangedUser
+      properties:
+        ISIN:
+          type: string
+        InstrumentCode:
+          type: string
+        BloombergTicker:
+          type: string
+        CUSIP:
+          type: string
+        SEDOL:
+          type: string
+        Name:
+          type: string
+        ShortName:
+          type: string
+        Description:
+          type: string
+        Ticker:
+          type: string
+        ParentCompanyName:
+          type: string
+        SecurityType:
+          type: string
+        SecuritySubType:
+          type: string
+        MarketSector:
+          type: string
+        SecurityClass:
+          type: string
+        IssuerIndustry:
+          type: string
+        CountryId:
+          type: integer
+        QuotedCurrencyId:
+          type: integer
+        AmountIssued:
+          type: number
+          format: double
+        CouponType:
+          type: string
+        Coupon:
+          type: number
+          format: double
+        CouponFrequency:
+          type: string
+        PreviousCouponDate:
+          type: string
+        FirstCouponDate:
+          type: string
+        NextCouponDate:
+          type: string
+        PenultimateCouponDate:
+          type: string
+        IssueDate:
+          type: string
+        IssuePrice:
+          type: number
+          format: double
+        MaturityDate:
+          type: string
+        CouponTypeResetDate:
+          type: string
+        NextRefixDate:
+          type: string
+        PriceMethod:
+          type: string
+        StockExchangeCode:
+          type: string
+        DayCountDescription:
+          type: string
+        InflationLinkedIndicator:
+          type: string
+        RedemptionValue:
+          type: number
+          format: double
+        IssuerName: 
+          type: string
+        IssuerCode:
+          type: string
+        IsCashEquivalent:
+          type: boolean
+        CicCountryCode: 
+          type: string
+        CicTreeId:
+          type: integer
+        IcbTreeId:
+          type: integer
+        GicsTreeId:
+          type: integer
+        C68TreeId:
+          type: integer
+        AssetClassTreeId:
+          type: integer
+        LastChangedUser:
+          type: string
+          description: The Name of the LastChangedUser (mandatory)
+    
+    InstrumentDurationRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+          nullable: true
+        InstrumentId:
+          type: integer
+          nullable: true
+        InstrumentCode:
+          type: string
+          nullable: true
+        ISIN:
+          type: string
+          nullable: true
+        Name:
+          type: string
+          nullable: true
+        Description:
+          type: string
+          nullable: true
+        ModifiedDuration:
+          type: string
+          nullable: true
+        YieldToMaturity:
+          type: string
+          nullable: true
+        Status:
+          type: string
+          
+    InstrumentDurationWrite:
+      type: object
+      properties:
+        InstrumentId:
+          type: integer
+          nullable: true
+        ModifiedDuration:
+          type: string
+          nullable: true
+        YieldToMaturity:
+          type: string
+          nullable: true
+        LastChangedUser:
+          type: string
+          
+    InstrumentDurationOutstandingRead:
+      type: object
+      properties:
+        InstrumentId:
+          type: integer
+          nullable: true
+        InstrumentCode:
+          type: string
+          nullable: true
+        ISIN:
+          type: string
+          nullable: true
+        Name:
+          type: string
+          nullable: true
+        Description:
+          type: string
+          nullable: true
+          
+    InstrumentBetaRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+          nullable: true
+        InstrumentId:
+          type: integer
+          nullable: true
+        InstrumentCode:
+          type: string
+          nullable: true
+        ISIN:
+          type: string
+          nullable: true
+        Name:
+          type: string
+          nullable: true
+        Description:
+          type: string
+          nullable: true
+        Beta:
+          type: string
+          nullable: true
+        Status:
+          type: string
+          
+    InstrumentBetaWrite:
+      type: object
+      properties:
+        InstrumentId:
+          type: integer
+          nullable: true
+        Beta:
+          type: string
+          nullable: true
+        LastChangedUser:
+          type: string
+          
+    InstrumentBetaOutstandingRead:
+      type: object
+      properties:
+        InstrumentId:
+          type: integer
+          nullable: true
+        InstrumentCode:
+          type: string
+          nullable: true
+        ISIN:
+          type: string
+          nullable: true
+        Name:
+          type: string
+          nullable: true
+        Description:
+          type: string
+          nullable: true
+          
+    InstrumentDurationAuditTrailRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+          nullable: true
+        InstrumentCode:
+          type: string
+          nullable: true
+        ISIN:
+          type: string
+        ModifiedDuration:
+          type: string
+          nullable: true
+        YieldToMaturity:
+          type: string
+          nullable: true
+        LastChangedUser:
+          type: string
+          description: The Name of the LastChangedUser (mandatory)
+        ValidFrom:
+          type: string
+          nullable: true
+        ValidTo:
+          type: string
+          nullable: true
+          
+    InstrumentBetaAuditTrailRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+          nullable: true
+        InstrumentCode:
+          type: string
+          nullable: true
+        ISIN:
+          type: string
+        Beta:
+          type: string
+          nullable: true
+        LastChangedUser:
+          type: string
+          description: The Name of the LastChangedUser (mandatory)
+        ValidFrom:
+          type: string
+          nullable: true
+        ValidTo:
+          type: string
+          nullable: true
+    
+    AssetClassTreeRead: 
+      type: array 
+      items: 
+        type: object
+        properties:
+          AssetClassTreeId:
+            type: integer
+          AssetClassNodeLevel1Id:
+            type: integer
+          AssetClassNodeLevel1Name:
+            type: string
+          AssetClassNodeLevel2Id:
+            type: integer
+          AssetClassNodeLevel2Name:
+            type: string
+          AssetClassNodeLevel3Id:
+            type: integer
+          AssetClassNodeLevel3Name:
+            type: string
+
+    AssetClassTreeLevelRead:
+      type: array 
+      items: 
+        type: object
+        properties:
+          AssetClassTreeId:
+            type: integer
+          AssetClassNodeLevelId:
+            type: integer
+          AssetClassNodeLevelName:
+            type: string
+            
+    AssetClassTreeIdRead: 
+      type: object
+      properties: 
+        AssetClassTreeId:
+          type: integer
+                
+    AssetClassClassificationRead: 
+      type: object 
+      properties: 
+        Tree: 
+          $ref: '#/components/schemas/AssetClassTreeRead'
+        Level1: 
+          $ref: '#/components/schemas/AssetClassTreeLevelRead'
+        Level2: 
+          $ref: '#/components/schemas/AssetClassTreeLevelRead'
+        Level3: 
+          $ref: '#/components/schemas/AssetClassTreeLevelRead'
+    C68TreeRead: 
+      type: array 
+      items: 
+        type: object
+        properties:
+          C68TreeId:
+            type: integer
+          C68NodeLevel1Id:
+            type: integer
+          C68NodeLevel1Code:
+            type: string
+          C68NodeLevel1Name:
+            type: string
+          C68NodeLevel2Id:
+            type: integer
+          C68NodeLevel2Code:
+            type: string
+          C68NodeLevel2Name:
+            type: string
+
+    C68TreeLevelRead:
+      type: array 
+      items: 
+        type: object
+        properties:
+          C68TreeId:
+            type: integer
+          C68NodeLevelId:
+            type: integer
+          C68NodeLevelCode:
+            type: string
+          C68NodeLevelName:
+            type: string
+
+    C68ClassificationRead: 
+      type: object 
+      properties: 
+        Tree: 
+          $ref: '#/components/schemas/C68TreeRead'
+        Level1: 
+          $ref: '#/components/schemas/C68TreeLevelRead'
+        Level2: 
+          $ref: '#/components/schemas/C68TreeLevelRead'
+          
+    VwC68CicMapRead: 
+      type: object
+      properties: 
+        C68TreeId: 
+          type: integer
+        C68NodeLevel1Id: 
+          type: integer
+        C68NodeLevel1Code: 
+          type: string
+        C68NodeLevel1Name: 
+          type: string
+        C68NodeLevel2Id: 
+          type: integer
+        C68NodeLevel2Code: 
+          type: string
+        C68NodeLevel2Name: 
+          type: string
+        CicTreeId: 
+          type: integer
+        CicNodeLevel1Id: 
+          type: integer
+        CicNodeLevel1Code: 
+          type: string
+        CicNodeLevel1Name: 
+          type: string
+        CicNodeLevel2Id: 
+          type: integer
+        CicNodeLevel2Code: 
+          type: string
+        CicNodeLevel2Name: 
+          type: string 
+     
+
+    CicTreeRead: 
+      type: array 
+      items: 
+        type: object
+        properties:
+          CicTreeId:
+            type: integer
+          CicNodeLevel1Id:
+            type: integer
+          CicNodeLevel1Code:
+            type: string
+          CicNodeLevel1Name:
+            type: string
+          CicNodeLevel2Id:
+            type: integer
+          CicNodeLevel2Code:
+            type: string
+          CicNodeLevel2Name:
+            type: string
+
+    CicTreeLevelRead:
+      type: array 
+      items: 
+        type: object
+        properties:
+          CicTreeId:
+            type: integer
+          CicNodeLevelId:
+            type: integer
+          CicNodeLevelCode:
+            type: string
+          CicNodeLevelName:
+            type: string
+    
+    CicClassificationRead: 
+      type: object 
+      properties: 
+        Tree: 
+          $ref: '#/components/schemas/CicTreeRead'
+        Level1: 
+          $ref: '#/components/schemas/CicTreeLevelRead'
+        Level2: 
+          $ref: '#/components/schemas/CicTreeLevelRead'
+
+    GicsTreeRead: 
+      type: array 
+      items: 
+        type: object
+        properties:
+          GicsTreeId:
+            type: integer
+          GicsNodeLevel1Id:
+            type: integer
+          GicsNodeLevel1Name:
+            type: string
+          GicsNodeLevel2Id:
+            type: integer
+          GicsNodeLevel2Name:
+            type: string
+          GicsNodeLevel3Id:
+            type: integer
+          GicsNodeLevel3Name:
+            type: string
+          GicsNodeLevel4Id:
+            type: integer
+          GicsNodeLevel4Name:
+            type: string
+                
+    GicsTreeLevelRead:
+      type: array 
+      items: 
+        type: object
+        properties:
+          GicsTreeId:
+            type: integer
+          GicsNodeLevelId:
+            type: integer
+          GicsNodeLevelName:
+            type: string
+    
+    GicsClassificationRead: 
+      type: object 
+      properties: 
+        Tree: 
+          $ref: '#/components/schemas/GicsTreeRead'
+        Level1: 
+          $ref: '#/components/schemas/GicsTreeLevelRead'
+        Level2: 
+          $ref: '#/components/schemas/GicsTreeLevelRead'
+        Level3: 
+          $ref: '#/components/schemas/GicsTreeLevelRead'
+        Level4: 
+          $ref: '#/components/schemas/GicsTreeLevelRead'
+
+    IcbTreeRead: 
+      type: array 
+      items: 
+        type: object
+        properties:
+          IcbTreeId:
+            type: integer
+          IcbNodeLevel1Id:
+            type: integer
+          IcbNodeLevel1Code:
+            type: string
+          IcbNodeLevel1Name:
+            type: string
+          IcbNodeLevel2Id:
+            type: integer
+          IcbNodeLevel2Code:
+            type: string
+          IcbNodeLevel2Name:
+            type: string
+          IcbNodeLevel3Id:
+            type: integer
+          IcbNodeLevel3Code:
+            type: string
+          IcbNodeLevel3Name:
+            type: string
+          IcbNodeLevel4Id:
+            type: integer
+          IcbNodeLevel4Code:
+            type: string
+          IcbNodeLevel4Name:
+            type: string
+
+    IcbTreeLevelRead: 
+      type: array 
+      items: 
+        type: object
+        properties:
+          IcbTreeId:
+            type: integer
+          IcbNodeLevelId:
+            type: integer
+          IcbNodeLevelCode:
+            type: string
+          IcbNodeLevelName:
+            type: string
+            
+    IcbClassificationRead: 
+      type: object 
+      properties: 
+        Tree: 
+          $ref: '#/components/schemas/IcbTreeRead'
+        Level1: 
+          $ref: '#/components/schemas/IcbTreeLevelRead'
+        Level2: 
+          $ref: '#/components/schemas/IcbTreeLevelRead'
+        Level3: 
+          $ref: '#/components/schemas/IcbTreeLevelRead'
+        Level4: 
+          $ref: '#/components/schemas/IcbTreeLevelRead'
+
+    Classifications:
+      type: object
+      properties:
+        AssetClassClassification:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetClassClassificationRead'
+        C68Classification:
+          type: array
+          items:
+            $ref: '#/components/schemas/C68ClassificationRead'
+        VwC68CicMap: 
+          type: array
+          items:
+            $ref: '#/components/schemas/VwC68CicMapRead'
+        CicClassification:
+          type: array
+          items:
+            $ref: '#/components/schemas/CicClassificationRead'
+        GicsClassification:
+          type: array
+          items:
+            $ref: '#/components/schemas/GicsClassificationRead'
+        IcbClassification:
+          type: array
+          items:
+            $ref: '#/components/schemas/IcbClassificationRead'
+
+    CreditRatingScaleRead:
+      type: array
+      items:
+        type: object
+        properties:
+          Id:
+            type: integer
+          Description:
+            type: string
+          EUCreditQualityStep:
+            type: integer
+          BBComp:
+            type: string
+          Moodys:
+            type: string
+          SandP:
+            type: string
+          Fitch:
+            type: string
+          StandardSovereign:
+            type: string
+          MoodysSovereign:
+            type: string
+          LastChangedUser:
+            type: string
+          ValidFrom:
+            type: string
+          ValidTo:
+            type: string
+                
+    BBCompRead:
+      type: array
+      items:
+        type: object
+        properties: 
+          Id: 
+           type: integer
+          Name: 
+           type: string
+
+    MoodysRead:
+      type: array
+      items:
+        type: object
+        properties: 
+          Id: 
+           type: integer
+          Name: 
+           type: string
+
+    SandPRead:
+      type: array
+      items:
+        type: object
+        properties: 
+          Id: 
+           type: integer
+          Name: 
+           type: string
+          
+
+    FitchRead:
+      type: array
+      items:
+        type: object
+        properties: 
+          Id: 
+           type: integer
+          Name: 
+           type: string
+            
+    CreditRating:
+      type: object
+      properties:
+        CreditRatingScale:
+           $ref: '#/components/schemas/CreditRatingScaleRead'
+        BBComp:
+           $ref: '#/components/schemas/BBCompRead'
+        Moodys:
+           $ref: '#/components/schemas/MoodysRead'
+        SandP:
+           $ref: '#/components/schemas/SandPRead'
+        Fitch:
+           $ref: '#/components/schemas/FitchRead'
+           
+    
+    CreditRatingRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        ReportBatchId:
+          type: integer
+        ReportBatchDate:
+          type: string
+        InstrumentId:
+          type: integer
+        InstrumentCode: 
+          type: string
+          nullable: true
+        Isin: 
+          type: string
+          nullable: true
+        Country: 
+          type: string
+          nullable: true
+        Currency: 
+          type: string
+          nullable: true
+        BBCompRating:
+          type: string
+          nullable: true
+        CreditRatingScaleId:
+          type: integer
+        FitchRating:
+          type: string
+          nullable: true
+        MoodysRating:
+          type: string
+          nullable: true
+        SandPRating:
+          type: string
+          nullable: true
+        DbrsRating:
+          type: string
+          nullable: true
+        MinimumRtgRating:
+          type: string
+          nullable: true
+        FMInstrumentRating:
+          type: string
+          nullable: true
+        FMIssuerRating:
+          type: string
+          nullable: true
+        FinalRatingNationalSource:
+          type: string
+          nullable: true
+        FinalRatingNational:
+          type: string
+          nullable: true
+        FinalRatingInternationalSource:
+          type: string
+          nullable: true
+        FinalRatingInternational:
+          type: string
+          nullable: true
+        LastChangedUser:
+          type: string
+          description: The Name of the LastChangedUser (mandatory)
+        ValidFrom:
+          type: string
+        ValidTo:
+         type: string
+        Status:
+          type: string
+          nullable: true
+        IsNew:
+          type: string
+          nullable: true
+        UserNote: 
+          type: string
+          nullable: true
+          
+        
+
+    CreditRatingWrite:
+      type: object
+      required:
+        - ReportBatchId
+        - InstrumentId
+        - LastChangedUser
+        - ReportBatchDate
+        - BBCompRating
+        - MoodysRating
+        - SandPRating
+       
+      properties:
+        ReportBatchId:
+          type: integer
+        InstrumentId:
+          type: integer
+        InstrumentCode: 
+          type: string
+        BBCompRating:
+          type: string
+        FitchRating:
+          type: string
+        MoodysRating:
+          type: string
+        SandPRating:
+          type: string
+        FinalRatingNationalSource:
+          type: string
+        FinalRatingNational:
+          type: string
+        FinalRatingInternationalSource:
+          type: string
+        LastChangedUser:
+          type: string
+          description: The Name of the LastChangedUser (mandatory)
+        UserNote: 
+          type: string
+ 
+    CreditRatingAuditTrailRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        ReportBatchId:
+          type: integer
+        ReportBatchDate:
+          type: string
+        InstrumentId:
+          type: integer
+        InstrumentCode: 
+          type: string
+          nullable: true
+        Isin: 
+          type: string
+          nullable: true
+        Country: 
+          type: string
+          nullable: true
+        BBCompRating:
+          type: string
+          nullable: true
+        CreditRatingScaleId:
+          type: integer
+        FitchRating:
+          type: string
+          nullable: true
+        MoodysRating:
+          type: string
+          nullable: true
+        SandPRating:
+          type: string
+          nullable: true
+        DbrsRating:
+          type: string
+          nullable: true
+        MinimumRtgRating:
+          type: string
+          nullable: true
+        FMInstrumentRating:
+          type: string
+          nullable: true
+        FMIssuerRating:
+          type: string
+          nullable: true
+        FinalRatingNationalSource:
+          type: string
+          nullable: true
+        FinalRatingNational:
+          type: string
+          nullable: true
+        FinalRatingInternationalSource:
+          type: string
+          nullable: true
+        FinalRatingInternational:
+          type: string
+          nullable: true
+        LastChangedUser:
+          type: string
+          description: The Name of the LastChangedUser (mandatory)
+        ValidFrom:
+          type: string
+        ValidTo:
+         type: string
+        Status:
+          type: string
+          nullable: true
+        IsNew:
+          type: string
+          nullable: true
+        UserNote:
+          type: string
+          nullable: true
+          
+    CustomHoldingRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        ReportbatchId:
+          type: integer
+        ReportDate: 
+          type: string
+        ReportBatchType:
+          type: string
+        ReportBatchWorkflowInstanceId:
+          type: string
+        PortfolioId:
+          type: integer
+        PortfolioCode: 
+          type: string
+        InstrumentId:
+          type: integer
+        InstrumentCode:
+          type: string
+        HoldingNominal:
+          type: string
+        BaseMarketValue:
+          type: string 
+        AccruedInterest:
+          type: string 
+        InflowOutflow:
+          type: string
+        Currency: 
+          type: string
+        Action:
+          type: string
+        ActionUser:
+          type: string
+        ActionDate:
+          type: string
+          
+    CustomHoldingWrite:
+      type: object
+      required:
+          - ReportBatchId
+          - PortfolioId
+          - InstrumentId
+          - HoldingNominal
+          - BaseMarketValue
+          - AccruedInterest
+          - InflowOutflow
+          - Action
+          - ActionUser
+          - ActionDate
+      properties:
+        ReportbatchId:
+          type: integer
+        PortfolioId:
+          type: integer
+        InstrumentId:
+          type: integer
+        HoldingNominal:
+          type: string
+        BaseMarketValue:
+          type: string 
+        AccruedInterest:
+          type: string
+        InflowOutflow:
+          type: string
+        Action:
+          type: string
+        ActionUser:
+          type: string
+        ActionDate:
+          type: string
+          
+    CustomHoldingAuditTrailRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        ReportbatchId:
+          type: integer
+        ReportDate: 
+          type: string
+        PortfolioId:
+          type: integer
+        PortfolioCode: 
+          type: string
+        InstrumentId:
+          type: integer
+        InstrumentCode:
+          type: string
+        HoldingNominal:
+          type: string
+        BaseMarketValue:
+          type: string 
+        AccruedInterest:
+          type: string 
+        InflowOutflow:
+          type: string
+        Action:
+          type: string
+        ActionUser:
+          type: string
+        ActionDate:
+          type: string
+         
+          
+    Message:
+      properties:
+        Message:
+          type: string
+          
+    FileProcessLogRead:
+      type: object
+      properties:
+        FileLogId:
+          type: integer
+        ReportDate:
+          type: string
+        FileName:
+          type: string
+        FilePath: 
+          type: string
+        RecordCount: 
+          type: integer
+        WorkflowDefinitionName:
+          type: string
+        WorkflowStatusName:
+          type: string
+        CreatedAt:
+          type: string
+        FinishedAt:
+          type: string
+        LastExecutedActivityName:
+          type: string
+
+          
+    PortfolioWithECICExternalCode:
+      type: object
+      properties:
+        PortfolioId: 
+          type: integer
+        PortfolioCode: 
+          type: string
+          
+    InstrumentStartingWithFIXEDDEPOSIT:
+      type: object
+      properties:
+        InstrumentId: 
+          type: integer
+        InstrumentCode: 
+          type: string
+          
+    FileFault: 
+      type: object
+      properties:
+        Id: 
+          type: integer
+        Exception: 
+          type: string
+        Message: 
+          type: string
+        FaultedActivityId: 
+          type: string
+        FaultedActivityName: 
+          type: string
+        Resuming: 
+          type: boolean
+        
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+security:
+  - ApiKeyAuth: []
+
+

@@ -1,0 +1,892 @@
+openapi: 3.0.1
+info:
+  title: Invest Insight Monthly Process API
+  version: 1.0.0
+  contact:
+    name: Digiata
+paths:
+  /monthly-runs/{ReportDate}:
+    post:
+      summary: Run the monthly process for the given date (if the monthly process did not start).
+      operationId: MonthlyRunsPost
+      parameters:
+        - name: ReportDate
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 2024-03-31
+      responses:
+        '201':
+          description: Run Started (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Monthly process started successfully."
+        '500':
+          description: Internal Server Error (500)
+
+  /approve-logs/{ReportBatchId}:
+    post:
+      summary: Approve/Reject the given report batch. Type in (Data Preparation; Level 1; Level 2; Level 3)
+      operationId: ApproveLogsPost
+      parameters:
+        - name: ReportBatchId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApproveLogWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Report batch approval status updated successfully."
+                required:
+                  - message
+        '500':
+          description: Internal Server Error (500)
+
+    get:
+      summary: Returns the approval/rejection log for the given report batch
+      operationId: ApproveLogsGet
+      parameters:
+        - name: ReportBatchId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApproveLogReads'
+        '500':
+          description: Internal Server Error (500)
+
+  /approve-logs/{ReportBatchId}/{Type}:
+    get:
+      summary: Returns the approval/rejection log for the given report batch and type
+      operationId: ApproveLogGet
+      parameters:
+        - name: ReportBatchId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: Type
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApproveLogRead'
+        '500':
+          description: Internal Server Error (500)
+                  
+  /index-prices:
+    get:
+      tags:
+        - Index Price
+      operationId: IndexePricesGet
+      responses:
+        '200':
+          description: A list of all Index prices
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  IndexPrices:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/IndexPriceRead'
+    post:
+      tags:
+        - Index Price
+      operationId: IndexPricePost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IndexPriceWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /index-prices/{Id}:
+    get:
+      tags:
+        - Index Price
+      operationId: IndexPriceGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the Index price
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexPriceRead'
+    put:
+      tags:
+        - Index Price
+      operationId: IndexPricePut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IndexPriceWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Index Price
+      operationId: IndexPriceDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Delete index price with matching id
+          required: true
+          schema:
+            type: string
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  
+  /index-prices-history/{Id}:
+    get:
+      tags:
+        - Index Price
+      operationId: IndexPriceHistoryGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the Index price
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of records of Index prices of an index 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  IndexPriceHistory:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/IndexPriceRead'
+  
+  /process-logs:
+    get:
+      tags:
+        - Process Logs
+      operationId: ProcessLogsGet
+      summary: Get all Montly Process Logs
+      parameters:
+        - name: ReportBatchId
+          in: query
+          description: Id of historical cash flow 
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of all Montly Process Logs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  MonthlyProcesslogs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MonthlyProcessLogRead'
+                      
+  /report-batches:
+    get:
+      tags:
+        - Process Logs
+      operationId: ReportBatchesGet
+      summary: Get all Montly Process Logs
+      responses:
+        '200':
+          description: A list of all Montly Report Batches
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  MonthlyReportBatches:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MonthlyReportBatchRead'
+                      
+                      
+  /check-file-completeness:
+    get:
+      tags:
+        - Check Data Completeness
+      operationId: CheckFilesGet
+      responses:
+        '200':
+          description: A list of all File Checks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  FileChecks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileCheckRead'
+  
+  /check-main-data-completeness:
+    get:
+      tags:
+        - Check Data Completeness
+      operationId: CheckMainDataGet
+      responses:
+        '200':
+          description: A list of all Main Data Checks
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/MainDataCheckRead'
+
+  
+  /check-other-data-completeness:
+    get:
+      tags:
+        - Check Data Completeness
+      operationId: CheckOtherDataGet
+      responses:
+        '200':
+          description: A list of all Main Data Checks
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/OtherDataCheckRead'
+                
+  /monthly-report-batch:
+    post:
+      tags:
+        - Report Batch
+      operationId: ReportBatchPost
+      summary: Create New Report Batch
+      description: Create New Monthly Report Batch
+      responses:
+        '200':
+          description: ReportBatch as been created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message' 
+                
+  /rerun-index-performance-calcs:
+    post:
+      tags:
+        - Calculations
+      operationId: RerunIndexPerformanceCalcsPost
+      summary: Re run index performance calcs since inception
+      description: Re run index performance calcs since inception
+      responses:
+        '200':
+          description: Index Performance Calcs Successfully Re-run
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+                
+  /rerun-benchmark-performance-calcs:
+    post:
+      tags:
+        - Calculations
+      operationId: RerunBenchmarkPerformanceCalcsPost
+      summary: Re run Benchmark performance calcs since inception
+      description: Re run Benchmark performance calcs since inception
+      responses:
+        '200':
+          description: Benchmark Performance Calcs Successfully Re-run
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+                
+  /report-comments:
+    get:
+      tags:
+        - Report Comments
+      operationId: ReportCommentsGet
+      responses:
+        '200':
+          description: A list of all Report Comments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   ReportComments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ReportCommentRead'
+    post:
+      tags:
+        - Report Comments
+      operationId: ReportCommentPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportCommentWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+                
+  /report-comments/{Id}:
+    get:
+      tags:
+        - Report Comments
+      operationId: ReportCommentGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the Report Comment
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Created (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportCommentRead'
+    put:
+      tags:
+        - Report Comments
+      operationId: ReportCommentPut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportCommentWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Report Comments
+      operationId: ReportCommentDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Delete Report Comments with matching id
+          required: true
+          schema:
+            type: string
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+                
+  /credit-rating-changes:
+    get:
+      tags:
+        - Credit Rating Changes
+      operationId: CreditRatingChangesGet
+      responses:
+        '200':
+          description: A list of all Credit Rating Changes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   CreditRatingChanges:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CreditRatingChangeRead'
+                      
+  /calculation-log-error-count:
+    get:
+      tags:
+        - Calculation Logs
+      operationId: CalculationLogErrorCountGet
+      responses:
+        '200':
+          description: A count of calculation log errors for current report batch
+          content:
+            application/json:
+              schema:
+                type: integer
+                
+  /calculation-log:
+    get:
+      tags:
+        - Calculation Logs
+      operationId: CalculationLogsGet
+      responses:
+        '200':
+          description: Calculation log errors for current report batch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   CalculationLogs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CalculationLogsRead'
+                      
+  /calculation-log-error/{CalculationLogId}:
+    get:
+      tags:
+        - Calculation Logs
+      operationId: CalculationLogErrorsGet
+      parameters:
+        - name: CalculationLogId
+          in: path
+          description: CalculationLogId of the requested calculation log errors
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A count of calculation log errors for current report batch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   CalculationLogErrors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CalculationLogErrorsRead'
+  
+
+components:
+  schemas:
+    ApproveLogWrite:
+      type: object
+      properties:
+        WorkflowInstanceId:
+          type: string
+        Type:
+          type: string
+          description: Data Preparation; Level 1; Level 2; Level 3
+        IsApproved:
+          type: boolean
+        User:
+          type: string
+        RejectReason:
+          type: string
+      required:
+        - WorkflowInstanceId
+        - IsApproved
+        - Type
+        - User
+
+    ApproveLogRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        ReportBatchId:
+          type: integer
+        ReportDate:
+          type: string
+        Type:
+          type: string
+        IsApproved:
+          type: boolean
+        User:
+          type: string
+        Time:
+          type: string
+        RejectReason:
+          type: string
+    ApproveLogReads:
+      type: array
+      items:
+        $ref: '#/components/schemas/ApproveLogRead'
+        
+    IndexPriceRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        ReportbatchId:
+          type: integer
+        ReportDate: 
+          type: string
+        ReportBatchType:
+          type: string
+        ReportBatchWorkflowInstanceId:
+          type: string
+        IndexId:
+          type: integer
+        IndexCode: 
+          type: string
+        IndexBloombergTicker:
+          type: string
+        Price:
+          type: number 
+          format: double
+        Status:
+          type: string
+          
+    IndexPriceWrite:
+      type: object
+      required:
+          - ReportBatchId
+          - IndexId
+          - Price
+      properties:
+        ReportBatchId:
+          type: integer
+        IndexId: 
+          type: integer
+        Price:
+          type: number 
+          format: double
+        LastChangedUser:
+          type: string
+          
+          
+    Message:
+      properties:
+        Message:
+          type: string
+          
+          
+    MonthlyProcessLogRead: 
+      type: object
+      properties:
+        ReportBatchId:
+          type: integer
+        ReportDate:
+          type: string
+        EventName: 
+          type: string
+        ExecutedAt:
+          type: string
+        LastExecutedActivityName:
+          type: string
+        
+    FileCheckRead:
+      type: object
+      properties:
+        FileSource:
+          type: string
+        ExpectedFileCount:
+          type: integer
+        ActualFileCount:
+          type: integer
+    
+
+    PortfolioManager:
+      type: object
+      properties:
+        PortfolioCode:
+          type: string
+        HoldingDataComplete:
+          type: string
+        TransactionDataComplete:
+          type: string
+        IncomeDataComplete:
+          type: string
+        CashDataComplete:
+          type: string
+        PerformanceDataComplete:
+          type: string
+        ManagementFeeDataComplete:
+          type: string
+    
+    Custodian:
+      type: object
+      properties:
+        PortfolioCode:
+          type: string
+        CustodianHoldingDataComplete:
+          type: string
+        CustodianTransactionDataComplete:
+          type: string
+        CustodianCashDataComplete:
+          type: string
+        CustodianFeeDataComplete:
+          type: string
+    
+    BloombergHolding:
+      type: object
+      properties:
+        PortfolioCode:
+          type: string
+        BloombergHoldingDataComplete:
+          type: string
+          
+    MainDataCheckRead:
+      type: object
+      properties:
+        PortfolioManagers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PortfolioManager'
+        Custodians:
+          type: array
+          items:
+            $ref: '#/components/schemas/Custodian'
+        BloombergHoldings:
+          type: array
+          items:
+            $ref: '#/components/schemas/BloombergHolding'
+
+    
+    IndexPriceIncompleteCount:
+      type: object
+      properties:
+        IndexPriceIncompleteCount:
+          type: integer
+    
+    InstrumentIncompleteCount:
+      type: object
+      properties:
+        InstrumentIncompleteCount:
+          type: integer
+    
+    CreditRatingIncompleteCount:
+      type: object
+      properties:
+        CreditRatingIncompleteCount:
+          type: integer
+          
+    InstrumentDurationIncompleteCount:
+      type: object
+      properties:
+        InstrumentDurationIncompleteCount:
+          type: integer
+          
+    InstrumentBetaIncompleteCount:
+      type: object
+      properties:
+        InstrumentBetaIncompleteCount:
+          type: integer
+          
+          
+    
+    OtherDataCheckRead:
+      type: object
+      properties:
+        IndexPriceIncompleteCounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndexPriceIncompleteCount'
+        InstrumentIncompleteCounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstrumentIncompleteCount'
+        CreditRatingIncompleteCounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditRatingIncompleteCount'
+        InstrumentDurationIncompleteCounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstrumentDurationIncompleteCount'
+        InstrumentBetaIncompleteCounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstrumentBetaIncompleteCount'
+            
+    
+    MonthlyReportBatchRead:
+      type: object
+      properties:
+        ReportBatchId:
+          type: integer
+        ReportDate:
+          type: string
+        WorkflowInstanceId:
+          type: string
+        WorkflowStatusName:
+          type: string
+        CreatedAt:
+          type: string
+        FinishedAt:
+          type: string
+        LastExecutedActivityName:
+          type: string
+          
+    ReportCommentRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        ReportBatchId:
+          type: integer
+        ReportDate:
+          type: string
+        ReportListId:
+          type: string
+        ReportListName:
+          type: string
+        Comment:
+          type: string
+        LastChangedUser:
+          type: string
+          
+    ReportCommentWrite:
+      type: object
+      required:
+          - ReportBatchId
+          - ReportListId
+          - Comment
+          - LastChangedUser
+          - LastChangedDate
+      properties:
+        ReportBatchId:
+          type: integer
+        ReportListId:
+          type: string
+        Comment:
+          type: string
+        LastChangedUser:
+          type: string
+          
+    
+    CreditRatingChangeRead:
+      type: object
+      properties:
+        ReportDate:
+          type: string
+        InstrumentCode:
+          type: string
+        Isin:
+          type: string
+        Country:
+          type: string
+        FinalRatingNational:
+          type: string
+        PreviousFinalRatingNational:
+          type: string
+        FinalRatingInternational:
+          type: string
+        PreviousFinalRatingInternational:
+          type: string
+          
+    CalculationLogsRead:
+      type: object
+      properties:
+        CalculationLogId:
+          type: integer
+        CalculationName:
+          type: string
+        CalculationStatus:
+          type: string
+        StartTime:
+          type: string
+        EndTime:
+          type: string
+        ViewErrors:
+          type: string
+          
+    CalculationLogErrorsRead:
+      type: object
+      properties:
+        CalculationLogErrorId:
+          type: integer
+        CalculationName:
+          type: string
+        CalculationStatus:
+          type: string
+        StartTime:
+          type: string
+        EndTime:
+          type: string
+        ErrorPrefix:
+          type: string
+        FullError:
+          type: string
+         
+    
+

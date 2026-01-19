@@ -1,0 +1,898 @@
+openapi: 3.0.1
+info:
+  title: WeeklyProcessApi
+  version: 0.0.1
+servers:
+  - url: http://localhost:10004
+paths:
+  /configurations:
+    get:
+      tags:
+        - Configuration
+      operationId: ConfigurationsGet
+      summary: Get all configurations
+      responses:
+        '200':
+          description: A list of all configurations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ReportBatchId: 
+                    type: integer
+                  ReportDate: 
+                    type: string 
+                  ReportBatchWorkflowInstanceId: 
+                    type: string
+                  ReportBatchWorkflowInstanceCurrentActivity: 
+                    type: string
+                  ReportDates: 
+                    type: array 
+                    items: 
+                      type: object
+                      properties:
+                        Id: 
+                          type: integer
+                        ReportDate: 
+                          type: string 
+                        WorkflowInstanceId: 
+                          type: string
+
+  /weekly-runs/{ReportDate}:
+    post:
+      summary: Run the weekly process for the given date (if the  weekly process did not start).
+      tags:
+        - Create Weekly Process
+      operationId: WeeklyRunsPost
+      parameters:
+        - name: ReportDate
+          in: path
+          required: true
+          schema:
+            type: string
+            format: date
+            example: 2024-03-31
+      responses:
+        '201':
+          description: Run Started (201)
+          content:
+            application/json:
+              schema:
+               $ref: '#/components/schemas/Message'
+                   
+        '500':
+          description: Internal Server Error (500)
+
+  /projected-cash-flow:
+    get:
+      tags:
+        - Projected Cash Flow
+      operationId: ProjectedCashFlowValuesGet
+      summary: Get all projected cash flow values
+      responses:
+        '200':
+          description: A list of all projected cash flow values
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ProjectedCashFlowValues:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProjectedCashflowRead'
+    post:
+      tags:
+        - Projected Cash Flow
+      operationId: ProjectedCashFlowValuePost
+      summary: Add projected cashflow value 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectedCashflowWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /projected-cash-flow/{Id}:
+    get:
+      tags:
+        - Projected Cash Flow
+      operationId: ProjectedCashFlowValueGet
+      summary: Get projected cash flow value by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested projected cash flow value
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectedCashflowRead'
+    put:
+      tags:
+         - Projected Cash Flow
+      operationId: ProjectedCashFlowValuePut
+      summary: Update an existing projected cash flow value by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the projected cash flow value to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectedCashflowWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+         - Projected Cash Flow
+      operationId: ProjectedCashFlowValueDelete
+      summary: Delete projected cash flow value by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of projected cash flow value to delete
+          required: true
+          schema:
+            type: integer
+        - name: LastChangedUser
+          in: query
+          description: LastChangedUser of projected cash flow value to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+                 
+  /actual-cash-flow:
+    get:
+      tags:
+        - Actual Cash Flow
+      operationId: ActualCashFlowValuesGet
+      summary: Get all actual cash flow values
+      responses:
+        '200':
+          description: A list of all actual cash flow values
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ActualCashFlowValues:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ActualCashflowRead'
+    post:
+      tags:
+        - Actual Cash Flow
+      operationId: ActualCashFlowValuePost
+      summary: Add actual cashflow value 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActualCashflowWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /actual-cash-flow/{Id}:
+    get:
+      tags:
+        - Actual Cash Flow
+      operationId: ActualCashFlowValueGet
+      summary: Get actual cash flow value by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested actual cash flow value
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActualCashflowRead'
+    put:
+      tags:
+         - Actual Cash Flow
+      operationId: ActualCashFlowValuePut
+      summary: Update an existing actual cash flow value by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the actual cash flow value to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActualCashflowWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+         - Actual Cash Flow
+      operationId: ActualCashFlowValueDelete
+      summary: Delete actual cash flow value by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of actual cash flow value to delete
+          required: true
+          schema:
+            type: integer
+        - name: LastChangedUser
+          in: query
+          description: LastChangedUser of actual cash flow value to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+                 
+  
+  /Proposed-cash-flow:
+    get:
+      tags:
+        - Proposed Cash Flow
+      operationId: ProposedCashFlowValuesGet
+      summary: Get all proposed cash flow values
+      responses:
+        '200':
+          description: A list of all proposed cash flow values
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ProposedCashFlowValues:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProposedCashflowRead'
+    post:
+      tags:
+        - Proposed Cash Flow
+      operationId: ProposedCashFlowValuePost
+      summary: Add proposed cashflow value 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProposedCashflowWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /Proposed-cash-flow/{Id}:
+    get:
+      tags:
+        - Proposed Cash Flow
+      operationId: ProposedCashFlowValueGet
+      summary: Get proposed cash flow value by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested proposed cash flow value
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProposedCashflowRead'
+    put:
+      tags:
+         - Proposed Cash Flow
+      operationId: ProposedCashFlowValuePut
+      summary: Update an existing proposed cash flow value by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the proposed cash flow value to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProposedCashflowWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+         - Proposed Cash Flow
+      operationId: ProposedCashFlowValueDelete
+      summary: Delete proposed cash flow value by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of proposed cash flow value to delete
+          required: true
+          schema:
+            type: integer
+        - name: LastChangedUser
+          in: query
+          description: LastChangedUser of proposed cash flow value to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+  
+  
+  
+  /complete-step/{ReportBatchId}:
+    post:
+      summary: Complete ProjectedCashflowCapture and ActualCashflowCapture Steps
+      tags:
+        - Complete Step
+      operationId: CompleteStepPost
+      parameters:
+        - name: ReportBatchId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteStepWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+                 
+  /complete-weekly-batch:
+    post:
+      summary: Complete Weekly Batch
+      tags:
+        - Complete Step
+      operationId: CompleteWeeklyBatchPost
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+                 
+  /cash-flow-rebalancing-recommendations/{ReportBatchId}/{CurrencyId}:
+    get:
+      tags:
+        - Cash Flow Rebalancing Recommendations
+      operationId: CashFlowRebalancingRecommendationsGet
+      summary: Get cash flow rebalancing recommendation by ReportBatchId 
+      parameters:
+        - name: ReportBatchId
+          in: path
+          description: Id of cash flow rebalancing recommendation
+          required: true
+          schema:
+            type: integer
+        - name: CurrencyId
+          in: path
+          description: Id of cash flow rebalancing recommendation
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ProjectedCashFlowValues:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProjectedCashflowRead'
+                  ActualCashFlowValues:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ActualCashflowRead'
+                  CalculatedCashFlowValues:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CalculatedCashflowRead'
+                  ProposedCashFlowValues: 
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProposedCashflowRead'
+                      
+  /historical-cash-flow/{ReportBatchId}/{CurrencyId}:
+    get:
+      tags:
+        - Historical Cash Flow
+      operationId: HistoricalCashFlowsGet
+      summary: Get historical cash flow by ReportBatchId and CurrencyId
+      parameters:
+        - name: ReportBatchId
+          in: path
+          description: Id of historical cash flow 
+          required: true
+          schema:
+            type: integer
+        - name: CurrencyId
+          in: path
+          description: Id of the requested historical cash flow 
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ProjectedCashFlowValues:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProjectedCashflowRead'
+                  ActualCashFlowValues:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ActualCashflowRead'
+                  CalculatedCashFlowValues:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CalculatedCashflowRead'
+                  ProposedCashFlowValues: 
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProposedCashflowRead'
+                      
+  /process-logs:
+    get:
+      tags:
+        - Process Logs
+      operationId: ProcessLogsGet
+      summary: Get all Weekly Process Logs
+      parameters:
+        - name: ReportBatchId
+          in: query
+          description: ReportBatchId of Weekly Process
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of all Weekly Process Logs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  WeeklyProcesslogs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WeeklyProcessLogRead'
+  
+  
+  /user-audit-trail:
+    get:
+      tags:
+        - Process Logs
+      operationId: AuditTrailGet
+      summary: Get audit trail of all user
+      parameters:
+        - name: ReportBatchId
+          in: query
+          description: ReportBatchId of Weekly Process
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of audit trail of all user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  UserAuditTrailRead:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserAuditTrailRead'
+
+components:
+  schemas:
+    ProjectedCashflowRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        ReportBatchId:
+          type: integer
+        ReportBatchType:
+          type: string
+        ReportDate:
+          type: string
+        WeeklyProcessWorkflowInstanceId:
+          type: string
+        CurrencyId:
+          type: integer
+        CurrencyCode:
+          type: string
+        OpeningCashBalance:
+          type: number
+          format: double
+        DtiGrantInflow:
+          type: number
+          format: double
+        PremiumInflow:
+          type: number
+          format: double
+        OtherInflow:
+          type: number
+          format: double
+        TotalInflow:
+          type: number
+          format: double
+        ImuOutflow:
+          type: number
+          format: double
+        ClaimsOutflow:
+          type: number
+          format: double
+        SalariesOutflow:
+          type: number
+          format: double
+        BonusesOutflow:
+          type: number
+          format: double
+        TaxOutflow:
+          type: number
+          format: double
+        OtherOpexOutflow:
+          type: number
+          format: double
+        TotalOutflow:
+          type: number
+          format: double
+        Buffer:
+          type: number
+          format: double
+       
+    ProjectedCashflowWrite:
+      type: object
+      required:
+        - ReportBatchId
+        - CurrencyId
+        -  OpeningCashBalance
+        - DtiGrantInflow
+        - PremiumInflow
+        - OtherInflow
+        - ImuOutflow
+        - ClaimsOutflow
+        - SalariesOutflow
+        - BonusesOutflow
+        - TaxOutflow
+        - OtherOpexOutflow
+        - Buffer
+        - LastChangedUser
+      properties:
+        ReportBatchId:
+          type: integer
+        CurrencyId:
+          type: integer
+        OpeningCashBalance:
+          type: number
+          format: double
+        DtiGrantInflow:
+          type: number
+          format: double
+        PremiumInflow:
+          type: number
+          format: double
+        OtherInflow:
+          type: number
+          format: double
+        ImuOutflow:
+          type: number
+          format: double
+        ClaimsOutflow:
+          type: number
+          format: double
+        SalariesOutflow:
+          type: number
+          format: double
+        BonusesOutflow:
+          type: number
+          format: double
+        TaxOutflow:
+          type: number
+          format: double
+        OtherOpexOutflow:
+          type: number
+          format: double
+        Buffer:
+          type: number
+          format: double
+        LastChangedUser: 
+          type: string
+    ActualCashflowRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        ReportBatchId:
+          type: integer
+        ReportBatchType:
+          type: string
+        ReportDate:
+          type: string
+        WeeklyProcessWorkflowInstanceId:
+          type: string
+        CurrencyId:
+          type: integer
+        CurrencyCode:
+          type: string
+        AnticipatedCashflow:
+          type: number
+          format: double
+        ActualCashflow:
+          type: number
+          format: double
+        UnitResponsible:
+          type: string
+        TransactionDate:
+          type: string
+          format: date
+          nullable: true
+        ReceiptsDate:
+          type: string
+          format: date
+          nullable: true
+                
+       
+    ActualCashflowWrite:
+      type: object
+      required:
+        - ReportBatchId
+        - CurrencyId
+        - AnticipatedCashflow
+        - LastChangedUser
+      properties:
+        ReportBatchId:
+          type: integer
+        CurrencyId:
+          type: integer
+        AnticipatedCashflow:
+          type: number
+          format: double
+        ActualCashflow:
+          type: number
+          format: double
+        UnitResponsible:
+          type: string
+        TransactionDate:
+          type: string
+          format: date
+        ReceiptsDate:
+          type: string
+          format: date
+        LastChangedUser: 
+          type: string
+    
+    CalculatedCashflowRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        ReportBatchId:
+          type: integer
+        ReportBatchType:
+          type: string
+        ReportDate:
+          type: string
+        WeeklyProcessWorkflowInstanceId:
+          type: string
+        PortfolioId:
+          type: integer
+        Portfolio:
+          type: string
+        TotalCurrencyMarketValue:
+          type: number
+          format: double
+        PortfolioMarketValue:
+          type: number
+          format: double
+        ActualWeight:
+          type: number
+          format: double
+        Saa:
+          type: number
+          format: double
+        SaaWeightAlpha:
+          type: number
+          format: double
+        SaaMarketValueAfterCashflow:
+          type: number
+          format: double
+        CalculatedRebalance:
+          type: number
+          format: double
+        NewSaa:
+          type: number
+          format: double
+        RebalancingDeviation:
+          type: number
+          format: double
+        PercentOfPortfolio:
+          type: number
+          format: double
+          
+    ProposedCashflowRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        ReportBatchId:
+          type: integer
+        ReportBatchType:
+          type: string
+        ReportDate:
+          type: string
+        PortfolioId:
+          type: integer
+        PortfolioName:
+          type: string
+        ProposedCashflow:
+          type: number
+          format: double
+       
+       
+    ProposedCashflowWrite:
+      type: object
+      required:
+        - ReportBatchId
+        - CurrencyId
+        - AnticipatedCashflow
+        - LastChangedUser
+      properties:
+        Id:
+          type: integer
+        ReportBatchId:
+          type: integer
+        PortfolioId:
+          type: integer
+        ProposedCashflow:
+          type: number
+          format: double
+        LastChangedUser: 
+          type: string
+    
+
+    Message:
+      properties:
+        Message:
+          type: string
+          
+    CompleteStepWrite:
+      type: object
+      properties:
+        CurrentStep:
+          type: string
+        NextStep:
+          type: string
+      required:
+        - Step
+       
+    WeeklyProcessLogRead: 
+      type: object
+      properties:
+        ReportBatchId:
+          type: integer
+        ReportDate:
+          type: string
+        EventName: 
+          type: string
+        ExecutedAt:
+          type: string
+        LastExecutedActivityName:
+          type: string
+          
+    UserAuditTrailRead: 
+      type: object
+      properties:
+        Id:
+          type: integer
+        ReportBatchId:
+          type: integer
+        ReportBatchType:
+          type: string
+        ReportDate:
+          type: string
+        ReportBatchWorkflowInstanceId:
+          type: string
+        Action: 
+          type: string
+        ActionUser:
+          type: string
+        ActionDate:
+          type: string
+          
+     
+      
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+security:
+  - ApiKeyAuth: []

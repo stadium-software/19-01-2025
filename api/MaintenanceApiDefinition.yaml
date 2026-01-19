@@ -1,0 +1,4193 @@
+openapi: 3.0.1
+info:
+  title: MaintenanceApi
+  version: 0.0.1
+servers:
+  - url: http://localhost:10001
+
+paths:
+
+  /configurations:
+    get:
+      tags:
+        - Configuration
+      operationId: ConfigurationsGet
+      responses:
+        '200':
+          description: A list of all configurations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  TransformTypes:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/TransformType'
+                  TransformAssetManagerTypes: 
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/TransformAssetManagerType'
+                  Benchmarks: 
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/NameId'
+                  Tranches: 
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/NameId'
+                  Portfolios: 
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/NameId'
+                  TrancheCurrencies: 
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/NameId'
+                  ManagementFeeRanges: 
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/ManagementFeeRangeRead'
+                  AssetClassGroupTypes: 
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/AssetClassGroupType'
+                  AssetClassGroups: 
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/AssetClassGroup'
+                  CreditRatingGroupTypes: 
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/CreditRatingGroupType'
+                  CreditRatingGroups: 
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/CreditRatingGroup'
+                  FileTypes: 
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/FileType'
+                  FileSources: 
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/FileSource'
+                  FileFormats: 
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/FileFormat'
+                  WorkflowDefinitions: 
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/WorkflowDefinition'
+                      
+  /regional-exposures:
+    get:
+      tags:
+        - Configuration
+      operationId: RegionalExposuresGet
+      responses:
+        '200':
+          description: A list of all regional exposures
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  RegionalExposures:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RegionalExposureRead'
+                      
+                    
+  /countries:
+    get:
+      tags:
+        - Country
+      operationId: CountriesGet
+      responses:
+        '200':
+          description: A list of all countries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Countries:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CountriesRead'
+    post:
+      tags:
+        - Country
+      operationId: CountryPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CountriesWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /countries/{Id}:
+    get:
+      tags:
+        - Country
+      operationId: CountryGet
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountriesRead'
+    put:
+      tags:
+        - Country
+      operationId: CountryPut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CountriesWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Country
+      operationId: CountryDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Delete the country with matching id
+          required: true
+          schema:
+            type: string
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /currencies:
+    get:
+      tags:
+        - Currency
+      operationId: CurrenciesGet
+      responses:
+        '200':
+          description: A list of all currencies
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Currencies:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CurrenciesRead'
+    post:
+      tags:
+        - Currency
+      operationId: CurrencyPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CurrenciesWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /currencies/{Id}:
+    get:
+      tags:
+        - Currency
+      operationId: CurrencyGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the currency
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrenciesRead'
+    put:
+      tags:
+        - Currency
+      operationId: CurrencyPut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CurrenciesWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Currency
+      operationId: CurrencyDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Delete currency with matching id
+          required: true
+          schema:
+            type: string
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /asset-managers:
+    get:
+      tags:
+        - Asset Manager
+      operationId: AssetManagersGet
+      responses:
+        '200':
+          description: A list of all asset managers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  AssetManagers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AssetManagersRead'
+    post:
+      tags:
+        - Asset Manager
+      operationId: AssetManagerPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetManagersWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /asset-managers/{Id}:
+    get:
+      tags:
+        - Asset Manager
+      operationId: AssetManagerGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the asset manager
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetManagersRead'
+    put:
+      tags:
+        - Asset Manager
+      operationId: AssetManagerPut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetManagersWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Asset Manager
+      operationId: AssetManagerDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Delete assetmanager with matching id
+          required: true
+          schema:
+            type: string
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+                
+  /asset-managers-full-audit-trail:
+    get:
+      tags:
+        - Asset Manager
+      operationId: AssetManagerFullAuditTrailGet
+      responses:
+        '200':
+          description: A list of all asset managers audit trails
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  AssetManagerAuditTrails:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AssetManagerAuditTrailRead'
+                
+  /portfolios:
+    get:
+      tags:
+        - Portfolio
+      operationId: PortfoliosGet
+      responses:
+        '200':
+          description: A list of all asset managers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Portfolios:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PortfoliosRead'
+    post:
+      tags:
+        - Portfolio
+      operationId: PortfolioPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortfoliosWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /portfolios/{Id}:
+    get:
+      tags:
+        - Portfolio
+      operationId: PortfolioGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the Portfolio
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created (200)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PortfoliosRead'
+    put:
+      tags:
+        - Portfolio
+      operationId: PortfolioPut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortfoliosWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Portfolio
+      operationId: PortfolioDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Delete Portfolio with matching id
+          required: true
+          schema:
+            type: string
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+                
+  /portfolio-full-audit-trail:
+    get:
+      tags:
+        - Portfolio
+      operationId: PortfolioFullAuditTrailGet
+      responses:
+        '200':
+          description: A list of all audit trails for portfolios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  PortfolioAuditTrails:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PortfolioAuditTrailRead'
+                
+                
+  /indexes:
+    get:
+      tags:
+        - Index
+      operationId: IndexesGet
+      responses:
+        '200':
+          description: A list of all Indexes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Indexes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/IndexesRead'
+    post:
+      tags:
+        - Index
+      operationId: IndexPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IndexesWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /indexes/{Id}:
+    get:
+      tags:
+        - Index
+      operationId: IndexGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the Index
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexesRead'
+    put:
+      tags:
+        - Index
+      operationId: IndexPut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IndexesWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Index
+      operationId: IndexDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Delete index with matching id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /index-audit-trail/{Id}:
+    get:
+      tags:
+        - Index
+      operationId: IndexAuditTrailGet
+      summary: Get an Index by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested Index Audit Trail
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of Index Audit Trail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  IndexAuditTrail:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/IndexesRead'
+      
+  /index-full-audit-trail:
+    get:
+      tags:
+        - Index
+      operationId: IndexFullAuditTrailGet
+      summary: Get full index table audit trail
+      responses:
+        '200':
+          description: A list of Index Audit Trail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  IndexAuditTrail:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/IndexesRead'                    
+        
+  /benchmarks:
+    get:
+      tags:
+        - Benchmark
+      operationId: BenchmarksGet
+      responses:
+        '200':
+          description: A list of all Benchmarks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Benchmarks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BenchmarksRead'
+    post:
+      tags:
+        - Benchmark
+      operationId: BenchmarkPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BenchmarksWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+
+  /benchmarks/{Id}:
+    get:
+      tags:
+        - Benchmark
+      operationId: BenchmarkGet
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BenchmarksRead'
+    put:
+      tags:
+        - Benchmark
+      operationId: BenchmarkPut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BenchmarksWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Benchmark
+      operationId: BenchmarkDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Delete the Benchmark with matching id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  
+  
+  /benchmark-audit-trail/{Id}:
+    get:
+      tags:
+        - Benchmark
+      operationId: BenchmarkAuditTrailGet
+      summary: Get an Benchmark by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested Benchmark Audit Trail
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of Benchmark Audit Trail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  BenchmarkAuditTrail:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BenchmarksRead'
+                      
+  /benchmark-full-audit-trail:
+    get:
+      tags:
+        - Benchmark
+      operationId: BenchmarkFullAuditTrailGet
+      summary: Get an Audit Trail of Entire Benchmark Table
+      responses:
+        '200':
+          description: A list of Benchmark Audit Trail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  BenchmarkAuditTrail:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BenchmarksRead'
+
+ 
+  /credit-rating-scales:
+    get:
+      tags:
+        - Credit Rating Scale
+      operationId: CreditRatingScalesGet
+      summary: Get all CreditRatingScales
+      responses:
+        '200':
+          description: A list of all CreditRatingScales
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  CreditRatingScales:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CreditRatingScaleRead'
+    post:
+      tags:
+        - Credit Rating Scale
+      operationId: CreditRatingScalePost
+      summary: Create a new CreditRatingScale
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditRatingScaleWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /credit-ratings/{Id}:
+    get:
+      tags:
+        - Credit Rating Scale
+      operationId: CreditRatingScaleGet
+      summary: Get an CreditRatingScale by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested CreditRatingScale
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditRatingScaleRead'
+    put:
+      tags:
+        - Credit Rating Scale
+      operationId: CreditRatingScalePut
+      summary: Update an existing CreditRatingScale by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the CreditRatingScale to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditRatingScaleWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Credit Rating Scale
+      operationId: CreditRatingScaleDelete
+      summary: Delete an CreditRatingScale by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the CreditRatingScale to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+                    
+                    
+  /transforms:
+    get:
+      tags:
+        - Transformation
+      operationId: TransformsGet
+      summary: Get all Transforms
+      responses:
+        '200':
+          description: A list of all Transforms
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Transforms:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TransformRead'
+    post:
+      tags:
+        - Transformation
+      operationId: TransformPost
+      summary: Create a new Transform
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransformWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /transforms/{Id}:
+    get:
+      tags:
+        - Transformation
+      operationId: TransformGet
+      summary: Get an Transform by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested Transform
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransformRead'
+    put:
+      tags:
+        - Transformation
+      operationId: TransformPut
+      summary: Update an existing Transform by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the Transform to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransformWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Transformation
+      operationId: TransformDelete
+      summary: Delete an Transform by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the Transform to delete
+          required: true
+          schema:
+            type: integer
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+                
+  /transforms-full-audit-trail:
+    get:
+      tags:
+        - Transformation
+      operationId: TransformsFullAuditTrailGet
+      summary: Get all Transforms audit trails
+      responses:
+        '200':
+          description: A list of all Transforms audit trails
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  TransformAuditTrails:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TransformAuditTrailRead'
+  
+  /transform-asset-managers:
+    get:
+      tags:
+        - Transformation
+      operationId: TransformAssetManagersGet
+      summary: Get all TransformAssetManagers
+      responses:
+        '200':
+          description: A list of all TransformAssetManagers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  TransformAssetManagers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TransformAssetManagerRead'
+    post:
+      tags:
+        - Transformation
+      operationId: TransformAssetManagerPost
+      summary: Create a new TransformAssetManager
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransformAssetManagerWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /transform-asset-managers/{Id}:
+    get:
+      tags:
+        - Transformation
+      operationId: TransformAssetManagerGet
+      summary: Get an TransformAssetManager by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested TransformAssetManager
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransformAssetManagerRead'
+    put:
+      tags:
+        - Transformation
+      operationId: TransformAssetManagerPut
+      summary: Update an existing TransformAssetManager by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the TransformAssetManager to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransformAssetManagerWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Transformation
+      operationId: TransformAssetManagerDelete
+      summary: Delete an TransformAssetManager by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the TransformAssetManager to delete
+          required: true
+          schema:
+            type: integer
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+                
+  /transform-asset-managers-full-audit-trail:
+    get:
+      tags:
+        - Transformation
+      operationId: TransformAssetManagerFullAuditGet
+      summary: Get all audit trails TransformAssetManagers
+      responses:
+        '200':
+          description: A list of all TransformAssetManagers audit trails
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  TransformAssetManagerAuditTrails:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TransformAssetManagerAuditTrailRead'
+                
+  /tranche-portfolio-setup:
+    get:
+      tags:
+        - Tranche Portolio Setup
+      operationId: TranchePortfoliosGet
+      parameters:
+        - name: CurrencyId
+          in: query
+          description: CurrencyId of the Tranche Portfolio setup to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of Tranche Portfolio setups
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  TranchePortfolios:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TranchePortfolioRead'
+    post:
+      tags:
+        - Tranche Portolio Setup
+      operationId: TranchePortfolioPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranchePortfolioWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+
+  /tranche-portfolio-setup/{Id}:
+    get:
+      tags:
+          - Tranche Portolio Setup
+      operationId: TranchePortfolioGet
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranchePortfolioRead'
+    put:
+      tags:
+        - Tranche Portolio Setup
+      operationId: TranchePortfolioPut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranchePortfolioWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Tranche Portolio Setup
+      operationId: TranchePortfolioDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Delete the Tranche Portfolio Setup with matching id
+          required: true
+          schema:
+            type: integer
+        - name: LastChangedUser
+          in: query
+          description: Delete the Tranche Portfolio Setup with matching id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message' 
+                
+  /tranche-portfolio-setup-full-audit-trail:
+    get:
+      tags:
+        - Tranche Portolio Setup
+      operationId: TranchePortfolioFullAuditTrailGet
+      responses:
+        '200':
+          description: A list of Tranche Portfolio setup audit trails
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  TranchePortfolioAuditTrails:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TranchePortfolioAuditTrailRead'
+  
+  /management-fee-rates:
+    get:
+      tags:
+        - Management Fee Rate
+      operationId: ManagementFeeRatesGet
+      responses:
+        '200':
+          description: A list of all Management Fee Rates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ManagementFeeRates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ManagementFeeRateRead'
+    post:
+      tags:
+        - Management Fee Rate
+      operationId: ManagementFeeRatePost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManagementFeeRateWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+                
+  /management-fee-rates-audit-trail/{Id}:
+    get:
+      tags:
+        - Management Fee Rate
+      operationId: ManagementFeeRateAuditTrailGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the Management Fee Rate
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of all Management Fee Rate Audit Trails
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ManagementFeeRateAuditTrail:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ManagementFeeRateAuditTrailRead'
+                      
+  /management-fee-rates-full-audit-trail:
+    get:
+      tags:
+        - Management Fee Rate
+      operationId: ManagementFeeRateFullAuditTrailGet
+      responses:
+        '200':
+          description: A list of all Management Fee Rate Audit Trails
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ManagementFeeRateAuditTrail:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ManagementFeeRateAuditTrailRead'
+      
+  /management-fee-rates/{Id}:
+    get:
+      tags:
+        - Management Fee Rate
+      operationId: ManagementFeeRateGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the Management Fee Rate
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManagementFeeRateRead'
+    put:
+      tags:
+        - Management Fee Rate
+      operationId: ManagementFeeRatePut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManagementFeeRateWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Management Fee Rate
+      operationId: ManagementFeeRateDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Delete Management Fee Rate with matching id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  
+  /custody-fee-rates:
+    get:
+      tags:
+        - Custody Fee Rate
+      operationId: CustodyFeeRatesGet
+      responses:
+        '200':
+          description: A list of all Custody Fee Rates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  CustodyFeeRates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CustodyFeeRateRead'
+    post:
+      tags:
+        - Custody Fee Rate
+      operationId: CustodyFeeRatePost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustodyFeeRateWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+                
+  /custody-fee-rates-audit-trail/{Id}:
+    get:
+      tags:
+        - Custody Fee Rate
+      operationId: CustodyFeeRateAuditTrailGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the Custody Fee Rate
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  CustodyFeeRateAuditTrails:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CustodyFeeRateAuditTrailRead'
+                      
+  /custody-fee-rates-full-audit-trail:
+    get:
+      tags:
+        - Custody Fee Rate
+      operationId: CustodyFeeRateFullAuditTrailGet
+      responses:
+        '200':
+          description: Created (200)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  CustodyFeeRateAuditTrails:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CustodyFeeRateAuditTrailRead'
+                
+  /custody-fee-rates/{Id}:
+    get:
+      tags:
+        - Custody Fee Rate
+      operationId: CustodyFeeRateGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the Custody Fee Rate
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustodyFeeRateRead'
+    put:
+      tags:
+        - Custody Fee Rate
+      operationId: CustodyFeeRatePut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustodyFeeRateWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Custody Fee Rate
+      operationId: CustodyFeeRateDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Delete Custody Fee Rate with matching id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+                
+  /portfolio-asset-class-limit:
+    get:
+      tags:
+       - Asset Class Limit
+      operationId: PortfolioAssetClassLimitsGet
+      summary: Get all portfolio asset class limits by portfolioId
+      parameters:
+        - name: PortfolioId
+          in: query
+          description: Id of the requested portfolio asset class limit by portfolioId
+          required: true
+          schema:
+            type: integer
+      responses:
+       '200':
+        description: A list of all portfolio asset class limits by portfolioId
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                PortfolioAssetClassLimits:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PortfolioAssetClassLimitRead'
+
+    post:
+      tags:
+        -  Asset Class Limit
+      operationId: PortfolioAssetClassLimitPost
+      summary: Add portfolio asset class limit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortfolioAssetClassLimitWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /portfolio-asset-class-limit/{Id}:
+    get:
+      tags:
+        -  Asset Class Limit
+      operationId: PortfolioAssetClassLimitGet
+      summary: Get portfolio asset class limit by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested portfolio asset class limit
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortfolioAssetClassLimitRead'
+    put:
+      tags:
+         -  Asset Class Limit
+      operationId: PortfolioAssetClassLimitPut
+      summary: Update an existing portfolio asset class limit by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the portfolio asset class limit to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortfolioAssetClassLimitWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+         -  Asset Class Limit
+      operationId: PortfolioAssetClassLimitDelete
+      summary: Delete portfolio asset class limit by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of portfolio asset class limit to delete
+          required: true
+          schema:
+            type: integer
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+                 
+  /portfolio-asset-class-limit-full-audit-trail:
+    get:
+      tags:
+       - Asset Class Limit
+      operationId: PortfolioAssetClassLimitFullAuditTrailGet
+      summary: Get all portfolio asset class limit full audit trail
+      responses:
+       '200':
+        description: A list of all portfolio asset class limit audit trails
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                PortfolioAssetClassLimitAuditTrails:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PortfolioAssetClassLimitAuditTrailRead'
+                 
+  /asset-class-group-limit:
+    get:
+      tags:
+       - Asset Class Limit
+      operationId: AssetClassGroupLimitsGet
+      summary: Get all asset class group by AssetClassGroupTypeId and CurrencyId
+      parameters:
+        - name: AssetClassGroupTypeId
+          in: query
+          description: Id of the requested asset class group by AssetClassGroupTypeId
+          required: true
+          schema:
+            type: integer
+        - name: CurrencyId
+          in: query
+          description: Id of the requested asset class group by CurrencyId
+          required: true
+          schema:
+            type: integer
+      responses:
+       '200':
+        description: A list of all asset class group by AssetClassGroupTypeId and CurrencyId
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                AssetClassGroupLimits:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/AssetClassGroupLimitRead'
+
+    post:
+      tags:
+        -  Asset Class Limit
+      operationId: AssetClassGroupLimitPost
+      summary: Add asset class group limit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetClassGroupLimitWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+                
+  /asset-class-group-limit/{Id}:
+    get:
+      tags:
+        -  Asset Class Limit
+      operationId: AssetClassGroupLimitGet
+      summary: Get asset class group limit by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested asset class group limit
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetClassGroupLimitRead'
+    put:
+      tags:
+         -  Asset Class Limit
+      operationId: AssetClassGroupLimitPut
+      summary: Update an existing asset class group limit by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the asset class group limit to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetClassGroupLimitWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+         -  Asset Class Limit
+      operationId: AssetClassGroupLimitDelete
+      summary: Delete asset class group limit by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of asset class group limit to delete
+          required: true
+          schema:
+            type: integer
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+                 
+  /asset-class-group-limit-full-audit-trail:
+    get:
+      tags:
+       - Asset Class Limit
+      operationId: AssetClassGroupLimitFullAuditTrailGet
+      summary: Get all asset class group limits full audit trail
+      responses:
+       '200':
+        description: A list of all asset class group limits full audit trails
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                AssetClassGroupLimits:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/AssetClassGroupLimitAuditTrailRead'
+                 
+  /asset-class-group:
+    get:
+      tags:
+       - Asset Class Group
+      operationId: AssetClassGroupsGet
+      summary: Get all asset class groups
+      responses:
+       '200':
+        description: A list of all asset class group by AssetClassGroupTypeId and CurrencyId
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                AssetClassGroups:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/AssetClassGroupRead'
+
+    post:
+      tags:
+        -  Asset Class Group
+      operationId: AssetClassGroupPost
+      summary: Add asset class group
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetClassGroupWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+                
+  /asset-class-group/{Id}:
+    get:
+      tags:
+        -  Asset Class Group
+      operationId: AssetClassGroupGet
+      summary: Get asset class group by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested asset class group
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetClassGroupRead'
+    put:
+      tags:
+         -  Asset Class Group
+      operationId: AssetClassGroupPut
+      summary: Update an existing asset class group by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the asset class group to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetClassGroupWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+         -  Asset Class Group
+      operationId: AssetClassGroupDelete
+      summary: Delete asset class group by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of asset class group to delete
+          required: true
+          schema:
+            type: integer
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+                 
+  /asset-class-group-map:
+    get:
+      tags:
+       - Asset Class Group
+      operationId: AssetClassGroupMapsGet
+      summary: Get all asset class groups
+      responses:
+       '200':
+        description: A list of all asset class group maps
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                AssetClassGroupMaps:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/AssetClassGroupMapRead'
+
+    post:
+      tags:
+        -  Asset Class Group
+      operationId: AssetClassGroupMapPost
+      summary: Add asset class group map
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetClassGroupMapWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+                
+  /asset-class-group-map/{Id}:
+    get:
+      tags:
+        -  Asset Class Group
+      operationId: AssetClassGroupMapGet
+      summary: Get asset class group map by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested asset class group map
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetClassGroupMapRead'
+    put:
+      tags:
+         -  Asset Class Group
+      operationId: AssetClassGroupMapPut
+      summary: Update an existing asset class group map by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the asset class group map to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetClassGroupMapWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+         -  Asset Class Group
+      operationId: AssetClassGroupMapDelete
+      summary: Delete asset class group map by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of asset class group map to delete
+          required: true
+          schema:
+            type: integer
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+                 
+  /credit-rating-portfolio-limit:
+    get:
+      tags:
+       - Credit Rating Group Limit
+      operationId: CreditRatingGroupPortfolioLimitsGet
+      summary: Get all credit rating portfiolio limits
+      parameters:
+        - name: CreditRatingGroupTypeId
+          in: query
+          description: Id of the credit rating portfiolio limits by CreditRatingGroupTypeId
+          required: true
+          schema:
+            type: integer
+        - name: PortfolioId
+          in: query
+          description: Id of the credit rating portfiolio limits by PortfolioId
+          required: true
+          schema:
+            type: integer
+      responses:
+       '200':
+        description: A list of all credit rating portfiolio limits 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+               CreditRatingGroupPortfolioLimits:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/CreditRatingGroupPortfolioLimitRead'
+
+    post:
+      tags:
+        - Credit Rating Group Limit
+      operationId: CreditRatingGroupPortfolioLimitPost
+      summary: Add credit rating portfiolio limit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditRatingGroupPortfolioLimitWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /credit-rating-portfolio-limit/{Id}:
+    get:
+      tags:
+        - Credit Rating Group Limit
+      operationId: CreditRatingGroupPortfolioLimitGet
+      summary: Get credit rating portfiolio limit by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested credit rating portfiolio limit
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditRatingGroupPortfolioLimitRead'
+    put:
+      tags:
+         - Credit Rating Group Limit
+      operationId: CreditRatingGroupPortfolioLimitPut
+      summary: Update an existing credit rating portfiolio limit by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the credit rating portfiolio limit to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditRatingGroupPortfolioLimitWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Credit Rating Group Limit
+      operationId: CreditRatingGroupPortfolioLimitDelete
+      summary: Delete credit rating portfiolio limit by Id
+      parameters:
+        - name: Id
+          in: path
+          description: Id of credit rating portfiolio limit to delete
+          required: true
+          schema:
+            type: integer
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/Message'
+                 
+  /credit-rating-portfolio-limit-full-audit-trail:
+    get:
+      tags:
+       - Credit Rating Group Limit
+      operationId: CreditRatingGroupPortfolioLimitFullAuditTrailGet
+      summary: Get all credit rating portfiolio limit AUdit trails
+      responses:
+       '200':
+        description: A list of all credit rating portfiolio limit audit trails
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+               CreditRatingGroupPortfolioLimitAuditTrails:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/CreditRatingGroupPortfolioLimitAuditTrailRead'
+                 
+                 
+  /file-settings:
+    get:
+      tags:
+      - FileSetting
+      operationId: FileSettingsGet
+      responses:
+        '200':
+          description: A list of all FileSettings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  FileSettings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FileSettingRead'
+    post:
+      tags:
+      - FileSetting
+      operationId: FileSettingPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileSettingWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+                
+  /file-settings/{Id}:
+    get:
+      tags:
+        - FileSetting
+      operationId: FileSettingGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the FileSetting
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileSettingRead'
+    put:
+      tags:
+        - FileSetting
+      operationId: FileSettingPut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileSettingWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - FileSetting
+      operationId: FileSettingDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Delete FileSetting with matching id
+          required: true
+          schema:
+            type: string
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+                
+  
+  /finance-account-codes:
+    get:
+      tags:
+        - Finance Account Codes
+      operationId: FinanceAccountCodesGet
+      responses:
+        '200':
+          description: A list of all finance account codes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  FinanceAccountCodes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FinanceAccountCodeRead'
+    post:
+      tags:
+        - Finance Account Codes
+      operationId: FinanceAccountCodePost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinanceAccountCodeWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /finance-account-codes/{Id}:
+    get:
+      tags:
+        - Finance Account Codes
+      operationId: FinanceAccountCodeGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the finance account codes
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinanceAccountCodeRead'
+    put:
+      tags:
+        - Finance Account Codes
+      operationId: FinanceAccountCodePut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinanceAccountCodeWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Finance Account Codes
+      operationId: FinanceAccountCodeDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Delete finance account codes with matching id
+          required: true
+          schema:
+            type: string
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+                
+  /budget-performance-types:
+    get:
+      tags:
+        - Budget Performance
+      operationId: BudgetPerformanceTypesGet
+      responses:
+        '200':
+          description: A list of all Budget Performance Types
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  BudgetPerformanceTypes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BudgetPerformanceTypeRead'
+                
+  /budget-performance:
+    get:
+      tags:
+        - Budget Performance
+      operationId: BudgetPerformancesGet
+      responses:
+        '200':
+          description: A list of all Budget Performances
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  BudgetPerformances:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BudgetPerformanceRead'
+    post:
+      tags:
+        - Budget Performance
+      operationId: BudgetPerformancePost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BudgetPerformanceWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /budget-performance/{Id}:
+    get:
+      tags:
+        - Budget Performance
+      operationId: BudgetPerformanceGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the Budget Performance
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BudgetPerformanceRead'
+    put:
+      tags:
+        - Budget Performance
+      operationId: BudgetPerformancePut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BudgetPerformanceWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Budget Performance
+      operationId: BudgetPerformanceDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Delete Budget Performance with matching id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  
+  /report-list:
+    get:
+      tags:
+        - Report List
+      operationId: ReportListsGet
+      responses:
+        '200':
+          description: A list of all Report List
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ReportLists:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ReportListRead'
+    post:
+      tags:
+        - Report List
+      operationId: ReportListPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportListWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /report-list/{Id}:
+    get:
+      tags:
+        - Report List
+      operationId: ReportListGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the Report List
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportListRead'
+    put:
+      tags:
+        - Report List
+      operationId: ReportListPut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportListWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Report List
+      operationId: ReportListDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Delete Report List with matching id
+          required: true
+          schema:
+            type: string
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+
+  /portfolio-exclusion:
+    get:
+      tags:
+        - Portfolio Exclusion
+      operationId: PortfolioExclusionsGet
+      responses:
+        '200':
+          description: A list of all Portfolio Exclusions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  PortfolioExclusions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PortfolioExclusionRead'
+    post:
+      tags:
+        - Portfolio Exclusion
+      operationId: PortfolioExclusionPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortfolioExclusionWrite'
+      responses:
+        '201':
+          description: Created (201)
+          content:
+            application/json:
+              schema:
+                type: integer
+  /portfolio-exclusion/{Id}:
+    get:
+      tags:
+        - Portfolio Exclusion
+      operationId: PortfolioExclusionGet
+      parameters:
+        - name: Id
+          in: path
+          description: The id of the Portfolio Exclusion
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortfolioExclusionRead'
+    put:
+      tags:
+        - Portfolio Exclusion
+      operationId: PortfolioExclusionPut
+      parameters:
+        - name: Id
+          in: path
+          description: Id of the requested record
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortfolioExclusionWrite'
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+    delete:
+      tags:
+        - Portfolio Exclusion
+      operationId: PortfolioExclusionDelete
+      parameters:
+        - name: Id
+          in: path
+          description: Delete Portfolio Exclusion with matching id
+          required: true
+          schema:
+            type: string
+        - name: LastChangedUser
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK (200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+components:
+  schemas:
+    CountriesRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Code:
+          type: string
+        Name:
+          type: string
+        Code2:
+          type: string
+        Numeric:
+          type: string
+        RegionalExposureId:
+          type: integer
+        RegionalExposure:
+          type: string
+    CountriesWrite:
+      type: object
+      properties:
+        Code:
+          type: string
+        Name:
+          type: string
+        Code2:
+          type: string
+        Numeric:
+          type: string
+        RegionalExposureId:
+          type: integer
+        LastChangedUser:
+          type: string
+          
+    CurrenciesRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Code:
+          type: string
+        Name:
+          type: string
+        Numeric:
+          type: string
+        RegionalExposureId:
+          type: integer
+        RegionalExposure:
+          type: string
+    CurrenciesWrite:
+      type: object
+      properties:
+        Code:
+          type: string
+        Name:
+          type: string
+        Numeric:
+          type: string
+        RegionalExposureId:
+          type: integer
+        LastChangedUser:
+          type: string
+          
+    AssetManagersRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        BbbeeLevel:
+          type: integer
+          nullable: true
+        ChiefExecutiveOfficer:
+          type: string
+        ChiefInvestmentOfficer:
+          type: string
+        ClientRelationshipManager:
+          type: string
+        Code:
+          type: string
+        ExternalCode:
+          type: string
+        InceptionYear:
+          type: integer
+          nullable: true
+        Location:
+          type: string
+        Name:
+          type: string
+        Website:
+          type: string
+
+    AssetManagersWrite:
+      type: object
+      required:
+          - ChiefExecutiveOfficer
+          - ChiefInvestmentOfficer
+          - ClientRelationshipManager
+          - Code
+          - ExternalCode
+      properties:
+        BbbeeLevel:
+          type: integer
+        ChiefExecutiveOfficer:
+          type: string
+        ChiefInvestmentOfficer:
+          type: string
+        ClientRelationshipManager:
+          type: string
+        Code:
+          type: string
+        ExternalCode:
+          type: string
+        InceptionYear:
+          type: integer
+        Location:
+          type: string
+        Name:
+          type: string
+        Website:
+          type: string
+        LastChangedUser:
+          type: string
+          
+    AssetManagerAuditTrailRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        BbbeeLevel:
+          type: integer
+          nullable: true
+        ChiefExecutiveOfficer:
+          type: string
+        ChiefInvestmentOfficer:
+          type: string
+        ClientRelationshipManager:
+          type: string
+        Code:
+          type: string
+        ExternalCode:
+          type: string
+        InceptionYear:
+          type: integer
+          nullable: true
+        Location:
+          type: string
+        Name:
+          type: string
+        Website:
+          type: string
+        LastChangedUser:
+          type: string
+        ValidFrom:
+          type: string
+        ValidTo:
+          type: string
+    
+    PortfoliosWrite:
+      type: object
+      required:
+        - AssetManagerId
+        - BenchmarkId
+        - Code
+        - CurrencyId
+        - ExternalCode
+        - ExternalName
+        - FundStyle
+        - Mandate
+        - MandateAppointedDate
+        - MandateInceptionDate
+        - Name
+        - Objective
+        - MinimumAcceptableReturnIndexId
+      properties:
+        AssetManagerId:
+          type: integer
+        BenchmarkId:
+          type: integer
+        Code:
+          type: string
+        CurrencyId:
+          type: integer
+        ExternalCode:
+          type: string
+        ExternalName:
+          type: string
+        FundStyle:
+          type: string
+        Mandate:
+          type: string
+        MandateAppointedDate: 
+          type: string
+        MandateInceptionDate:
+          type: string
+        Name:
+          type: string
+        Objective:
+          type: string
+        PortfolioManagers:
+          type: array
+          items:
+            type: string
+        MinimumAcceptableReturnIndexId:
+          type: integer
+        LastChangedUser:
+          type: string
+    PortfoliosRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        AssetManagerId:
+          type: integer
+        BenchmarkId:
+          type: integer
+        Code:
+          type: string
+        CurrencyId:
+          type: integer
+        ExternalCode:
+          type: string
+        ExternalName:
+          type: string
+        FundStyle:
+          type: string
+        Mandate:
+          type: string
+        MandateAppointedDate: 
+          type: string
+        MandateInceptionDate:
+          type: string
+        Name:
+          type: string
+        Objective:
+          type: string
+        PortfolioManagers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PortfolioManager'
+        MinimumAcceptableReturnIndexId:
+          type: integer
+        MinimumAcceptableReturnIndex:
+          type: string
+    
+    PortfolioManager:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string  
+          
+    PortfolioAuditTrailRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        AssetManagerId:
+          type: integer
+        BenchmarkId:
+          type: integer
+        Code:
+          type: string
+        CurrencyId:
+          type: integer
+        ExternalCode:
+          type: string
+        ExternalName:
+          type: string
+        FundStyle:
+          type: string
+        Mandate:
+          type: string
+        MandateAppointedDate: 
+          type: string
+        MandateInceptionDate:
+          type: string
+        Name:
+          type: string
+        Objective:
+          type: string
+        PortfolioManagers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PortfolioManager'
+        MinimumAcceptableReturnIndexId:
+          type: integer
+        MinimumAcceptableReturnIndex:
+          type: string
+        LastChangedUser:
+          type: string
+        ValidFrom:
+          type: string
+        ValidTo:
+          type: string
+          
+    IndexesRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Code:
+          type: string
+        Name: 
+          type: string
+        BloombergTicker:
+          type: string
+        Description:
+          type: string
+        CurrencyId: 
+          type: integer
+        CurrencyCode: 
+          type: string
+        LastChangedUser:
+          type: string
+          description: The Name of the LastChangedUser (mandatory)
+        ValidFrom:
+          type: string
+        ValidTo:
+         type: string
+          
+    IndexesWrite:
+      type: object
+      required:
+          - Code
+          - Name
+          - BloombergTicker
+          - Description
+          - CurrencyId
+          - LastChangedUser
+      properties:
+        Code:
+          type: string
+        Name: 
+          type: string
+        BloombergTicker:
+          type: string
+        Description:
+          type: string
+        CurrencyId: 
+          type: integer
+        LastChangedUser:
+          type: string
+          
+    BenchmarksRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string
+        Description:
+          type: string
+        IndexWeights:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndexWeight'
+        Constant:
+          type: number
+          format: decimal
+          example: 2.0
+        LastChangedUser:
+          type: string
+          description: The Name of the LastChangedUser (mandatory)
+        ValidFrom:
+          type: string
+        ValidTo:
+         type: string
+
+    BenchmarksWrite:
+      type: object
+      required:
+          - Name
+          - IndexWeights
+      properties:
+        Name:
+          type: string
+        IndexWeights:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndexWeight'
+        Constant:
+          type: number
+          format: decimal
+          example: 2.0
+        LastChangedUser:
+          type: string
+
+    IndexWeight:
+      type: object
+      properties:
+        IndexId:
+          type: integer
+        Weight:
+          type: number
+          format: decimal
+          example: 0.01
+          
+    CreditRatingScaleRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Description:
+          type: string
+        EUCreditQualityStep:
+          type: string
+        BBComp:
+          type: string
+        Moodys: 
+          type: string
+        SandP:
+          type: string
+        Fitch:
+          type: string
+        StandardSovereign:
+          type: string
+        MoodysSovereign:
+          type: string
+        LastChangedUser:
+          type: string
+          description: The Name of the LastChangedUser (mandatory)
+        ValidFrom:
+          type: string
+          format: date-time
+        ValidTo:
+          type: string
+          format: date-time
+          
+          
+    CreditRatingScaleWrite:
+      type: object
+      required:
+        - Description
+        - EUCreditQualityStep
+        - BBComp
+        - Moodys
+        - SandP
+        - Fitch
+        - StandardSovereign
+        - MoodysSovereign
+        - LastChangedUser
+      properties:
+        Description:
+          type: string
+        EUCreditQualityStep:
+          type: integer
+        BBComp:
+          type: string
+        Moodys: 
+          type: string
+        SandP:
+          type: string
+        Fitch:
+          type: string
+        StandardSovereign:
+          type: string
+        MoodysSovereign:
+          type: string
+        LastChangedUser:
+          type: string
+          description: The Name of the LastChangedUser (mandatory)
+          
+    TransformType: 
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string
+    
+    TransformAssetManagerType: 
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string
+      
+          
+    TransformRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        TransformTypeId:
+          type: integer
+        TransformType:
+          type: string
+        Source:
+          type: string
+        Target: 
+          type: string
+        
+          
+    TransformWrite:
+      type: object
+      required:
+        - TransformTypeId
+        - Source
+        - Target
+      properties:
+        TransformTypeId:
+          type: integer
+        Source:
+          type: string
+        Target: 
+          type: string
+        LastChangedUser: 
+          type: string
+          
+    TransformAuditTrailRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        TransformTypeId:
+          type: integer
+        TransformType:
+          type: string
+        Source:
+          type: string
+        Target: 
+          type: string
+        LastChangedUser:
+          type: string
+        ValidFrom:
+          type: string
+        ValidTo:
+          type: string
+          
+    TransformAssetManagerRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        TransformTypeAssetManagerId:
+          type: integer
+        TransformTypeAssetManager:
+          type: string
+        AssetManagerId:
+          type: integer
+        AssetManager:
+          type: string
+        Source:
+          type: string
+        Target: 
+          type: string
+        
+    TransformAssetManagerWrite:
+      type: object
+      required:
+        - TransformTypeAssetManagerId
+        - AssetManagerId
+        - Source
+        - Target
+      properties:
+        TransformTypeAssetManagerId:
+          type: integer
+        AssetManagerId:
+          type: integer
+        Source:
+          type: string
+        Target: 
+          type: string
+        LastChangedUser: 
+          type: string
+      
+    TransformAssetManagerAuditTrailRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        TransformTypeAssetManagerId:
+          type: integer
+        TransformTypeAssetManager:
+          type: string
+        AssetManagerId:
+          type: integer
+        AssetManager:
+          type: string
+        Source:
+          type: string
+        Target: 
+          type: string
+        LastChangedUser:
+          type: string
+        ValidFrom:
+          type: string
+        ValidTo:
+          type: string
+  
+    TranchePortfolioRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        CurrencyId:
+          type: integer
+        CurrencyName:
+          type: string
+        PortfolioId:
+          type: integer
+        PortfolioCode:
+          type: string
+        TrancheTreeId:
+          type: integer
+        Tranche:
+          type: string
+        PerformanceTargetBenchmarkId:
+          type: integer
+        BenchmarkDescription:
+          type: string
+        PortfolioAllocation:
+          type: number
+          format: decimal
+        IpsDurationTarget:
+          type: number
+          format: decimal
+        IpsDurationMinimumLimit:
+          type: number
+          format: decimal
+        IpsDurationMaximumLimit:
+          type: number
+          format: decimal
+        TrackingErrorLimit:
+          type: number
+          format: decimal
+        EquityRiskLimit:
+          type: number
+          format: decimal
+        CurrencyRiskLimit:
+          type: number
+          format: decimal
+        InterestRateRiskLimit:
+          type: number
+          format: decimal
+        IpsDurationVariation:
+          type: number
+          format: decimal
+          
+    TranchePortfolioWrite:
+      type: object
+      properties:
+        CurrencyId:
+          type: integer
+        PortfolioId:
+          type: integer
+        TrancheTreeId:
+          type: integer
+        PerformanceTargetBenchmarkId:
+          type: integer
+        PortfolioAllocation:
+          type: number
+          format: decimal
+        IpsDurationTarget:
+          type: number
+          format: decimal
+        IpsDurationMinimumLimit:
+          type: number
+          format: decimal
+        IpsDurationMaximumLimit:
+          type: number
+          format: decimal
+        TrackingErrorLimit:
+          type: number
+          format: decimal
+        EquityRiskLimit:
+          type: number
+          format: decimal
+        CurrencyRiskLimit:
+          type: number
+          format: decimal
+        InterestRateRiskLimit:
+          type: number
+          format: decimal
+        LastChangedUser:
+          type: string
+        IpsDurationVariation:
+          type: number
+          format: decimal
+          
+    TranchePortfolioAuditTrailRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        CurrencyId:
+          type: integer
+        CurrencyName:
+          type: string
+        PortfolioId:
+          type: integer
+        PortfolioCode:
+          type: string
+        TrancheTreeId:
+          type: integer
+        Tranche:
+          type: string
+        PerformanceTargetBenchmarkId:
+          type: integer
+        BenchmarkDescription:
+          type: string
+        PortfolioAllocation:
+          type: number
+          format: decimal
+        IpsDurationTarget:
+          type: number
+          format: decimal
+        IpsDurationMinimumLimit:
+          type: number
+          format: decimal
+        IpsDurationMaximumLimit:
+          type: number
+          format: decimal
+        TrackingErrorLimit:
+          type: number
+          format: decimal
+        EquityRiskLimit:
+          type: number
+          format: decimal
+        CurrencyRiskLimit:
+          type: number
+          format: decimal
+        InterestRateRiskLimit:
+          type: number
+          format: decimal
+        IpsDurationVariation:
+          type: number
+          format: decimal
+        LastChangedUser:
+          type: string
+        ValidFrom:
+          type: string
+        ValidTo:
+          type: string
+          
+    Message:
+      properties:
+        Message:
+          type: string
+          
+    NameId:
+      properties:
+        Id:
+          type: integer 
+        Name:
+          type: string 
+          
+    ManagementFeeRateRead:
+      properties:
+        Id:
+          type: integer 
+        RatePerAnnum:
+          type: string 
+        ExcludingVat:
+          type: boolean
+        MinimiumAmount:
+          type: string
+        MaximumAmount:
+          type:  string
+        PortfolioId:
+          type: integer 
+        PortfolioCode:
+          type: string 
+        CurrencyId:
+          type: integer
+        CurrencyCode :
+          type: string
+          
+    ManagementFeeRateAuditTrailRead:
+      properties:
+        Id:
+          type: integer 
+        PortfolioCode:
+          type: string
+        RatePerAnnum:
+          type: string 
+        ExcludingVat:
+          type: boolean
+        MinimumAmount:
+          type: string
+        MaximumAmount:
+          type: string
+        CurrencyCode :
+          type: string
+        ChangedUser:
+          type: string
+        ChangedDate:
+          type: string
+          
+    ManagementFeeRateWrite:
+      type: object
+      required:
+        - RatePerAnnum
+        - ExcludingVat
+        - ManagementFeeRangeId
+        - PortfolioId
+      properties:
+        RatePerAnnum:
+          type: string 
+        ExcludingVat:
+          type: boolean
+        MinAmount:
+          type: string
+        MaxAmount:
+          type: string
+        PortfolioId:
+          type: integer 
+        CurrencyId: 
+          type: integer 
+        ChangedUser:
+          type: string
+          
+    ManagementFeeRangeRead: 
+      type: object 
+      properties: 
+        Id:
+          type: integer 
+        MinAmount:
+          type: string
+        MaxAmount:
+          type: string
+        CurrencyId:
+          type: integer
+
+    CustodyFeeRateRead:
+      properties:
+        Id:
+          type: integer 
+        PortfolioId:
+          type: integer
+        PortfolioCode:
+          type: string
+        RatePerAnnum:
+          type: number
+        LastChangedUser:
+          type: string
+          
+    CustodyFeeRateAuditTrailRead:
+      properties:
+        Id:
+          type: integer 
+        PortfolioId:
+          type: integer
+        PortfolioCode:
+          type: string
+        RatePerAnnum:
+          type: number
+        LastChangedUser:
+          type: string
+        ValidFrom:
+          type: string
+        ValidTo:
+          type: string
+    
+    CustodyFeeRateWrite:
+      type: object
+      required:
+        - PortfolioId
+        - RatePerAnnum
+        - LastChangedUser
+      properties:
+        PortfolioId:
+          type: integer
+        RatePerAnnum:
+          type: number
+        LastChangedUser:
+          type: string 
+    
+    PortfolioAssetClassLimitRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        PortfolioId:
+          type: integer
+        PortfolioCode:
+          type: string
+        AssetClassGroupId:
+          type: integer
+        AssetClassGroupName:
+          type: string
+        AssetClassGroupTypeId:
+          type: integer
+        AssetClassGroupTypeName:
+          type: string
+        MinimumLimit:
+          type: number 
+          format: double
+        MaximumLimit:
+          type: number 
+          format: double
+          
+    PortfolioAssetClassLimitAuditTrailRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        PortfolioId:
+          type: integer
+        PortfolioCode:
+          type: string
+        AssetClassGroupId:
+          type: integer
+        AssetClassGroupName:
+          type: string
+        AssetClassGroupTypeId:
+          type: integer
+        AssetClassGroupTypeName:
+          type: string
+        MinimumLimit:
+          type: number 
+          format: double
+        MaximumLimit:
+          type: number 
+          format: double
+        LastChangedUser:
+          type: string
+        ValidFrom:
+          type: string
+        ValidTo:
+          type: string
+                
+       
+    PortfolioAssetClassLimitWrite:
+      type: object
+      required:
+        - PortfolioId
+        - AssetClassGroupId
+        - MinimumLimit
+        - MaximumLimit
+      properties:
+        PortfolioId:
+          type: integer
+        AssetClassGroupId:
+          type: integer
+        MinimumLimit:
+          type: number 
+          format: double
+        MaximumLimit:
+          type: number 
+          format: double
+        LastChangedUser:
+          type: string
+          
+    AssetClassGroupLimitRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        AssetClassGroupId:
+          type: integer
+        AssetClassGroupName:
+          type: string
+        MinimumLimit:
+          type: number 
+          format: double
+        MaximumLimit:
+          type: number 
+          format: double
+        StrategicAllocation:
+          type: number 
+          format: double
+          
+    AssetClassGroupLimitAuditTrailRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        AssetClassGroupTypeId:
+          type: integer
+        AssetClassGroupTypeName:
+          type: string
+        AssetClassGroupId:
+          type: integer
+        AssetClassGroupName:
+          type: string
+        MinimumLimit:
+          type: number 
+          format: double
+        MaximumLimit:
+          type: number 
+          format: double
+        StrategicAllocation:
+          type: number 
+          format: double
+        LastChangedUser:
+          type: string
+        ValidFrom:
+          type: string
+        ValidTo:
+          type: string
+                
+       
+    AssetClassGroupLimitWrite:
+      type: object
+      required:
+        - AssetClassGroupId
+        - CurrencyId
+        - MinimumLimit
+        - MaximumLimit
+      properties:
+        AssetClassGroupId:
+          type: integer
+        CurrencyId:
+          type: integer
+        MinimumLimit:
+          type: number 
+          format: double
+        MaximumLimit:
+          type: number 
+          format: double
+        StrategicAllocation:
+          type: number 
+          format: double
+        LastChangedUser:
+          type: string
+          
+    AssetClassGroupRead:
+      type: object
+      properties:
+        AssetClassGroupId:
+          type: integer
+        AssetClassGroupName:
+          type: string
+        AssetClassGroupTypeId:
+          type: integer
+        AssetClassGroupTypeName:
+          type: string
+                
+       
+    AssetClassGroupWrite:
+      type: object
+      required:
+        - AssetClassGroupTypeId
+        - AssetClassGroupName
+      properties:
+        AssetClassGroupName:
+          type: string
+        AssetClassGroupTypeId:
+          type: integer
+        LastChangedUser:
+          type: string
+          
+    AssetClassGroupMapRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        AssetClassGroupTypeId:
+          type: integer
+        AssetClassGroupTypeName:
+          type: string
+        AssetClassGroupId:
+          type: integer
+        AssetClassGroupName:
+          type: string
+        AssetClassTreeId:
+          type: integer
+        AssetClassTreeName:
+          type: string
+                
+       
+    AssetClassGroupMapWrite:
+      type: object
+      required:
+        - AssetClassGroupId
+        - AssetClassTreeId
+      properties:
+        AssetClassGroupId:
+          type: integer
+        AssetClassTreeId:
+          type: integer
+        LastChangedUser:
+          type: string
+          
+          
+    AssetClassGroupType:
+      type: object
+      properties:
+        AssetClassGroupTypeId:
+          type: integer
+        AssetClassGroupTypeName:
+          type: string
+        
+    
+    AssetClassGroup:
+      type: object
+      properties:
+        AssetClassGroupId:
+          type: integer
+        AssetClassGroupName:
+          type: string
+        AssetClassGroupTypeId:
+          type: integer
+          
+    CreditRatingGroupPortfolioLimitRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        PortfolioId:
+          type: integer
+        PortfolioCode:
+          type: string
+        CreditRatingGroupId:
+          type: integer
+        CreditRatingGroupName:
+          type: string
+        IssuerCreditRatingLimit:
+          type: number 
+        PortfolioCreditRatingLimit:
+          type: number 
+        IssueLimit:
+          type: number 
+        CorporateBondType:
+          type: string
+                
+       
+    CreditRatingGroupPortfolioLimitWrite:
+      type: object
+      required:
+        - PortfolioId
+        - CreditRatingGroupId
+        - IssuerCreditRatingLimit
+        - PortfolioCreditRatingLimit
+      properties:
+        PortfolioId:
+          type: integer
+        CreditRatingGroupId:
+          type: integer
+        IssuerCreditRatingLimit:
+          type: number 
+        PortfolioCreditRatingLimit:
+          type: number 
+        IssueLimit:
+          type: number 
+        CorporateBondType:
+          type: string
+        LastChangedUser:
+          type: string
+          
+    CreditRatingGroupPortfolioLimitAuditTrailRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        PortfolioId:
+          type: integer
+        PortfolioCode:
+          type: string
+        CreditRatingGroupId:
+          type: integer
+        CreditRatingGroupName:
+          type: string
+        IssuerCreditRatingLimit:
+          type: number 
+        PortfolioCreditRatingLimit:
+          type: number 
+        IssueLimit:
+          type: number 
+        CorporateBondType:
+          type: string
+        LastChangedUser:
+          type: string
+        ValidFrom:
+          type: string
+        ValidTo:
+          type: string
+    
+          
+    CreditRatingGroupType:
+      type: object
+      properties:
+        CreditRatingGroupTypeId:
+          type: integer
+        CreditRatingGroupTypeName:
+          type: string
+        
+    
+    CreditRatingGroup:
+      type: object
+      properties:
+        CreditRatingGroupId:
+          type: integer
+        CreditRatingGroupName:
+          type: string
+        CreditRatingGroupTypeId:
+          type: integer
+          
+    FileSettingRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        FileSourceId:
+          type: integer
+        FileSourceName:
+          type: string
+        FileTypeId:
+          type: integer
+        FileTypeName:
+          type: string
+        FileFormatId:
+          type: integer
+        FileFormatName:
+          type: string
+        FileName:
+          type: string
+        Folder:
+          type: string
+        BackupFileName:
+          type: string
+        BackupFolder:
+          type: string
+        WorkflowDefinitionId:
+          type: integer
+        WorkflowDefinitionName:
+          type: string
+        IsActive:
+          type: string
+
+    FileSettingWrite:
+      type: object
+      required:
+        - FileSourceId
+        - FileTypeId
+        - FileFormatId
+        - FileName
+        - Folder
+        - BackupFileName
+        - WorkflowDefinitionId
+        - IsActive
+      properties:
+        FileSourceId:
+          type: integer
+        FileTypeId:
+          type: integer
+        FileFormatId:
+          type: integer
+        FileName:
+          type: string
+        Folder:
+          type: string
+        BackupFileName:
+          type: string
+        BackupFolder:
+          type: string
+        WorkflowDefinitionId:
+          type: string
+        IsActive:
+          type: boolean
+        LastChangedUser:
+          type: string
+    
+    FileType:
+      type: object
+      properties:
+        FileTypeId:
+          type: integer
+        FileTypeName:
+          type: string
+    
+    FileSource:
+      type: object
+      properties:
+        FileSourceId:
+          type: integer
+        FileSourceName:
+          type: string
+          
+    FileFormat:
+      type: object
+      properties:
+        FileFormatId:
+          type: integer
+        FileFormatName:
+          type: string
+          
+    WorkflowDefinition:
+      type: object
+      properties:
+        WorkflowDefinitionId:
+          type: integer
+        ProcessAutomationDefinitionId:
+          type: string
+        WorkflowDefinitionName:
+          type: string
+          
+    FinanceAccountCodeRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        PortfolioId:
+          type: integer
+        PortfolioName: 
+          type: string
+        InterestReceived:
+          type: string
+        RealisedProfitOrLoss:
+          type: string
+        ManagementFeesPaid:
+          type: string
+        OtherExpensesPaid: 
+          type: string
+        ReitDividendsReceived:
+          type: string
+        DividendsReceived:
+          type: string 
+        DividendWithholdingTax:
+          type: string
+        NetTrustReceivedOrPayed:
+          type: string
+        SundryIncomeOther:
+          type: string
+        UnrealisedProfitOrLoss: 
+          type: string
+        Transfers:
+          type: string
+        LongTermInvestment:
+          type: string 
+      
+          
+    FinanceAccountCodeWrite:
+      type: object
+      required:
+          - PortfolioId
+          - InterestReceived
+      properties:
+        PortfolioId:
+          type: integer
+        InterestReceived:
+          type: string
+        RealisedProfitOrLoss:
+          type: string
+          nullable: true
+        ManagementFeesPaid:
+          type: string
+          nullable: true
+        OtherExpensesPaid: 
+          type: string
+          nullable: true
+        ReitDividendsReceived:
+          type: string
+          nullable: true
+        DividendsReceived:
+          type: string 
+          nullable: true
+        DividendWithholdingTax:
+          type: string
+          nullable: true
+        NetTrustReceivedOrPayed:
+          type: string
+          nullable: true
+        SundryIncomeOther:
+          type: string
+          nullable: true
+        UnrealisedProfitOrLoss: 
+          type: string
+          nullable: true
+        Transfers:
+          type: string
+          nullable: true
+        LongTermInvestment:
+          type: string
+          nullable: true
+        LastChangedUser:
+          type: string
+          
+    RegionalExposureRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string
+          
+    BudgetPerformanceTypeRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string
+    
+    BudgetPerformanceRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        EffectiveDate:
+          type: string
+        PortfolioId:
+          type: integer
+        PortfolioCode:
+          type: string
+        TypeId:
+          type: integer
+        Type:
+          type: string
+        Performance:
+          type: number
+          format: double
+        LastChangedUser:
+          type: string
+       
+    BudgetPerformanceWrite:
+      type: object
+      required:
+        - PortfolioId
+        - Performance
+        - LastChangedUser
+      properties:
+        EffectiveDate:
+          type: string
+        PortfolioId:
+          type: integer
+        TypeId:
+          type: integer
+        Performance:
+          type: number
+          format: double
+        LastChangedUser:
+          type: string
+          
+    ReportListRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        ReportName:
+          type: string
+          
+    ReportListWrite:
+      type: object
+      required:
+        - PortfolioName
+      properties:
+        ReportName:
+          type: string
+        LastChangedUser:
+          type: string
+          
+    
+    PortfolioExclusionRead:
+      type: object
+      properties:
+        Id:
+          type: integer
+        PortfolioName:
+          type: string
+          
+    PortfolioExclusionWrite:
+      type: object
+      required:
+        - PortfolioName
+      properties:
+        PortfolioName:
+          type: string
+        LastChangedUser:
+          type: string
+    
+
+ 
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+security:
+  - ApiKeyAuth: []
