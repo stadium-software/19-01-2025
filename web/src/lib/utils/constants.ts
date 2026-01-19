@@ -14,6 +14,14 @@ export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8042';
 
 /**
+ * Monthly Process API base URL
+ * Used for report batch management and monthly processing operations
+ */
+export const MONTHLY_PROCESS_API_URL =
+  process.env.NEXT_PUBLIC_MONTHLY_PROCESS_API_URL ||
+  'http://localhost:10003/investinsight/monthly-process';
+
+/**
  * Default pagination settings
  * Customize based on your application's needs
  */

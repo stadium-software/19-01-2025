@@ -1,8 +1,13 @@
 /**
  * Report Batches API Functions
  * API endpoints for Epic 1: Start Page & Report Batch Management
+ *
+ * Uses the centralized API client for consistent error handling,
+ * logging, and audit trail support.
  */
 
+import { apiClient } from './client';
+import { MONTHLY_PROCESS_API_URL } from '@/lib/utils/constants';
 import type {
   ReportBatch,
   ReportBatchListResponse,
@@ -10,8 +15,66 @@ import type {
   CreateBatchResponse,
 } from '@/types/report-batch';
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8042';
+/**
+ * Custom API client for Monthly Process API
+ * Uses the different base URL for monthly process endpoints
+ */
+async function monthlyProcessClient<T>(
+  endpoint: string,
+  config: Parameters<typeof apiClient>[1] = {},
+): Promise<T> {
+  const url = `${MONTHLY_PROCESS_API_URL}${endpoint}`;
+
+  const { params, lastChangedUser, isBinaryResponse, ...fetchConfig } = config;
+
+  // Build query string
+  let fullUrl = url;
+  if (params) {
+    const queryParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined) {
+        queryParams.append(key, String(value));
+      }
+    });
+    const queryString = queryParams.toString();
+    if (queryString) {
+      fullUrl = `${url}?${queryString}`;
+    }
+  }
+
+  // Build headers
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(fetchConfig.headers as Record<string, string>),
+  };
+
+  if (lastChangedUser) {
+    headers['LastChangedUser'] = lastChangedUser;
+  }
+
+  const response = await fetch(fullUrl, {
+    ...fetchConfig,
+    headers,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    const message =
+      errorData.Messages?.[0] ||
+      `HTTP ${response.status}: ${response.statusText}`;
+    throw new Error(message);
+  }
+
+  if (isBinaryResponse) {
+    return (await response.blob()) as T;
+  }
+
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
+  return response.json();
+}
 
 /**
  * Fetch report batches with pagination and search
@@ -23,33 +86,14 @@ export async function getReportBatches(params: {
 }): Promise<ReportBatchListResponse> {
   const { page = 1, pageSize = 10, search } = params;
 
-  const queryParams = new URLSearchParams({
-    page: String(page),
-    pageSize: String(pageSize),
-  });
-
-  if (search) {
-    queryParams.set('search', search);
-  }
-
-  const response = await fetch(
-    `${API_BASE_URL}/v1/report-batches?${queryParams}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+  return monthlyProcessClient<ReportBatchListResponse>('/report-batches', {
+    method: 'GET',
+    params: {
+      page,
+      pageSize,
+      ...(search && { search }),
     },
-  );
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(
-      errorData.Messages?.[0] || 'Failed to fetch report batches',
-    );
-  }
-
-  return response.json();
+  });
 }
 
 /**
@@ -57,43 +101,22 @@ export async function getReportBatches(params: {
  */
 export async function createReportBatch(
   data: CreateBatchRequest,
+  lastChangedUser?: string,
 ): Promise<CreateBatchResponse> {
-  const response = await fetch(`${API_BASE_URL}/v1/report-batches`, {
+  return monthlyProcessClient<CreateBatchResponse>('/monthly-report-batch', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
     body: JSON.stringify(data),
+    lastChangedUser,
   });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.Messages?.[0] || 'Failed to create report batch');
-  }
-
-  return response.json();
 }
 
 /**
  * Get a single report batch by ID
  */
 export async function getReportBatch(batchId: string): Promise<ReportBatch> {
-  const response = await fetch(`${API_BASE_URL}/v1/report-batches/${batchId}`, {
+  return monthlyProcessClient<ReportBatch>(`/report-batches/${batchId}`, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
   });
-
-  if (!response.ok) {
-    if (response.status === 401) {
-      throw new Error('Session expired');
-    }
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.Messages?.[0] || 'Failed to fetch report batch');
-  }
-
-  return response.json();
 }
 
 /**
@@ -105,30 +128,12 @@ export async function exportReportBatches(params: {
 }): Promise<Blob> {
   const { includeFiltered = false, search } = params;
 
-  const queryParams = new URLSearchParams({
-    includeFiltered: String(includeFiltered),
-  });
-
-  if (search) {
-    queryParams.set('search', search);
-  }
-
-  const response = await fetch(
-    `${API_BASE_URL}/v1/report-batches/export?${queryParams}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'text/csv',
-      },
+  return monthlyProcessClient<Blob>('/report-batches/export', {
+    method: 'GET',
+    params: {
+      includeFiltered,
+      ...(search && { search }),
     },
-  );
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(
-      errorData.Messages?.[0] || 'Failed to export report batches',
-    );
-  }
-
-  return response.blob();
+    isBinaryResponse: true,
+  });
 }

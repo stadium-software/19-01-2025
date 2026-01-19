@@ -2,10 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { StatusBadge } from './StatusBadge';
+import { getReportBatches } from '@/lib/api/report-batches';
 import type { ReportBatch } from '@/types/report-batch';
-
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8042';
 
 interface FetchState {
   data: ReportBatch[];
@@ -14,7 +12,15 @@ interface FetchState {
   error: string | null;
 }
 
-export function ReportBatchesTable() {
+interface ReportBatchesTableProps {
+  onStateChange?: (state: {
+    total: number;
+    filtered: number;
+    searchTerm: string;
+  }) => void;
+}
+
+export function ReportBatchesTable({ onStateChange }: ReportBatchesTableProps) {
   const [state, setState] = useState<FetchState>({
     data: [],
     total: 0,
@@ -40,37 +46,24 @@ export function ReportBatchesTable() {
     setState((prev) => ({ ...prev, loading: true, error: null }));
 
     try {
-      const queryParams = new URLSearchParams({
-        page: String(page),
-        pageSize: String(pageSize),
+      const result = await getReportBatches({
+        page,
+        pageSize,
+        search: debouncedSearch || undefined,
       });
 
-      if (debouncedSearch) {
-        queryParams.set('search', debouncedSearch);
-      }
-
-      const response = await fetch(
-        `${API_BASE_URL}/v1/report-batches?${queryParams}`,
-        {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        },
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.Messages?.[0] ||
-            'Unable to load batches. Please try again later.',
-        );
-      }
-
-      const result = await response.json();
       setState({
         data: result.data,
         total: result.total,
         loading: false,
         error: null,
+      });
+
+      // Notify parent of state change for export functionality
+      onStateChange?.({
+        total: result.total,
+        filtered: debouncedSearch ? result.data.length : result.total,
+        searchTerm: debouncedSearch,
       });
     } catch (err) {
       // Network errors (TypeError) get a friendly message, API errors keep their message
@@ -85,7 +78,7 @@ export function ReportBatchesTable() {
             : 'Unable to load batches. Please try again later.',
       }));
     }
-  }, [page, debouncedSearch]);
+  }, [page, debouncedSearch, onStateChange]);
 
   useEffect(() => {
     fetchBatches();
@@ -180,22 +173,40 @@ export function ReportBatchesTable() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Batch ID
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Month
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Year
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Created Date
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Actions
               </th>
             </tr>
@@ -219,10 +230,16 @@ export function ReportBatchesTable() {
                   {formatDate(batch.createdDate)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <button className="text-blue-600 hover:text-blue-800 mr-4">
+                  <button
+                    aria-label={`View details for batch ${batch.id}`}
+                    className="text-blue-600 hover:text-blue-800 mr-4"
+                  >
                     View Details
                   </button>
-                  <button className="text-blue-600 hover:text-blue-800">
+                  <button
+                    aria-label={`View logs for batch ${batch.id}`}
+                    className="text-blue-600 hover:text-blue-800"
+                  >
                     View Logs
                   </button>
                 </td>

@@ -1,9 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8042';
+import { createReportBatch } from '@/lib/api/report-batches';
 
 const MONTHS = [
   'January',
@@ -106,41 +104,32 @@ export function CreateBatchModal({
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/v1/report-batches`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          month,
-          year: Number(year),
-          autoImport,
-        }),
+      await createReportBatch({
+        month,
+        year: Number(year),
+        autoImport,
       });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        const errorMessage = errorData.Messages?.[0];
-
-        if (response.status === 409) {
-          setError(
-            errorMessage || `A batch for ${month} ${year} already exists`,
-          );
-        } else if (response.status === 500) {
-          setError(
-            errorMessage || 'Unable to create batch. Please try again later.',
-          );
-        } else {
-          setError(
-            errorMessage || 'Unable to create batch. Please try again later.',
-          );
-        }
-        return;
-      }
 
       onSuccess?.();
       onClose();
     } catch (err) {
-      if (err instanceof Error && err.message.includes('timeout')) {
-        setError('Request timed out. Please try again.');
+      // Handle network errors (TypeError: Failed to fetch)
+      if (err instanceof TypeError) {
+        setError('Unable to create batch. Please try again later.');
+      } else if (err instanceof Error) {
+        // Check for specific error patterns
+        if (
+          err.message.includes('409') ||
+          err.message.toLowerCase().includes('already exists')
+        ) {
+          setError(`A batch for ${month} ${year} already exists`);
+        } else if (err.message.includes('timeout')) {
+          setError('Request timed out. Please try again.');
+        } else {
+          setError(
+            err.message || 'Unable to create batch. Please try again later.',
+          );
+        }
       } else {
         setError('Unable to create batch. Please try again later.');
       }

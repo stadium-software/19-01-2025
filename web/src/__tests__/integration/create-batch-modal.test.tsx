@@ -113,7 +113,7 @@ describe('Create Batch Modal - Story 1.2', () => {
       });
 
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('/v1/report-batches'),
+        expect.stringContaining('/monthly-report-batch'),
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({

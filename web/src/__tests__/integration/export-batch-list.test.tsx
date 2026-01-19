@@ -82,7 +82,7 @@ describe('Export Batch List - Story 1.5', () => {
       // Assert
       await waitFor(() => {
         expect(global.fetch).toHaveBeenCalledWith(
-          expect.stringContaining('/v1/report-batches/export'),
+          expect.stringContaining('/report-batches/export'),
           expect.anything(),
         );
       });
@@ -243,8 +243,11 @@ describe('Export Batch List - Story 1.5', () => {
         ).toBeInTheDocument();
       });
 
-      // Resolve to clean up
+      // Resolve and wait for state to settle
       resolveFetch!(createMockCSVResponse('data'));
+      await waitFor(() => {
+        expect(screen.getByText(/download ready/i)).toBeInTheDocument();
+      });
     });
 
     it('disables button during export', async () => {
@@ -270,8 +273,11 @@ describe('Export Batch List - Story 1.5', () => {
         ).toBeDisabled();
       });
 
-      // Resolve to clean up
+      // Resolve and wait for state to settle
       resolveFetch!(createMockCSVResponse('data'));
+      await waitFor(() => {
+        expect(screen.getByText(/download ready/i)).toBeInTheDocument();
+      });
     });
   });
 
@@ -385,8 +391,11 @@ describe('Export Batch List - Story 1.5', () => {
         expect(screen.getByText(/preparing export/i)).toBeInTheDocument();
       });
 
-      // Resolve to clean up
+      // Resolve and wait for state to settle
       resolveFetch!(createMockCSVResponse('data'));
+      await waitFor(() => {
+        expect(screen.getByText(/download ready/i)).toBeInTheDocument();
+      });
     });
 
     it('shows download ready notification when file is ready', async () => {

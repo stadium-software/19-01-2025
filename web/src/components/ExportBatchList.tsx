@@ -1,9 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8042';
+import { useState, useCallback } from 'react';
+import { exportReportBatches } from '@/lib/api/report-batches';
 
 interface ExportBatchListProps {
   totalBatches: number;
@@ -26,83 +24,66 @@ export function ExportBatchList({
   const hasFilters = totalBatches !== filteredBatches;
   const isLargeExport = totalBatches > 1000;
 
-  const formatDate = () => {
+  const formatDate = useCallback(() => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-  };
+  }, []);
 
-  const downloadCSV = async (includeFiltered: boolean) => {
-    setLoading(true);
-    setError(null);
-    setDownloadReady(false);
-    setExportStep('Preparing export... (Step 1 of 2)');
-
-    try {
-      const queryParams = new URLSearchParams({
-        includeFiltered: String(includeFiltered),
-      });
-
-      if (searchTerm) {
-        queryParams.set('search', searchTerm);
-      }
-
-      const response = await fetch(
-        `${API_BASE_URL}/v1/report-batches/export?${queryParams}`,
-        {
-          method: 'GET',
-          headers: { 'Content-Type': 'text/csv' },
-        },
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.Messages?.[0] ||
-            'Unable to export batches. Please try again later.',
-        );
-      }
-
-      setExportStep('Downloading... (Step 2 of 2)');
-      const blob = await response.blob();
-
-      // Create download link
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `report-batches-${formatDate()}.csv`;
+  const downloadCSV = useCallback(
+    async (includeFiltered: boolean) => {
+      setLoading(true);
+      setError(null);
+      setDownloadReady(false);
+      setExportStep('Preparing export... (Step 1 of 2)');
 
       try {
-        link.click();
-        setDownloadReady(true);
-      } catch {
-        setError('Please allow downloads from this site');
-      } finally {
-        URL.revokeObjectURL(url);
-      }
-    } catch (err) {
-      // Network errors (TypeError) get a friendly message
-      if (err instanceof TypeError) {
-        setError('Unable to export batches. Please try again later.');
-      } else if (err instanceof Error) {
-        if (err.message.includes('timeout')) {
-          setError(
-            'Export timed out. Try exporting fewer rows or contact support.',
-          );
-        } else {
-          setError(err.message);
-        }
-      } else {
-        setError('Unable to export batches. Please try again later.');
-      }
-    } finally {
-      setLoading(false);
-      setExportStep(null);
-      setShowConfirmation(false);
-      setShowLargeExportWarning(false);
-    }
-  };
+        const blob = await exportReportBatches({
+          includeFiltered,
+          search: searchTerm,
+        });
 
-  const handleExportClick = () => {
+        setExportStep('Downloading... (Step 2 of 2)');
+
+        // Create download link
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `report-batches-${formatDate()}.csv`;
+
+        try {
+          link.click();
+          setDownloadReady(true);
+        } catch {
+          setError('Please allow downloads from this site');
+        } finally {
+          URL.revokeObjectURL(url);
+        }
+      } catch (err) {
+        // Network errors (TypeError) get a friendly message
+        if (err instanceof TypeError) {
+          setError('Unable to export batches. Please try again later.');
+        } else if (err instanceof Error) {
+          if (err.message.includes('timeout')) {
+            setError(
+              'Export timed out. Try exporting fewer rows or contact support.',
+            );
+          } else {
+            setError(err.message);
+          }
+        } else {
+          setError('Unable to export batches. Please try again later.');
+        }
+      } finally {
+        setLoading(false);
+        setExportStep(null);
+        setShowConfirmation(false);
+        setShowLargeExportWarning(false);
+      }
+    },
+    [searchTerm, formatDate],
+  );
+
+  const handleExportClick = useCallback(() => {
     // No batches to export
     if (totalBatches === 0) {
       setError('No batches to export');
@@ -123,24 +104,31 @@ export function ExportBatchList({
 
     // No filters, export all immediately
     downloadCSV(false);
-  };
+  }, [
+    totalBatches,
+    isLargeExport,
+    hasFilters,
+    showLargeExportWarning,
+    showConfirmation,
+    downloadCSV,
+  ]);
 
-  const handleExportAll = () => {
+  const handleExportAll = useCallback(() => {
     downloadCSV(false);
-  };
+  }, [downloadCSV]);
 
-  const handleExportFiltered = () => {
+  const handleExportFiltered = useCallback(() => {
     downloadCSV(true);
-  };
+  }, [downloadCSV]);
 
-  const handleContinueLargeExport = () => {
+  const handleContinueLargeExport = useCallback(() => {
     setShowLargeExportWarning(false);
     if (hasFilters) {
       setShowConfirmation(true);
     } else {
       downloadCSV(false);
     }
-  };
+  }, [hasFilters, downloadCSV]);
 
   return (
     <div className="relative inline-block">
