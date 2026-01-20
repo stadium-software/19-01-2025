@@ -610,6 +610,47 @@ main
 - **Delete branches** after successful PR merge
 - **Use descriptive commit messages** following the project's commit format
 
+## CRITICAL: Mandatory Steps When Starting a New Epic
+
+**Before starting ANY new epic, Claude MUST perform these 3 steps in order:**
+
+### Step 1: Create a New Branch
+
+```bash
+# Always create a dedicated branch for the new epic
+git checkout -b feature/epic-<N>-<short-name>
+
+# Example: Starting Epic 3
+git checkout -b feature/epic-3-other-files
+```
+
+**Why:** Each epic should be isolated in its own branch for clean PR reviews and rollback capability.
+
+### Step 2: Clear Context (User Action)
+
+Claude should remind the user to clear context before proceeding:
+
+> "Before we start Epic N, please type `/clear` to reset the conversation context. This optimizes token usage and ensures we start fresh."
+
+**Why:** Large features exhaust the context window. Each epic's outputs are saved to files, so clearing loses nothing.
+
+### Step 3: Follow the TDD Workflow
+
+After context is cleared, follow the standard phases:
+1. SPECIFY - Read existing stories, write/enable acceptance tests
+2. IMPLEMENT - Implement features to make tests pass
+3. VERIFY - Run quality gates (tests, lint, build)
+
+**Do NOT skip these steps even if:**
+- The conversation was restored from a summary/compaction
+- The user says "continue" without specifying context
+- Previous epic just completed in the same session
+
+**If context was just restored from compaction:**
+- Ask the user before proceeding with any epic
+- Confirm which epic to work on
+- Recommend clearing context if significant work was summarized
+
 ## Context Clearing Between Phases
 
 When using the TDD workflow with multiple agents (ui-ux-designer → feature-planner → test-generator → implementation), clear the conversation context at these points to optimize token usage and maintain focus:

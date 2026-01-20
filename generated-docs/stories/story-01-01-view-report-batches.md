@@ -13,30 +13,30 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I am on the Start Page, when the page loads, then I see a table with columns: Batch ID, Month, Year, Status, Created Date, Actions
-- [ ] Given there are 10+ batches, when the page loads, then I see pagination controls (10 rows per page)
-- [ ] Given I am viewing the batch list, when I click the "Next" pagination button, then I see the next 10 batches
-- [ ] Given I am on page 2, when I click "Previous", then I see the first 10 batches again
-- [ ] Given batches exist with different statuses, when I view the list, then I see color-coded status badges (In Progress: blue, Completed: green, Failed: red, Pending: gray)
+- [x] Given I am on the Start Page, when the page loads, then I see a table with columns: Batch ID, Month, Year, Status, Created Date, Actions
+- [x] Given there are 10+ batches, when the page loads, then I see pagination controls (10 rows per page)
+- [x] Given I am viewing the batch list, when I click the "Next" pagination button, then I see the next 10 batches
+- [x] Given I am on page 2, when I click "Previous", then I see the first 10 batches again
+- [x] Given batches exist with different statuses, when I view the list, then I see color-coded status badges (In Progress: blue, Completed: green, Failed: red, Pending: gray)
 
 ### Search & Filter
-- [ ] Given I am viewing the batch list, when I type "2024" in the search box, then I see only batches with "2024" in any column
-- [ ] Given I search for "January", when the search completes, then I see only batches with Month = "January"
-- [ ] Given I search for a non-existent batch, when the search completes, then I see "No batches found" message
-- [ ] Given I have entered a search term, when I clear the search box, then I see all batches again
+- [x] Given I am viewing the batch list, when I type "2024" in the search box, then I see only batches with "2024" in any column
+- [x] Given I search for "January", when the search completes, then I see only batches with Month = "January"
+- [x] Given I search for a non-existent batch, when the search completes, then I see "No batches found" message
+- [x] Given I have entered a search term, when I clear the search box, then I see all batches again
 
 ### Edge Cases
-- [ ] Given there are no batches in the system, when the page loads, then I see "No report batches found. Create your first batch to get started."
-- [ ] Given there are exactly 10 batches, when the page loads, then I do not see pagination controls
-- [ ] Given there are 25 batches, when I view the list, then I see "Page 1 of 3" indicator
+- [x] Given there are no batches in the system, when the page loads, then I see "No report batches found. Create your first batch to get started."
+- [x] Given there are exactly 10 batches, when the page loads, then I do not see pagination controls
+- [x] Given there are 25 batches, when I view the list, then I see "Page 1 of 3" indicator
 
 ### Error Handling
-- [ ] Given the API is unavailable, when the page loads, then I see "Unable to load batches. Please try again later."
-- [ ] Given the API returns an error, when the page loads, then I see a toast notification with the error message
+- [x] Given the API is unavailable, when the page loads, then I see "Unable to load batches. Please try again later."
+- [x] Given the API returns an error, when the page loads, then I see a toast notification with the error message
 
 ### Loading States
-- [ ] Given I navigate to the Start Page, when data is loading, then I see a loading spinner with "Loading batches..." text
-- [ ] Given I am on the Start Page, when I click pagination, then I see a brief loading indicator during data fetch
+- [x] Given I navigate to the Start Page, when data is loading, then I see a loading spinner with "Loading batches..." text
+- [x] Given I am on the Start Page, when I click pagination, then I see a brief loading indicator during data fetch
 
 ## Implementation Notes
 - **API Endpoint:** `GET /v1/report-batches?page={page}&pageSize={pageSize}&search={term}`
@@ -64,9 +64,9 @@
 None - This is the foundation story
 
 ## Definition of Done
-- [ ] Table displays all batch columns correctly
-- [ ] Search filters results in real-time
-- [ ] Pagination works for 10+ batches
-- [ ] Status badges display correct colors
-- [ ] Loading and error states render properly
-- [ ] Tests pass for all acceptance criteria
+- [x] Table displays all batch columns correctly
+- [x] Search filters results in real-time
+- [x] Pagination works for 10+ batches
+- [x] Status badges display correct colors
+- [x] Loading and error states render properly
+- [x] Tests pass for all acceptance criteria

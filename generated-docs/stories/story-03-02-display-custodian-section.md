@@ -13,27 +13,27 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I navigate to the Other Files dashboard, when the page loads, then I see a section titled "Custodian Files"
-- [ ] Given I view the Custodian section, when I look at the file types, then I see rows for: Holdings Reconciliation, Transaction Reconciliation, Cash Reconciliation
-- [ ] Given I view a Custodian file row, when I look at the columns, then I see: File Type, File Name, Upload Date, Status, Actions
-- [ ] Given a Custodian file has been uploaded, when I view the row, then I see the file name, upload date, and status icon (same as Bloomberg section)
+- [x] Given I navigate to the Other Files dashboard, when the page loads, then I see a section titled "Custodian Files"
+- [x] Given I view the Custodian section, when I look at the file types, then I see rows for: Holdings Reconciliation, Transaction Reconciliation, Cash Reconciliation
+- [x] Given I view a Custodian file row, when I look at the columns, then I see: File Type, File Name, Upload Date, Status, Actions
+- [x] Given a Custodian file has been uploaded, when I view the row, then I see the file name, upload date, and status icon (same as Bloomberg section)
 
 ### Status and Actions
-- [ ] Given a Custodian file has any status, when I view the row, then I see the same status icons as Bloomberg files (green check, yellow warning, red X, gray clock, blue spinner)
-- [ ] Given a Custodian file has status "Pending", when I view the row, then I see an "Upload" button
-- [ ] Given a Custodian file has status "Success", when I view the row, then I see a "Re-import" button
-- [ ] Given a Custodian file has status "Failed", when I view the row, then I see "View Errors" and "Re-import" buttons
+- [x] Given a Custodian file has any status, when I view the row, then I see the same status icons as Bloomberg files (green check, yellow warning, red X, gray clock, blue spinner)
+- [x] Given a Custodian file has status "Pending", when I view the row, then I see an "Upload" button
+- [x] Given a Custodian file has status "Success", when I view the row, then I see a "Re-import" button
+- [x] Given a Custodian file has status "Failed", when I view the row, then I see "View Errors" and "Re-import" buttons
 
 ### Section Behavior
-- [ ] Given the Custodian section is visible, when I click the section header, then the section collapses
-- [ ] Given all Custodian files have status "Success", when I view the section header, then I see a green checkmark icon
+- [x] Given the Custodian section is visible, when I click the section header, then the section collapses
+- [x] Given all Custodian files have status "Success", when I view the section header, then I see a green checkmark icon
 
 ### Edge Cases
-- [ ] Given no Custodian files have been uploaded, when I view the section, then all rows show status "Pending"
+- [x] Given no Custodian files have been uploaded, when I view the section, then all rows show status "Pending"
 
 ### Loading and Error States
-- [ ] Given I navigate to the dashboard, when Custodian data is loading, then I see skeleton loaders
-- [ ] Given the API fails, when I view the section, then I see "Unable to load Custodian files. Please try again later."
+- [x] Given I navigate to the dashboard, when Custodian data is loading, then I see skeleton loaders
+- [x] Given the API fails, when I view the section, then I see "Unable to load Custodian files. Please try again later."
 
 ## Implementation Notes
 - **API Endpoint:** `GET /v1/report-batches/{batchId}/other-files?category=custodian`
@@ -43,7 +43,7 @@
 - Story 3.1: Display Bloomberg Files Section (shares UI components)
 
 ## Definition of Done
-- [ ] Custodian section displays all file types
-- [ ] Status icons and action buttons work correctly
-- [ ] Section collapse/expand functions
-- [ ] Tests pass for all acceptance criteria
+- [x] Custodian section displays all file types
+- [x] Status icons and action buttons work correctly
+- [x] Section collapse/expand functions
+- [x] Tests pass for all acceptance criteria

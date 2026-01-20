@@ -13,22 +13,22 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I click "Upload" on a Bloomberg file, when the popup opens, then I see the title "Upload [File Type] - Bloomberg"
-- [ ] Given I select a file and click "Upload & Process", when the upload completes, then the file status changes to "Processing"
-- [ ] Given I click "Re-import" on a Custodian file, when the popup opens, then I see the warning: "This will replace existing data"
-- [ ] Given I upload a valid CSV file, when processing completes, then the status changes to "Success"
+- [x] Given I click "Upload" on a Bloomberg file, when the popup opens, then I see the title "Upload [File Type] - Bloomberg"
+- [x] Given I select a file and click "Upload & Process", when the upload completes, then the file status changes to "Processing"
+- [x] Given I click "Re-import" on a Custodian file, when the popup opens, then I see the warning: "This will replace existing data"
+- [x] Given I upload a valid CSV file, when processing completes, then the status changes to "Success"
 
 ### File Validation
-- [ ] Given I upload a Bloomberg Prices file, when the system validates it, then it checks for required columns: InstrumentCode, Date, Price
-- [ ] Given I upload a Custodian Holdings file, when validation runs, then it checks for matching portfolio holdings
-- [ ] Given validation fails, when I view errors, then I see specific row/column error messages
+- [x] Given I upload a Bloomberg Prices file, when the system validates it, then it checks for required columns: InstrumentCode, Date, Price
+- [x] Given I upload a Custodian Holdings file, when validation runs, then it checks for matching portfolio holdings
+- [x] Given validation fails, when I view errors, then I see specific row/column error messages
 
 ### Reuse File Import Popup
-- [ ] Given I click Upload/Re-import on any Other File, when the popup opens, then it uses the same File Import Popup component from Epic 2
-- [ ] Given the popup is open, when I view the form, then I see drag-and-drop, browse button, and progress bar (same UI as Portfolio Files)
+- [x] Given I click Upload/Re-import on any Other File, when the popup opens, then it uses the same File Import Popup component from Epic 2
+- [x] Given the popup is open, when I view the form, then I see drag-and-drop, browse button, and progress bar (same UI as Portfolio Files)
 
 ### Edge Cases
-- [ ] Given I upload a Bloomberg file with 100,000+ rows, when processing starts, then I see "Large file detected. Processing may take several minutes."
+- [x] Given I upload a Bloomberg file with 100,000+ rows, when processing starts, then I see "Large file detected. Processing may take several minutes."
 
 ## Implementation Notes
 - **API Endpoint:** `POST /v1/report-batches/{batchId}/other-files/upload`
@@ -43,7 +43,7 @@
 - Stories 3.1-3.3: Display file sections (Upload button source)
 
 ## Definition of Done
-- [ ] Upload works for Bloomberg, Custodian, and Additional files
-- [ ] File Import Popup is reused successfully
-- [ ] Validation enforces category-specific rules
-- [ ] Tests pass for all acceptance criteria
+- [x] Upload works for Bloomberg, Custodian, and Additional files
+- [x] File Import Popup is reused successfully
+- [x] Validation enforces category-specific rules
+- [x] Tests pass for all acceptance criteria

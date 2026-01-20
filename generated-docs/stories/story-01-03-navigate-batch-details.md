@@ -13,35 +13,35 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I am viewing the batch list, when I click the "View Details" button for a batch, then I am navigated to the Monthly Process Workflow View
-- [ ] Given I navigate to batch details, when the page loads, then I see the workflow view for the selected batch (Batch ID, Month, Year displayed in header)
-- [ ] Given I am on the workflow view, when I use the browser back button, then I return to the Start Page with the batch list intact
-- [ ] Given I navigate to batch details, when the URL loads, then I see `/batches/{batchId}/workflow` in the address bar
+- [x] Given I am viewing the batch list, when I click the "View Details" button for a batch, then I am navigated to the Monthly Process Workflow View
+- [x] Given I navigate to batch details, when the page loads, then I see the workflow view for the selected batch (Batch ID, Month, Year displayed in header)
+- [x] Given I am on the workflow view, when I use the browser back button, then I return to the Start Page with the batch list intact
+- [x] Given I navigate to batch details, when the URL loads, then I see `/batches/{batchId}/workflow` in the address bar
 
 ### Navigation Confirmation
-- [ ] Given a batch has Status = "In Progress", when I click "View Details", then I navigate to the workflow view without confirmation
-- [ ] Given a batch has Status = "Pending", when I click "View Details", then I navigate to the workflow view without confirmation
-- [ ] Given a batch has Status = "Completed", when I click "View Details", then I navigate to the workflow view in read-only mode
-- [ ] Given a batch has Status = "Failed", when I click "View Details", then I navigate to the workflow view showing error information
+- [x] Given a batch has Status = "In Progress", when I click "View Details", then I navigate to the workflow view without confirmation
+- [x] Given a batch has Status = "Pending", when I click "View Details", then I navigate to the workflow view without confirmation
+- [x] Given a batch has Status = "Completed", when I click "View Details", then I navigate to the workflow view in read-only mode
+- [x] Given a batch has Status = "Failed", when I click "View Details", then I navigate to the workflow view showing error information
 
 ### Button States
-- [ ] Given I am viewing the batch list, when I hover over the "View Details" button, then I see a tooltip: "View workflow details for this batch"
-- [ ] Given I click "View Details", when the navigation is in progress, then I see a loading spinner (brief transition)
-- [ ] Given a batch is being deleted, when I view the batch list, then the "View Details" button is disabled for that batch
+- [x] Given I am viewing the batch list, when I hover over the "View Details" button, then I see a tooltip: "View workflow details for this batch"
+- [x] Given I click "View Details", when the navigation is in progress, then I see a loading spinner (brief transition)
+- [x] Given a batch is being deleted, when I view the batch list, then the "View Details" button is disabled for that batch
 
 ### Edge Cases
-- [ ] Given I navigate to a non-existent batch ID, when the page loads, then I see a 404 error: "Batch not found"
-- [ ] Given I navigate to an archived batch, when the workflow view loads, then I see a banner: "This batch has been archived and is read-only"
-- [ ] Given I have the workflow view open, when another user deletes the batch, then I see "This batch no longer exists" error and am redirected to Start Page
+- [x] Given I navigate to a non-existent batch ID, when the page loads, then I see a 404 error: "Batch not found"
+- [x] Given I navigate to an archived batch, when the workflow view loads, then I see a banner: "This batch has been archived and is read-only"
+- [x] Given I have the workflow view open, when another user deletes the batch, then I see "This batch no longer exists" error and am redirected to Start Page
 
 ### Error Handling
-- [ ] Given the API is unavailable, when I click "View Details", then I see "Unable to load batch details. Please try again later." error toast
-- [ ] Given the batch data is corrupted, when the workflow view loads, then I see "Unable to display workflow. Contact support." error message
-- [ ] Given my session expires, when I click "View Details", then I am redirected to the login page
+- [x] Given the API is unavailable, when I click "View Details", then I see "Unable to load batch details. Please try again later." error toast
+- [x] Given the batch data is corrupted, when the workflow view loads, then I see "Unable to display workflow. Contact support." error message
+- [x] Given my session expires, when I click "View Details", then I am redirected to the login page
 
 ### Keyboard Navigation
-- [ ] Given I am viewing the batch list, when I press Tab to focus the "View Details" button and press Enter, then I navigate to the workflow view
-- [ ] Given the batch list is visible, when I press Ctrl+Click (or Cmd+Click on Mac) on "View Details", then the workflow opens in a new tab
+- [x] Given I am viewing the batch list, when I press Tab to focus the "View Details" button and press Enter, then I navigate to the workflow view
+- [x] Given the batch list is visible, when I press Ctrl+Click (or Cmd+Click on Mac) on "View Details", then the workflow opens in a new tab
 
 ## Implementation Notes
 - **API Endpoint:** `GET /v1/report-batches/{batchId}`
@@ -62,9 +62,9 @@
 - Epic 10: Monthly Process Workflow Orchestration (destination screen)
 
 ## Definition of Done
-- [ ] "View Details" button navigates to correct workflow URL
-- [ ] Workflow view loads with correct batch data
-- [ ] Back button returns to Start Page
-- [ ] Error handling works for invalid batch IDs
-- [ ] Loading state displays during navigation
-- [ ] Tests pass for all acceptance criteria
+- [x] "View Details" button navigates to correct workflow URL
+- [x] Workflow view loads with correct batch data
+- [x] Back button returns to Start Page
+- [x] Error handling works for invalid batch IDs
+- [x] Loading state displays during navigation
+- [x] Tests pass for all acceptance criteria

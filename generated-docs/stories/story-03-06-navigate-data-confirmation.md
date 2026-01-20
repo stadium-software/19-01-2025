@@ -13,21 +13,21 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I am viewing the Other Files dashboard, when I click "Proceed to Data Confirmation", then I navigate to the Data Confirmation screen
-- [ ] Given I navigate successfully, when the page loads, then I see the URL `/batches/{batchId}/data-confirmation`
-- [ ] Given I am on Data Confirmation, when I use the browser back button, then I return to the Other Files dashboard
+- [x] Given I am viewing the Other Files dashboard, when I click "Proceed to Data Confirmation", then I navigate to the Data Confirmation screen
+- [x] Given I navigate successfully, when the page loads, then I see the URL `/batches/{batchId}/data-confirmation`
+- [x] Given I am on Data Confirmation, when I use the browser back button, then I return to the Other Files dashboard
 
 ### Validation Warnings
-- [ ] Given Bloomberg files have status "Pending", when I click Proceed, then I see a warning: "Bloomberg files not uploaded. Data quality may be affected. Continue?"
-- [ ] Given Custodian files have status "Failed", when I click Proceed, then I see a warning: "Custodian reconciliation failed. Review errors before proceeding."
-- [ ] Given only Additional files are pending, when I click Proceed, then I navigate immediately (no warning, they're optional)
+- [x] Given Bloomberg files have status "Pending", when I click Proceed, then I see a warning: "Bloomberg files not uploaded. Data quality may be affected. Continue?"
+- [x] Given Custodian files have status "Failed", when I click Proceed, then I see a warning: "Custodian reconciliation failed. Review errors before proceeding."
+- [x] Given only Additional files are pending, when I click Proceed, then I navigate immediately (no warning, they're optional)
 
 ### Processing Files Warning
-- [ ] Given any file has status "Processing", when I click Proceed, then I see "Files are still processing. Proceeding will leave this page. Processing will continue in background."
+- [x] Given any file has status "Processing", when I click Proceed, then I see "Files are still processing. Proceeding will leave this page. Processing will continue in background."
 
 ### Button State
-- [ ] Given the dashboard is loading, when I view the button, then "Proceed to Data Confirmation" is disabled until data loads
-- [ ] Given I hover over the button, when I view the tooltip, then I see "Continue to data verification phase"
+- [x] Given the dashboard is loading, when I view the button, then "Proceed to Data Confirmation" is disabled until data loads
+- [x] Given I hover over the button, when I view the tooltip, then I see "Continue to data verification phase"
 
 ## Implementation Notes
 - **Navigation:** Next.js router to `/batches/[batchId]/data-confirmation`
@@ -39,8 +39,8 @@
 - Epic 7: Data Confirmation & Verification (destination screen)
 
 ## Definition of Done
-- [ ] Proceed button navigates to Data Confirmation screen
-- [ ] Validation warnings display for pending/failed files
-- [ ] Users can proceed despite warnings (soft validation)
-- [ ] Workflow tracking marks Other Files as complete
-- [ ] Tests pass for all acceptance criteria
+- [x] Proceed button navigates to Data Confirmation screen
+- [x] Validation warnings display for pending/failed files
+- [x] Users can proceed despite warnings (soft validation)
+- [x] Workflow tracking marks Other Files as complete
+- [x] Tests pass for all acceptance criteria
