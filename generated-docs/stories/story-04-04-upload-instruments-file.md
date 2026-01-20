@@ -12,17 +12,17 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I click "Upload File", when I select a valid Excel/CSV file, then I see file name and size displayed
-- [ ] Given I upload a valid file, when processing completes, then I see "X instruments added, Y updated" summary
-- [ ] Given file upload succeeds, when I view the grid, then new/updated instruments appear
+- [x] Given I click "Upload File", when I select a valid Excel/CSV file, then I see file name and size displayed
+- [x] Given I upload a valid file, when processing completes, then I see "X instruments added, Y updated" summary
+- [x] Given file upload succeeds, when I view the grid, then new/updated instruments appear
 
 ### Edge Cases
-- [ ] Given I upload a file with invalid ISINs, when validation runs, then I see a list of invalid rows with reasons
-- [ ] Given I upload a file with duplicate ISINs, when processing runs, then duplicates are updated (not added)
+- [x] Given I upload a file with invalid ISINs, when validation runs, then I see a list of invalid rows with reasons
+- [x] Given I upload a file with duplicate ISINs, when processing runs, then duplicates are updated (not added)
 
 ### Error Handling
 - [ ] Given I upload a non-Excel file, when I click Upload, then I see "Invalid file format. Please upload .xlsx or .csv"
-- [ ] Given the API fails during upload, when processing starts, then I see "Upload failed. Please try again."
+- [x] Given the API fails during upload, when processing starts, then I see "Upload failed. Please try again."
 
 ## Implementation Notes
 - API: POST /v1/instruments/upload (multipart/form-data)
