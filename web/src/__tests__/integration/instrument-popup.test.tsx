@@ -343,4 +343,77 @@ describe('Instrument Popup - Story 4.8: View Instrument Popup Details', () => {
       ).toBeInTheDocument();
     });
   });
+
+  it('includes View Full Details button in popup', async () => {
+    const user = userEvent.setup();
+    mockFetch.mockResolvedValue(createMockResponse(createMockInstruments()));
+
+    render(<InstrumentsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('US0378331005')).toBeInTheDocument();
+    });
+
+    const row = screen.getByText('US0378331005').closest('tr');
+    await user.click(row!);
+
+    await waitFor(() => {
+      const dialog = screen.getByRole('dialog');
+      expect(
+        within(dialog).getByRole('button', { name: /view full details/i }),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('navigates to edit page when View Full Details is clicked', async () => {
+    const user = userEvent.setup();
+    mockFetch.mockResolvedValue(createMockResponse(createMockInstruments()));
+
+    render(<InstrumentsPage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('US0378331005')).toBeInTheDocument();
+    });
+
+    const row = screen.getByText('US0378331005').closest('tr');
+    await user.click(row!);
+
+    await waitFor(() => {
+      const dialog = screen.getByRole('dialog');
+      expect(dialog).toBeInTheDocument();
+    });
+
+    const viewDetailsButton = screen.getByRole('button', {
+      name: /view full details/i,
+    });
+    await user.click(viewDetailsButton);
+
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith('/instruments/inst-1/edit');
+    });
+  });
+});
+
+describe('Instrument Popup - Story 4.8: Error Handling', () => {
+  it('displays error message when popup encounters API error', async () => {
+    // Import InstrumentDetailPopup directly for error state testing
+    const { InstrumentDetailPopup } =
+      await import('@/components/InstrumentDetailPopup');
+
+    render(
+      <InstrumentDetailPopup
+        instrument={null}
+        open={true}
+        onOpenChange={vi.fn()}
+        error="Failed to fetch instrument"
+      />,
+    );
+
+    await waitFor(() => {
+      const dialog = screen.getByRole('dialog');
+      expect(
+        within(dialog).getByText(/failed to load details/i),
+      ).toBeInTheDocument();
+    });
+  });
 });

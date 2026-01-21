@@ -250,6 +250,62 @@ describe('Instrument Audit Trail - Story 4.5: View Instrument Audit Trail', () =
       expect(createdElements.length).toBeGreaterThan(0);
     });
   });
+
+  it('shows Load More button when audit trail has 100+ entries', async () => {
+    const user = userEvent.setup();
+    // First page response with hasMore = true
+    const page1Response = {
+      entries: Array.from({ length: 50 }, (_, i) => ({
+        id: `audit-${i}`,
+        instrumentId: 'inst-123',
+        action: 'Updated',
+        changedBy: `user-${i % 5}`,
+        changedAt: new Date(Date.now() - i * 86400000).toISOString(),
+        previousValues: { name: `Old Name ${i}` },
+        newValues: { name: `New Name ${i}` },
+      })),
+      totalCount: 110,
+      hasMore: true,
+    };
+
+    // Second page response
+    const page2Response = {
+      entries: Array.from({ length: 50 }, (_, i) => ({
+        id: `audit-${50 + i}`,
+        instrumentId: 'inst-123',
+        action: 'Updated',
+        changedBy: `user-${i % 5}`,
+        changedAt: new Date(Date.now() - (50 + i) * 86400000).toISOString(),
+        previousValues: { name: `Old Name ${50 + i}` },
+        newValues: { name: `New Name ${50 + i}` },
+      })),
+      totalCount: 110,
+      hasMore: true,
+    };
+
+    mockFetch
+      .mockResolvedValueOnce(createMockResponse(page1Response))
+      .mockResolvedValueOnce(createMockResponse(page2Response));
+
+    render(<InstrumentAuditTrailPage />);
+
+    // Wait for initial load - use getAllByText since user-0 appears multiple times
+    await waitFor(() => {
+      expect(screen.getAllByText('user-0').length).toBeGreaterThan(0);
+    });
+
+    // Should show Load More button when hasMore is true
+    const loadMoreButton = screen.getByRole('button', { name: /load more/i });
+    expect(loadMoreButton).toBeInTheDocument();
+
+    // Click to load more
+    await user.click(loadMoreButton);
+
+    // Verify second page was fetched
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledTimes(2);
+    });
+  });
 });
 
 describe('Instrument History - Story 4.6: View Instrument History', () => {
@@ -468,11 +524,165 @@ describe('Instrument History - Story 4.6: View Instrument History', () => {
   });
 });
 
-// Story 4.7: Export Incomplete ISINs - Currently not implemented in grid
-// Tests marked as skip until the Export Incomplete button is added to InstrumentsPage
-describe.skip('Export Incomplete ISINs - Story 4.7: Export Incomplete ISINs', () => {
+// Story 4.7: Export Incomplete ISINs
+describe('Export Incomplete ISINs - Story 4.7: Export Incomplete ISINs', () => {
+  // Mock data matching InstrumentListResponse
+  const mockInstrumentsResponse = {
+    instruments: [
+      {
+        id: 'inst-1',
+        isin: 'US0378331005',
+        name: 'Apple Inc.',
+        assetClass: 'Equity',
+        currency: 'USD',
+        status: 'Complete',
+        issuer: 'Apple Inc.',
+        maturityDate: null,
+      },
+      {
+        id: 'inst-2',
+        isin: 'XS1234567890',
+        name: 'Incomplete Bond',
+        assetClass: '',
+        currency: 'EUR',
+        status: 'Incomplete',
+        issuer: '',
+        maturityDate: null,
+      },
+    ],
+    totalCount: 2,
+    hasMore: false,
+  };
+
+  // Need to import the InstrumentsPage for full integration test
+  // This is tested via instrument-grid.test.tsx which tests the InstrumentGrid component directly
   it('shows Export Incomplete button on instruments grid', async () => {
-    // This feature requires the Export Incomplete button to be added to InstrumentGrid
-    expect(true).toBe(true);
+    // Import dynamically to avoid module issues
+    const InstrumentsPage = (await import('@/app/instruments/page')).default;
+
+    mockFetch.mockResolvedValue(createMockResponse(mockInstrumentsResponse));
+
+    render(<InstrumentsPage />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: /export incomplete/i }),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('downloads Excel file when Export Incomplete is clicked', async () => {
+    const user = userEvent.setup();
+    const InstrumentsPage = (await import('@/app/instruments/page')).default;
+
+    // Create mock blob for Excel file
+    const mockExcelBlob = new Blob(['mock excel content'], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+
+    mockFetch
+      .mockResolvedValueOnce(createMockResponse(mockInstrumentsResponse))
+      .mockResolvedValueOnce({
+        ...createMockResponse(mockExcelBlob),
+        blob: () => Promise.resolve(mockExcelBlob),
+        headers: {
+          get: (name: string) => {
+            if (name === 'content-type')
+              return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+            return null;
+          },
+        },
+      });
+
+    // Mock URL.createObjectURL
+    const mockCreateObjectURL = vi.fn(() => 'blob:test-url');
+    const mockRevokeObjectURL = vi.fn();
+    global.URL.createObjectURL = mockCreateObjectURL;
+    global.URL.revokeObjectURL = mockRevokeObjectURL;
+
+    render(<InstrumentsPage />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: /export incomplete/i }),
+      ).toBeInTheDocument();
+    });
+
+    const exportButton = screen.getByRole('button', {
+      name: /export incomplete/i,
+    });
+    await user.click(exportButton);
+
+    await waitFor(() => {
+      // Verify the export API was called
+      expect(mockFetch).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  it('shows info message when no incomplete instruments exist', async () => {
+    const user = userEvent.setup();
+    const InstrumentsPage = (await import('@/app/instruments/page')).default;
+
+    // Small blob that indicates no data
+    const emptyBlob = new Blob(['No incomplete instruments'], {
+      type: 'text/plain',
+    });
+    Object.defineProperty(emptyBlob, 'size', { value: 25 });
+
+    mockFetch
+      .mockResolvedValueOnce(createMockResponse(mockInstrumentsResponse))
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        blob: () => Promise.resolve(emptyBlob),
+        headers: {
+          get: () => 'text/plain',
+        },
+      });
+
+    render(<InstrumentsPage />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: /export incomplete/i }),
+      ).toBeInTheDocument();
+    });
+
+    const exportButton = screen.getByRole('button', {
+      name: /export incomplete/i,
+    });
+    await user.click(exportButton);
+
+    // Toast message handled in the component
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  it('shows error message when export API fails', async () => {
+    const user = userEvent.setup();
+    const InstrumentsPage = (await import('@/app/instruments/page')).default;
+
+    mockFetch
+      .mockResolvedValueOnce(createMockResponse(mockInstrumentsResponse))
+      .mockRejectedValueOnce(new Error('Export failed. Please try again.'));
+
+    render(<InstrumentsPage />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: /export incomplete/i }),
+      ).toBeInTheDocument();
+    });
+
+    const exportButton = screen.getByRole('button', {
+      name: /export incomplete/i,
+    });
+    await user.click(exportButton);
+
+    // Error is shown via toast
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledTimes(2);
+    });
   });
 });

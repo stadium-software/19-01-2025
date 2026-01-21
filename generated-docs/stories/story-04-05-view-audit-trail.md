@@ -18,7 +18,7 @@
 
 ### Edge Cases
 - [x] Given an instrument has no changes, when I view audit trail, then I see "No changes recorded" message
-- [ ] Given audit trail has 100+ entries, when I scroll, then pagination loads older records
+- [x] Given audit trail has 100+ entries, when I scroll, then pagination loads older records
 
 ### Error Handling
 - [x] Given the API fails, when I load audit trail, then I see "Failed to load audit trail. Please try again."

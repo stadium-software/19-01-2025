@@ -1,7 +1,12 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { getInstruments, exportInstruments } from '@/lib/api/instruments';
+import {
+  getInstruments,
+  exportInstruments,
+  exportIncompleteIsins,
+} from '@/lib/api/instruments';
+import { useToast } from '@/contexts/ToastContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -24,7 +29,13 @@ import {
   COLUMN_PREFERENCES_KEY,
   INSTRUMENT_COLUMNS,
 } from '@/types/instrument';
-import { ArrowUpDown, Download, Columns, Search } from 'lucide-react';
+import {
+  ArrowUpDown,
+  Download,
+  Columns,
+  Search,
+  AlertTriangle,
+} from 'lucide-react';
 
 interface InstrumentGridProps {
   onSelectInstrument?: (instrument: Instrument) => void;
@@ -36,6 +47,7 @@ interface SortConfig {
 }
 
 export function InstrumentGrid({ onSelectInstrument }: InstrumentGridProps) {
+  const { showToast } = useToast();
   const [instruments, setInstruments] = useState<Instrument[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [hasMore, setHasMore] = useState(false);
@@ -46,6 +58,7 @@ export function InstrumentGrid({ onSelectInstrument }: InstrumentGridProps) {
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
   const [page, setPage] = useState(1);
   const [exporting, setExporting] = useState(false);
+  const [exportingIncomplete, setExportingIncomplete] = useState(false);
   const [columnDialogOpen, setColumnDialogOpen] = useState(false);
   const [columnVisibility, setColumnVisibility] = useState<ColumnVisibility>(
     () => {
@@ -153,6 +166,66 @@ export function InstrumentGrid({ onSelectInstrument }: InstrumentGridProps) {
       );
     } finally {
       setExporting(false);
+    }
+  };
+
+  // Handle export incomplete ISINs
+  const handleExportIncomplete = async () => {
+    setExportingIncomplete(true);
+    try {
+      const blob = await exportIncompleteIsins({ format: 'excel' });
+
+      // Check if the response indicates no incomplete instruments
+      // A blob with size 0 or a very small response may indicate no data
+      if (blob.size < 100) {
+        // Try to read as text to check for error message
+        const text = await blob.text();
+        if (
+          text.includes('No incomplete instruments') ||
+          text.includes('empty')
+        ) {
+          showToast({
+            title: 'Info',
+            message: 'No incomplete instruments found',
+            variant: 'info',
+          });
+          return;
+        }
+      }
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `incomplete-isins-${new Date().toISOString().split('T')[0]}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      showToast({
+        title: 'Success',
+        message: 'Incomplete ISINs exported successfully',
+        variant: 'success',
+      });
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'Export failed. Please try again.';
+
+      if (errorMessage.toLowerCase().includes('no incomplete')) {
+        showToast({
+          title: 'Info',
+          message: 'No incomplete instruments found',
+          variant: 'info',
+        });
+      } else {
+        showToast({
+          title: 'Error',
+          message: errorMessage,
+          variant: 'error',
+        });
+      }
+    } finally {
+      setExportingIncomplete(false);
     }
   };
 
@@ -307,6 +380,16 @@ export function InstrumentGrid({ onSelectInstrument }: InstrumentGridProps) {
           >
             <Columns className="h-4 w-4 mr-2" />
             Columns
+          </Button>
+
+          <Button
+            variant="outline"
+            onClick={handleExportIncomplete}
+            disabled={exportingIncomplete}
+            aria-label="Export Incomplete"
+          >
+            <AlertTriangle className="h-4 w-4 mr-2" />
+            {exportingIncomplete ? 'Exporting...' : 'Export Incomplete'}
           </Button>
 
           <Button

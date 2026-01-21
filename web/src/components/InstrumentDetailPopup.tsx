@@ -7,27 +7,34 @@
  * Displays detailed instrument information in a modal dialog.
  */
 
+import { useRouter } from 'next/navigation';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import type { Instrument } from '@/types/instrument';
 
 interface InstrumentDetailPopupProps {
-  instrument: Instrument;
+  instrument: Instrument | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  error?: string | null;
 }
 
 export function InstrumentDetailPopup({
   instrument,
   open,
   onOpenChange,
+  error,
 }: InstrumentDetailPopupProps) {
+  const router = useRouter();
+
   const formatDate = (dateString: string | null | undefined) => {
     if (!dateString) return '-';
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -36,6 +43,48 @@ export function InstrumentDetailPopup({
       day: 'numeric',
     });
   };
+
+  const handleViewFullDetails = () => {
+    if (instrument) {
+      onOpenChange(false);
+      router.push(`/instruments/${instrument.id}/edit`);
+    }
+  };
+
+  // Handle error state
+  if (error) {
+    return (
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Error</DialogTitle>
+          </DialogHeader>
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md">
+            Failed to load details
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => onOpenChange(false)}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  // Handle no instrument
+  if (!instrument) {
+    return (
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Instrument Details</DialogTitle>
+          </DialogHeader>
+          <div className="text-gray-500 py-4">Loading...</div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -88,6 +137,13 @@ export function InstrumentDetailPopup({
             </div>
           )}
         </div>
+
+        <DialogFooter className="gap-2 sm:gap-0">
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Close
+          </Button>
+          <Button onClick={handleViewFullDetails}>View Full Details</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
