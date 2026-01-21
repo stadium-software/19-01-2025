@@ -12,12 +12,12 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I select a beta, when I click Edit, then I see the form pre-filled
-- [ ] Given I change the beta value, when I save, then I see "Beta updated successfully"
-- [ ] Given I update, when I save, then audit trail records the change
+- [x] Given I select a beta, when I click Edit, then I see the form pre-filled
+- [x] Given I change the beta value, when I save, then I see "Beta updated successfully"
+- [x] Given I update, when I save, then audit trail records the change
 
 ### Error Handling
-- [ ] Given the API fails, when I save, then I see "Failed to update"
+- [x] Given the API fails, when I save, then I see "Failed to update"
 
 ## Implementation Notes
 - API: PUT /v1/instrument-betas/{id}

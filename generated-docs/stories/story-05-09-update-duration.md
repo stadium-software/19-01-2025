@@ -12,12 +12,12 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I select a duration, when I click Edit, then I see the form pre-filled
-- [ ] Given I change duration or YTM, when I save, then I see "Duration updated successfully"
-- [ ] Given I update, when I save, then audit trail records the change
+- [x] Given I select a duration, when I click Edit, then I see the form pre-filled
+- [x] Given I change duration or YTM, when I save, then I see "Duration updated successfully"
+- [x] Given I update, when I save, then audit trail records the change
 
 ### Error Handling
-- [ ] Given the API fails, when I save, then I see "Failed to update"
+- [x] Given the API fails, when I save, then I see "Failed to update"
 
 ## Implementation Notes
 - API: PUT /v1/instrument-durations/{id}

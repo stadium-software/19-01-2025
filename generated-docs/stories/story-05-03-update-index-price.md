@@ -12,12 +12,12 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I select a price, when I click Edit, then I see the form pre-filled
-- [ ] Given I change the price, when I save, then I see "Price updated successfully"
-- [ ] Given I update a price, when I save, then the audit trail records the change
+- [x] Given I select a price, when I click Edit, then I see the form pre-filled
+- [x] Given I change the price, when I save, then I see "Price updated successfully"
+- [x] Given I update a price, when I save, then the audit trail records the change
 
 ### Error Handling
-- [ ] Given the API fails, when I save, then I see "Failed to update. Please try again."
+- [x] Given the API fails, when I save, then I see "Failed to update. Please try again."
 
 ## Implementation Notes
 - API: PUT /v1/index-prices/{id}

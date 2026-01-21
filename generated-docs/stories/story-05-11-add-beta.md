@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I click "Add Beta", when the form opens, then I see: ISIN, Benchmark, Beta, Effective Date
-- [ ] Given I fill all fields, when I save, then I see "Beta added successfully"
-- [ ] Given I add beta, when I save, then audit trail records it
+- [x] Given I click "Add Beta", when the form opens, then I see: ISIN, Benchmark, Beta, Effective Date
+- [x] Given I fill all fields, when I save, then I see "Beta added successfully"
+- [x] Given I add beta, when I save, then audit trail records it
 
 ### Edge Cases
-- [ ] Given I enter duplicate (ISIN + Benchmark + Date), when I save, then I see "Beta already exists"
+- [x] Given I enter duplicate (ISIN + Benchmark + Date), when I save, then I see "Beta already exists"
 
 ### Error Handling
-- [ ] Given I leave required fields empty, when I save, then I see validation errors
+- [x] Given I leave required fields empty, when I save, then I see validation errors
 
 ## Implementation Notes
 - API: POST /v1/instrument-betas

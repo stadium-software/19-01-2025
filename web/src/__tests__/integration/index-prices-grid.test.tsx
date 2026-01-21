@@ -94,7 +94,7 @@ const createMockResponse = (data: unknown, ok = true, status = 200) => ({
   },
 });
 
-describe.skip('Index Prices Grid - Story 5.1: View Index Prices Grid', () => {
+describe('Index Prices Grid - Story 5.1: View Index Prices Grid', () => {
   it('displays grid with required columns when page loads', async () => {
     mockFetch.mockResolvedValue(createMockResponse(createMockIndexPrices()));
     render(<IndexPricesPage />);
@@ -114,15 +114,15 @@ describe.skip('Index Prices Grid - Story 5.1: View Index Prices Grid', () => {
     render(<IndexPricesPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('SPX')).toBeInTheDocument();
+      expect(screen.getAllByText('SPX').length).toBeGreaterThan(0);
     });
 
-    expect(screen.getByText('S&P 500')).toBeInTheDocument();
+    expect(screen.getAllByText('S&P 500').length).toBeGreaterThan(0);
     expect(screen.getByText('INDU')).toBeInTheDocument();
     expect(
       screen.getByText('Dow Jones Industrial Average'),
     ).toBeInTheDocument();
-    expect(screen.getByText('4783.45')).toBeInTheDocument();
+    expect(screen.getByText('4,783.45')).toBeInTheDocument();
   });
 
   it('sorts grid when column header is clicked', async () => {
@@ -150,7 +150,7 @@ describe.skip('Index Prices Grid - Story 5.1: View Index Prices Grid', () => {
     render(<IndexPricesPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('SPX')).toBeInTheDocument();
+      expect(screen.getAllByText('SPX').length).toBeGreaterThan(0);
     });
 
     const searchBox = screen.getByRole('searchbox', {
@@ -214,7 +214,35 @@ describe.skip('Index Prices Grid - Story 5.1: View Index Prices Grid', () => {
 
   it('filters prices by date range when filter is applied', async () => {
     const user = userEvent.setup();
-    mockFetch.mockResolvedValue(createMockResponse(createMockIndexPrices()));
+    // Mock to return filtered data when startDate parameter is included
+    mockFetch.mockImplementation((url: string) => {
+      if (url.includes('startDate=2024-01-20')) {
+        return Promise.resolve(
+          createMockResponse({
+            prices: [
+              {
+                id: 'price-1',
+                indexCode: 'SPX',
+                indexName: 'S&P 500',
+                date: '2024-01-20',
+                price: 4783.45,
+                currency: 'USD',
+              },
+              {
+                id: 'price-2',
+                indexCode: 'INDU',
+                indexName: 'Dow Jones Industrial Average',
+                date: '2024-01-20',
+                price: 37863.8,
+                currency: 'USD',
+              },
+            ],
+            totalCount: 2,
+          }),
+        );
+      }
+      return Promise.resolve(createMockResponse(createMockIndexPrices()));
+    });
     render(<IndexPricesPage />);
 
     await waitFor(() => {
@@ -230,8 +258,8 @@ describe.skip('Index Prices Grid - Story 5.1: View Index Prices Grid', () => {
 
     await waitFor(() => {
       // Only prices from 2024-01-20 should be visible
-      expect(screen.getByText('4783.45')).toBeInTheDocument();
-      expect(screen.queryByText('4780.24')).not.toBeInTheDocument();
+      expect(screen.getByText('4,783.45')).toBeInTheDocument();
+      expect(screen.queryByText('4,780.24')).not.toBeInTheDocument();
     });
   });
 
@@ -260,7 +288,7 @@ describe.skip('Index Prices Grid - Story 5.1: View Index Prices Grid', () => {
     render(<IndexPricesPage />);
 
     await waitFor(() => {
-      expect(screen.getByText('SPX')).toBeInTheDocument();
+      expect(screen.getAllByText('SPX').length).toBeGreaterThan(0);
     });
 
     const exportButton = screen.getByRole('button', {
@@ -282,8 +310,8 @@ describe.skip('Index Prices Grid - Story 5.1: View Index Prices Grid', () => {
 
     await waitFor(() => {
       // Verify prices are formatted with 2 decimal places
-      expect(screen.getByText('4783.45')).toBeInTheDocument();
-      expect(screen.getByText('37863.8')).toBeInTheDocument();
+      expect(screen.getByText('4,783.45')).toBeInTheDocument();
+      expect(screen.getByText('37,863.80')).toBeInTheDocument();
     });
   });
 
@@ -293,7 +321,8 @@ describe.skip('Index Prices Grid - Story 5.1: View Index Prices Grid', () => {
 
     await waitFor(() => {
       // Dates should be formatted as MM/DD/YY or similar readable format
-      expect(screen.getByText(/01\/20\/24/i)).toBeInTheDocument();
+      // Multiple dates may exist for same index
+      expect(screen.getAllByText(/01\/20\/24/i).length).toBeGreaterThan(0);
     });
   });
 

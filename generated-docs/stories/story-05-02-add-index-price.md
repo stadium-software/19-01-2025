@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I click "Add Price", when the form opens, then I see fields: Index Code, Date, Price, Currency
-- [ ] Given I fill all fields, when I save, then I see "Price added successfully"
-- [ ] Given I add a price, when I save, then the audit trail records my username
+- [x] Given I click "Add Price", when the form opens, then I see fields: Index Code, Date, Price, Currency
+- [x] Given I fill all fields, when I save, then I see "Price added successfully"
+- [x] Given I add a price, when I save, then the audit trail records my username
 
 ### Edge Cases
-- [ ] Given I enter a duplicate (Index + Date), when I save, then I see "Price already exists for this date"
+- [x] Given I enter a duplicate (Index + Date), when I save, then I see "Price already exists for this date"
 
 ### Error Handling
-- [ ] Given I leave required fields empty, when I save, then I see validation errors
+- [x] Given I leave required fields empty, when I save, then I see validation errors
 
 ## Implementation Notes
 - API: POST /v1/index-prices

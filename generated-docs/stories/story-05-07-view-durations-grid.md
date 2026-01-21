@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I navigate to Durations page, when the page loads, then I see: ISIN, Name, Duration, YTM, Effective Date
-- [ ] Given I search by ISIN, when I type, then matching rows are filtered
-- [ ] Given I click a row, when I select it, then I see duration details
+- [x] Given I navigate to Durations page, when the page loads, then I see: ISIN, Name, Duration, YTM, Effective Date
+- [x] Given I search by ISIN, when I type, then matching rows are filtered
+- [x] Given I click a row, when I select it, then I see duration details
 
 ### Edge Cases
-- [ ] Given no durations exist, when I load, then I see "No duration data found"
+- [x] Given no durations exist, when I load, then I see "No duration data found"
 
 ### Error Handling
-- [ ] Given the API fails, when I load, then I see "Failed to load durations"
+- [x] Given the API fails, when I load, then I see "Failed to load durations"
 
 ## Implementation Notes
 - API: GET /v1/instrument-durations

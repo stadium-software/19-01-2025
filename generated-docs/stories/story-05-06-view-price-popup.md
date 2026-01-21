@@ -12,12 +12,12 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I click an index row, when the popup opens, then I see: Index Code, Name, Current Price, Previous Price, Change %
-- [ ] Given I view the popup, when I click "View History", then I navigate to history page
-- [ ] Given I click outside, when I click, then the popup closes
+- [x] Given I click an index row, when the popup opens, then I see: Index Code, Name, Current Price, Previous Price, Change %
+- [x] Given I view the popup, when I click "View History", then I navigate to history page
+- [x] Given I click outside, when I click, then the popup closes
 
 ### Error Handling
-- [ ] Given the API fails, when I open popup, then I see "Failed to load details"
+- [x] Given the API fails, when I open popup, then I see "Failed to load details"
 
 ## Implementation Notes
 - API: GET /v1/index-prices/{id}

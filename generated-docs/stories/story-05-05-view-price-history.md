@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I select an index, when I click "History", then I see all prices sorted by date descending
-- [ ] Given I view history, when I see the list, then I see: Date, Price, Change %, User
-- [ ] Given I select a date range, when I apply filter, then I see prices within that range
+- [x] Given I select an index, when I click "History", then I see all prices sorted by date descending
+- [x] Given I view history, when I see the list, then I see: Date, Price, Change %, User
+- [x] Given I select a date range, when I apply filter, then I see prices within that range
 
 ### Edge Cases
-- [ ] Given an index has no history, when I view history, then I see "No historical data"
+- [x] Given an index has no history, when I view history, then I see "No historical data"
 
 ### Error Handling
-- [ ] Given the API fails, when I load, then I see "Failed to load history"
+- [x] Given the API fails, when I load, then I see "Failed to load history"
 
 ## Implementation Notes
 - API: GET /v1/index-prices/history/{indexCode}

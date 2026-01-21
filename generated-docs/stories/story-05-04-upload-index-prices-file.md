@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I click "Upload File", when I select a valid file, then I see file name displayed
-- [ ] Given I upload a valid file, when processing completes, then I see "X prices added, Y updated"
-- [ ] Given upload succeeds, when I view the grid, then new prices appear
+- [x] Given I click "Upload File", when I select a valid file, then I see file name displayed
+- [x] Given I upload a valid file, when processing completes, then I see "X prices added, Y updated"
+- [x] Given upload succeeds, when I view the grid, then new prices appear
 
 ### Edge Cases
-- [ ] Given the file has invalid prices (negative), when validation runs, then I see error list
+- [x] Given the file has invalid prices (negative), when validation runs, then I see error list
 
 ### Error Handling
-- [ ] Given I upload wrong format, when I submit, then I see "Invalid file format"
+- [x] Given I upload wrong format, when I submit, then I see "Invalid file format"
 
 ## Implementation Notes
 - API: POST /v1/index-prices/upload

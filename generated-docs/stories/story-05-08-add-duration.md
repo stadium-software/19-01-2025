@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I click "Add Duration", when the form opens, then I see: ISIN, Effective Date, Duration, YTM
-- [ ] Given I fill all fields, when I save, then I see "Duration added successfully"
-- [ ] Given I add duration, when I save, then audit trail records the change
+- [x] Given I click "Add Duration", when the form opens, then I see: ISIN, Effective Date, Duration, YTM
+- [x] Given I fill all fields, when I save, then I see "Duration added successfully"
+- [x] Given I add duration, when I save, then audit trail records the change
 
 ### Edge Cases
-- [ ] Given I enter duplicate (ISIN + Date), when I save, then I see "Duration already exists"
+- [x] Given I enter duplicate (ISIN + Date), when I save, then I see "Duration already exists"
 
 ### Error Handling
-- [ ] Given I leave required fields empty, when I save, then I see validation errors
+- [x] Given I leave required fields empty, when I save, then I see validation errors
 
 ## Implementation Notes
 - API: POST /v1/instrument-durations
