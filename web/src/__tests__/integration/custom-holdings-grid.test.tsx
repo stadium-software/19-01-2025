@@ -100,7 +100,31 @@ const createMockPortfolios = () => [
   { code: 'PORT-C', name: 'Portfolio C' },
 ];
 
-describe.skip('Custom Holdings Grid - Story 6.1: View Custom Holdings Grid', () => {
+// Helper to setup URL-based fetch mock
+const setupFetchMock = (
+  holdingsResponse: unknown[],
+  holdingsTotal: number,
+  portfolios: unknown[] = createMockPortfolios(),
+) => {
+  (global.fetch as Mock).mockImplementation((url: string) => {
+    if (url.includes('/v1/portfolios')) {
+      return Promise.resolve({
+        ok: true,
+        status: 200,
+        headers: new Headers({ 'content-type': 'application/json' }),
+        json: async () => portfolios,
+      });
+    }
+    if (url.includes('/v1/custom-holdings')) {
+      return Promise.resolve(
+        createMockResponse(holdingsResponse, holdingsTotal),
+      );
+    }
+    return Promise.reject(new Error(`Unexpected URL: ${url}`));
+  });
+};
+
+describe('Custom Holdings Grid - Story 6.1: View Custom Holdings Grid', () => {
   beforeEach(() => {
     global.fetch = vi.fn();
     localStorageMock.clear();
@@ -116,16 +140,14 @@ describe.skip('Custom Holdings Grid - Story 6.1: View Custom Holdings Grid', () 
     it('displays grid with all columns when page loads', async () => {
       // Arrange
       const mockHoldings = createMockHoldingsList(5);
-      (global.fetch as Mock).mockResolvedValueOnce(
-        createMockResponse(mockHoldings, 5),
-      );
+      setupFetchMock(mockHoldings, 5);
 
       // Act
       render(<CustomHoldingsGrid />);
 
-      // Assert - wait for data to load
+      // Assert - wait for data to load (use getAllByText since multiple rows may have same ISIN)
       await waitFor(() => {
-        expect(screen.getByText('US0378331005')).toBeInTheDocument();
+        expect(screen.getAllByText('US0378331005').length).toBeGreaterThan(0);
       });
 
       // Verify all columns are present
@@ -148,9 +170,7 @@ describe.skip('Custom Holdings Grid - Story 6.1: View Custom Holdings Grid', () 
         effectiveDate: '2024-01-15',
       });
 
-      (global.fetch as Mock).mockResolvedValueOnce(
-        createMockResponse([mockHolding], 1),
-      );
+      setupFetchMock([mockHolding], 1);
 
       // Act
       render(<CustomHoldingsGrid />);
@@ -158,7 +178,7 @@ describe.skip('Custom Holdings Grid - Story 6.1: View Custom Holdings Grid', () 
       // Assert
       await waitFor(() => {
         expect(screen.getByText('PORT-A')).toBeInTheDocument();
-        expect(screen.getByText('US0378331005')).toBeInTheDocument();
+        expect(screen.getAllByText('US0378331005').length).toBeGreaterThan(0);
         expect(screen.getByText('Apple Inc. Common Stock')).toBeInTheDocument();
         expect(screen.getByText('1,500')).toBeInTheDocument();
         expect(screen.getByText('USD')).toBeInTheDocument();
@@ -170,18 +190,16 @@ describe.skip('Custom Holdings Grid - Story 6.1: View Custom Holdings Grid', () 
       // Arrange
       const user = userEvent.setup();
       const mockHoldings = createMockHoldingsList(3);
-      (global.fetch as Mock).mockResolvedValueOnce(
-        createMockResponse(mockHoldings, 3),
-      );
+      setupFetchMock(mockHoldings, 3);
 
       render(<CustomHoldingsGrid />);
 
       await waitFor(() => {
-        expect(screen.getByText('US0378331005')).toBeInTheDocument();
+        expect(screen.getAllByText('US0378331005').length).toBeGreaterThan(0);
       });
 
       // Act - click on first row
-      const firstRow = screen.getByText('US0378331005').closest('tr');
+      const firstRow = screen.getAllByText('US0378331005')[0].closest('tr');
       await user.click(firstRow!);
 
       // Assert - should show detail view
@@ -199,19 +217,12 @@ describe.skip('Custom Holdings Grid - Story 6.1: View Custom Holdings Grid', () 
       const user = userEvent.setup();
       const mockHoldings = createMockHoldingsList(10);
 
-      (global.fetch as Mock)
-        .mockResolvedValueOnce(createMockResponse(mockHoldings, 10))
-        .mockResolvedValueOnce(
-          createMockResponse(
-            mockHoldings.filter((h) => h.portfolioCode === 'PORT-A'),
-            3,
-          ),
-        );
+      setupFetchMock(mockHoldings, 10);
 
       render(<CustomHoldingsGrid />);
 
       await waitFor(() => {
-        expect(screen.getByText('PORT-A')).toBeInTheDocument();
+        expect(screen.getAllByText('PORT-A').length).toBeGreaterThan(0);
       });
 
       // Act
@@ -237,19 +248,12 @@ describe.skip('Custom Holdings Grid - Story 6.1: View Custom Holdings Grid', () 
       const user = userEvent.setup();
       const mockHoldings = createMockHoldingsList(5);
 
-      (global.fetch as Mock)
-        .mockResolvedValueOnce(createMockResponse(mockHoldings, 5))
-        .mockResolvedValueOnce(
-          createMockResponse(
-            mockHoldings.filter((h) => h.isin.includes('US037833')),
-            1,
-          ),
-        );
+      setupFetchMock(mockHoldings, 5);
 
       render(<CustomHoldingsGrid />);
 
       await waitFor(() => {
-        expect(screen.getByText('US0378331005')).toBeInTheDocument();
+        expect(screen.getAllByText('US0378331005').length).toBeGreaterThan(0);
       });
 
       // Act
@@ -275,15 +279,16 @@ describe.skip('Custom Holdings Grid - Story 6.1: View Custom Holdings Grid', () 
       const user = userEvent.setup();
       const mockHoldings = createMockHoldingsList(5);
 
-      (global.fetch as Mock)
-        .mockResolvedValueOnce(createMockResponse(mockHoldings, 5))
-        .mockResolvedValueOnce(createMockResponse([], 0));
+      setupFetchMock(mockHoldings, 5);
 
       render(<CustomHoldingsGrid />);
 
       await waitFor(() => {
-        expect(screen.getByText('US0378331005')).toBeInTheDocument();
+        expect(screen.getAllByText('US0378331005').length).toBeGreaterThan(0);
       });
+
+      // Override mock for next search call
+      setupFetchMock([], 0);
 
       // Act
       const searchInput = screen.getByRole('searchbox', {
@@ -303,7 +308,7 @@ describe.skip('Custom Holdings Grid - Story 6.1: View Custom Holdings Grid', () 
   describe('Edge Cases', () => {
     it('shows empty state when no holdings exist', async () => {
       // Arrange
-      (global.fetch as Mock).mockResolvedValueOnce(createMockResponse([], 0));
+      setupFetchMock([], 0);
 
       // Act
       render(<CustomHoldingsGrid />);
@@ -319,16 +324,14 @@ describe.skip('Custom Holdings Grid - Story 6.1: View Custom Holdings Grid', () 
     it('displays pagination controls for large datasets', async () => {
       // Arrange
       const mockHoldings = createMockHoldingsList(50);
-      (global.fetch as Mock).mockResolvedValueOnce(
-        createMockResponse(mockHoldings.slice(0, 10), 50),
-      );
+      setupFetchMock(mockHoldings.slice(0, 10), 50);
 
       // Act
       render(<CustomHoldingsGrid />);
 
       // Assert
       await waitFor(() => {
-        expect(screen.getByText('US0378331005')).toBeInTheDocument();
+        expect(screen.getAllByText('US0378331005').length).toBeGreaterThan(0);
       });
 
       expect(screen.getByRole('button', { name: /next/i })).toBeInTheDocument();
@@ -339,31 +342,49 @@ describe.skip('Custom Holdings Grid - Story 6.1: View Custom Holdings Grid', () 
   describe('Error Handling', () => {
     it('shows error state when API fails', async () => {
       // Arrange
-      (global.fetch as Mock).mockRejectedValueOnce(
-        new TypeError('Failed to fetch'),
-      );
+      (global.fetch as Mock).mockImplementation((url: string) => {
+        if (url.includes('/v1/portfolios')) {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            headers: new Headers({ 'content-type': 'application/json' }),
+            json: async () => createMockPortfolios(),
+          });
+        }
+        return Promise.reject(new TypeError('Failed to fetch'));
+      });
 
       // Act
       render(<CustomHoldingsGrid />);
 
-      // Assert
+      // Assert - Network errors show connection message
       await waitFor(() => {
         expect(
-          screen.getByText(/failed to load custom holdings/i),
+          screen.getByText(/check your internet connection/i),
         ).toBeInTheDocument();
       });
     });
 
     it('shows API error message when server returns error', async () => {
       // Arrange
-      (global.fetch as Mock).mockResolvedValueOnce({
-        ok: false,
-        status: 500,
-        statusText: 'Internal Server Error',
-        headers: new Headers({ 'content-type': 'application/json' }),
-        json: async () => ({
-          Messages: ['Database connection failed'],
-        }),
+      (global.fetch as Mock).mockImplementation((url: string) => {
+        if (url.includes('/v1/portfolios')) {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            headers: new Headers({ 'content-type': 'application/json' }),
+            json: async () => createMockPortfolios(),
+          });
+        }
+        return Promise.resolve({
+          ok: false,
+          status: 500,
+          statusText: 'Internal Server Error',
+          headers: new Headers({ 'content-type': 'application/json' }),
+          json: async () => ({
+            Messages: ['Database connection failed'],
+          }),
+        });
       });
 
       // Act
@@ -395,7 +416,7 @@ describe.skip('Custom Holdings Grid - Story 6.1: View Custom Holdings Grid', () 
   });
 });
 
-describe.skip('Custom Holdings Grid - Story 6.7: Filter by Portfolio', () => {
+describe('Custom Holdings Grid - Story 6.7: Filter by Portfolio', () => {
   beforeEach(() => {
     global.fetch = vi.fn();
     localStorageMock.clear();
@@ -411,16 +432,7 @@ describe.skip('Custom Holdings Grid - Story 6.7: Filter by Portfolio', () => {
     it('displays portfolio dropdown filter', async () => {
       // Arrange
       const mockHoldings = createMockHoldingsList(5);
-      const mockPortfolios = createMockPortfolios();
-
-      (global.fetch as Mock)
-        .mockResolvedValueOnce(createMockResponse(mockHoldings, 5))
-        .mockResolvedValueOnce({
-          ok: true,
-          status: 200,
-          headers: new Headers({ 'content-type': 'application/json' }),
-          json: async () => mockPortfolios,
-        });
+      setupFetchMock(mockHoldings, 5);
 
       // Act
       render(<CustomHoldingsGrid />);
@@ -439,27 +451,12 @@ describe.skip('Custom Holdings Grid - Story 6.7: Filter by Portfolio', () => {
       // Arrange
       const user = userEvent.setup();
       const mockHoldings = createMockHoldingsList(10);
-      const mockPortfolios = createMockPortfolios();
-
-      (global.fetch as Mock)
-        .mockResolvedValueOnce(createMockResponse(mockHoldings, 10))
-        .mockResolvedValueOnce({
-          ok: true,
-          status: 200,
-          headers: new Headers({ 'content-type': 'application/json' }),
-          json: async () => mockPortfolios,
-        })
-        .mockResolvedValueOnce(
-          createMockResponse(
-            mockHoldings.filter((h) => h.portfolioCode === 'PORT-A'),
-            4,
-          ),
-        );
+      setupFetchMock(mockHoldings, 10);
 
       render(<CustomHoldingsGrid />);
 
       await waitFor(() => {
-        expect(screen.getByText('US0378331005')).toBeInTheDocument();
+        expect(screen.getAllByText('US0378331005').length).toBeGreaterThan(0);
       });
 
       // Act
@@ -481,28 +478,12 @@ describe.skip('Custom Holdings Grid - Story 6.7: Filter by Portfolio', () => {
       // Arrange
       const user = userEvent.setup();
       const mockHoldings = createMockHoldingsList(10);
-      const mockPortfolios = createMockPortfolios();
-
-      (global.fetch as Mock)
-        .mockResolvedValueOnce(createMockResponse(mockHoldings, 10))
-        .mockResolvedValueOnce({
-          ok: true,
-          status: 200,
-          headers: new Headers({ 'content-type': 'application/json' }),
-          json: async () => mockPortfolios,
-        })
-        .mockResolvedValueOnce(
-          createMockResponse(
-            mockHoldings.filter((h) => h.portfolioCode === 'PORT-A'),
-            4,
-          ),
-        )
-        .mockResolvedValueOnce(createMockResponse(mockHoldings, 10));
+      setupFetchMock(mockHoldings, 10);
 
       render(<CustomHoldingsGrid />);
 
       await waitFor(() => {
-        expect(screen.getByText('US0378331005')).toBeInTheDocument();
+        expect(screen.getAllByText('US0378331005').length).toBeGreaterThan(0);
       });
 
       // Filter to PORT-A first
@@ -534,23 +515,16 @@ describe.skip('Custom Holdings Grid - Story 6.7: Filter by Portfolio', () => {
       // Arrange
       const user = userEvent.setup();
       const mockHoldings = createMockHoldingsList(10);
-      const mockPortfolios = createMockPortfolios();
-
-      (global.fetch as Mock)
-        .mockResolvedValueOnce(createMockResponse(mockHoldings, 10))
-        .mockResolvedValueOnce({
-          ok: true,
-          status: 200,
-          headers: new Headers({ 'content-type': 'application/json' }),
-          json: async () => mockPortfolios,
-        })
-        .mockResolvedValueOnce(createMockResponse([], 0));
+      setupFetchMock(mockHoldings, 10);
 
       render(<CustomHoldingsGrid />);
 
       await waitFor(() => {
-        expect(screen.getByText('US0378331005')).toBeInTheDocument();
+        expect(screen.getAllByText('US0378331005').length).toBeGreaterThan(0);
       });
+
+      // Override mock for next call
+      setupFetchMock([], 0);
 
       // Act
       const portfolioFilter = screen.getByRole('combobox', {
@@ -568,11 +542,14 @@ describe.skip('Custom Holdings Grid - Story 6.7: Filter by Portfolio', () => {
 
     it('shows error when portfolio list fails to load', async () => {
       // Arrange
-      const mockHoldings = createMockHoldingsList(5);
-
-      (global.fetch as Mock)
-        .mockResolvedValueOnce(createMockResponse(mockHoldings, 5))
-        .mockRejectedValueOnce(new Error('Failed to fetch portfolios'));
+      (global.fetch as Mock).mockImplementation((url: string) => {
+        if (url.includes('/v1/portfolios')) {
+          return Promise.reject(new Error('Failed to fetch portfolios'));
+        }
+        return Promise.resolve(
+          createMockResponse(createMockHoldingsList(5), 5),
+        );
+      });
 
       // Act
       render(<CustomHoldingsGrid />);
@@ -591,27 +568,12 @@ describe.skip('Custom Holdings Grid - Story 6.7: Filter by Portfolio', () => {
       // Arrange
       const user = userEvent.setup();
       const mockHoldings = createMockHoldingsList(10);
-      const mockPortfolios = createMockPortfolios();
-
-      (global.fetch as Mock)
-        .mockResolvedValueOnce(createMockResponse(mockHoldings, 10))
-        .mockResolvedValueOnce({
-          ok: true,
-          status: 200,
-          headers: new Headers({ 'content-type': 'application/json' }),
-          json: async () => mockPortfolios,
-        })
-        .mockResolvedValueOnce(
-          createMockResponse(
-            mockHoldings.filter((h) => h.portfolioCode === 'PORT-B'),
-            3,
-          ),
-        );
+      setupFetchMock(mockHoldings, 10);
 
       render(<CustomHoldingsGrid />);
 
       await waitFor(() => {
-        expect(screen.getByText('US0378331005')).toBeInTheDocument();
+        expect(screen.getAllByText('US0378331005').length).toBeGreaterThan(0);
       });
 
       // Act
@@ -633,21 +595,10 @@ describe.skip('Custom Holdings Grid - Story 6.7: Filter by Portfolio', () => {
       localStorageMock.setItem('customHoldings.portfolioFilter', 'PORT-A');
 
       const mockHoldings = createMockHoldingsList(10);
-      const mockPortfolios = createMockPortfolios();
-
-      (global.fetch as Mock)
-        .mockResolvedValueOnce(
-          createMockResponse(
-            mockHoldings.filter((h) => h.portfolioCode === 'PORT-A'),
-            4,
-          ),
-        )
-        .mockResolvedValueOnce({
-          ok: true,
-          status: 200,
-          headers: new Headers({ 'content-type': 'application/json' }),
-          json: async () => mockPortfolios,
-        });
+      setupFetchMock(
+        mockHoldings.filter((h) => h.portfolioCode === 'PORT-A'),
+        4,
+      );
 
       // Act
       render(<CustomHoldingsGrid />);
@@ -672,22 +623,10 @@ describe.skip('Custom Holdings Grid - Story 6.7: Filter by Portfolio', () => {
       localStorageMock.setItem('customHoldings.portfolioFilter', 'PORT-A');
 
       const mockHoldings = createMockHoldingsList(10);
-      const mockPortfolios = createMockPortfolios();
-
-      (global.fetch as Mock)
-        .mockResolvedValueOnce(
-          createMockResponse(
-            mockHoldings.filter((h) => h.portfolioCode === 'PORT-A'),
-            4,
-          ),
-        )
-        .mockResolvedValueOnce({
-          ok: true,
-          status: 200,
-          headers: new Headers({ 'content-type': 'application/json' }),
-          json: async () => mockPortfolios,
-        })
-        .mockResolvedValueOnce(createMockResponse(mockHoldings, 10));
+      setupFetchMock(
+        mockHoldings.filter((h) => h.portfolioCode === 'PORT-A'),
+        4,
+      );
 
       render(<CustomHoldingsGrid />);
 
@@ -696,6 +635,9 @@ describe.skip('Custom Holdings Grid - Story 6.7: Filter by Portfolio', () => {
           screen.getByRole('combobox', { name: /filter by portfolio/i }),
         ).toBeInTheDocument();
       });
+
+      // Override for next call
+      setupFetchMock(mockHoldings, 10);
 
       // Act
       const portfolioFilter = screen.getByRole('combobox', {

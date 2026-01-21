@@ -42,7 +42,7 @@ const createMockResponse = (data: unknown, status = 200) => ({
   json: async () => data,
 });
 
-describe.skip('Delete Custom Holding - Story 6.4: Delete Custom Holding', () => {
+describe('Delete Custom Holding - Story 6.4: Delete Custom Holding', () => {
   const mockHolding = {
     id: 'holding-001',
     portfolioCode: 'PORT-A',

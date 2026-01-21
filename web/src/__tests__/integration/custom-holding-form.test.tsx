@@ -58,7 +58,7 @@ const createMockInstruments = () => [
   { code: 'US02079K1079', description: 'Alphabet Inc. Class A' },
 ];
 
-describe.skip('Custom Holding Form - Story 6.2: Add Custom Holding', () => {
+describe('Custom Holding Form - Story 6.2: Add Custom Holding', () => {
   beforeEach(() => {
     global.fetch = vi.fn();
     vi.clearAllMocks();
@@ -96,12 +96,8 @@ describe.skip('Custom Holding Form - Story 6.2: Add Custom Holding', () => {
         ).toBeInTheDocument();
       });
 
-      expect(
-        screen.getByLabelText(/portfolio code/i),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText(/instrument code/i),
-      ).toBeInTheDocument();
+      expect(screen.getByLabelText(/portfolio code/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/instrument code/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/amount/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/currency/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/effective date/i)).toBeInTheDocument();
@@ -129,8 +125,9 @@ describe.skip('Custom Holding Form - Story 6.2: Add Custom Holding', () => {
 
       // Assert
       await waitFor(() => {
-        expect(screen.getByRole('combobox', { name: /portfolio code/i }))
-          .toBeInTheDocument();
+        expect(
+          screen.getByRole('combobox', { name: /portfolio code/i }),
+        ).toBeInTheDocument();
       });
 
       expect(screen.getByText('Portfolio A')).toBeInTheDocument();
@@ -160,8 +157,9 @@ describe.skip('Custom Holding Form - Story 6.2: Add Custom Holding', () => {
 
       // Assert
       await waitFor(() => {
-        expect(screen.getByRole('combobox', { name: /instrument code/i }))
-          .toBeInTheDocument();
+        expect(
+          screen.getByRole('combobox', { name: /instrument code/i }),
+        ).toBeInTheDocument();
       });
 
       expect(screen.getByText('Apple Inc. Common Stock')).toBeInTheDocument();
@@ -262,9 +260,7 @@ describe.skip('Custom Holding Form - Story 6.2: Add Custom Holding', () => {
           headers: new Headers({ 'content-type': 'application/json' }),
           json: async () => createMockInstruments(),
         })
-        .mockResolvedValueOnce(
-          createMockResponse({ id: 'holding-001' }, 201),
-        );
+        .mockResolvedValueOnce(createMockResponse({ id: 'holding-001' }, 201));
 
       render(<CustomHoldingForm mode="add" onSuccess={vi.fn()} />);
 
@@ -312,9 +308,7 @@ describe.skip('Custom Holding Form - Story 6.2: Add Custom Holding', () => {
           headers: new Headers({ 'content-type': 'application/json' }),
           json: async () => createMockInstruments(),
         })
-        .mockResolvedValueOnce(
-          createMockResponse({ id: 'holding-001' }, 201),
-        );
+        .mockResolvedValueOnce(createMockResponse({ id: 'holding-001' }, 201));
 
       render(<CustomHoldingForm mode="add" onSuccess={vi.fn()} />);
 
@@ -535,9 +529,7 @@ describe.skip('Custom Holding Form - Story 6.2: Add Custom Holding', () => {
 
       // Assert
       await waitFor(() => {
-        expect(
-          screen.getByText(/holding already exists/i),
-        ).toBeInTheDocument();
+        expect(screen.getByText(/holding already exists/i)).toBeInTheDocument();
       });
     });
   });
@@ -568,7 +560,7 @@ describe.skip('Custom Holding Form - Story 6.2: Add Custom Holding', () => {
         expect(screen.getByLabelText(/portfolio code/i)).toBeInTheDocument();
       });
 
-      // Act
+      // Act - fill all required fields
       await user.selectOptions(
         screen.getByLabelText(/portfolio code/i),
         'PORT-A',
@@ -578,6 +570,8 @@ describe.skip('Custom Holding Form - Story 6.2: Add Custom Holding', () => {
         'US0378331005',
       );
       await user.type(screen.getByLabelText(/amount/i), '1000');
+      await user.selectOptions(screen.getByLabelText(/currency/i), 'USD');
+      await user.type(screen.getByLabelText(/effective date/i), '2024-01-15');
 
       await user.click(screen.getByRole('button', { name: /save/i }));
 
@@ -622,7 +616,7 @@ describe.skip('Custom Holding Form - Story 6.2: Add Custom Holding', () => {
         expect(screen.getByLabelText(/portfolio code/i)).toBeInTheDocument();
       });
 
-      // Fill form
+      // Fill all required form fields
       await user.selectOptions(
         screen.getByLabelText(/portfolio code/i),
         'PORT-A',
@@ -632,6 +626,8 @@ describe.skip('Custom Holding Form - Story 6.2: Add Custom Holding', () => {
         'US0378331005',
       );
       await user.type(screen.getByLabelText(/amount/i), '1000');
+      await user.selectOptions(screen.getByLabelText(/currency/i), 'USD');
+      await user.type(screen.getByLabelText(/effective date/i), '2024-01-15');
 
       // Act
       await user.click(screen.getByRole('button', { name: /save/i }));
@@ -649,7 +645,7 @@ describe.skip('Custom Holding Form - Story 6.2: Add Custom Holding', () => {
   });
 });
 
-describe.skip('Custom Holding Form - Story 6.3: Update Custom Holding', () => {
+describe('Custom Holding Form - Story 6.3: Update Custom Holding', () => {
   const mockHolding = {
     id: 'holding-001',
     portfolioCode: 'PORT-A',
