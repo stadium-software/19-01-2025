@@ -94,9 +94,16 @@ export const exportFileFaults = async (
 };
 
 // Story 9.5: Weekly Process Logs
-export const getWeeklyProcessLogs = (batchDate: string) => {
+export const getWeeklyProcessLogs = (
+  batchDate: string,
+  search?: string,
+  status?: string,
+) => {
+  const params = new URLSearchParams({ batchDate });
+  if (search) params.append('search', search);
+  if (status && status !== 'all') params.append('status', status);
   return get<WeeklyProcessLogsResponse>(
-    `/v1/weekly-process-logs?batchDate=${batchDate}`,
+    `/v1/weekly-process-logs?${params.toString()}`,
   );
 };
 
