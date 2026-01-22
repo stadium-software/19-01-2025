@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I navigate to Calculation Logs, when the page loads, then I see: Calculation Name, Start Time, End Time, Status, Records Processed
-- [ ] Given I click a calculation, when I select it, then I see detailed step-by-step log
-- [ ] Given calculations ran successfully, when I view logs, then I see green status indicators
+- [x] Given I navigate to Calculation Logs, when the page loads, then I see: Calculation Name, Start Time, End Time, Status, Records Processed
+- [x] Given I click a calculation, when I select it, then I see detailed step-by-step log
+- [x] Given calculations ran successfully, when I view logs, then I see green status indicators
 
 ### Edge Cases
-- [ ] Given no calculations have run, when I load the page, then I see "No calculation logs found"
+- [x] Given no calculations have run, when I load the page, then I see "No calculation logs found"
 
 ### Error Handling
-- [ ] Given the API fails, when I load, then I see "Failed to load calculation logs"
+- [x] Given the API fails, when I load, then I see "Failed to load calculation logs"
 
 ## Implementation Notes
 - API: GET /v1/calculation-logs

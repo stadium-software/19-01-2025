@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I am on Weekly Process Logs page, when I view User Audit Trail grid, then I see: User, Action, Entity, Timestamp, Details
-- [ ] Given I filter by user, when I apply filter, then I see actions for that user only
-- [ ] Given I search by entity, when I type, then matching actions filter
+- [x] Given I am on Weekly Process Logs page, when I view User Audit Trail grid, then I see: User, Action, Entity, Timestamp, Details
+- [x] Given I filter by user, when I apply filter, then I see actions for that user only
+- [x] Given I search by entity, when I type, then matching actions filter
 
 ### Edge Cases
-- [ ] Given no user actions occurred, when I view, then I see "No user actions recorded"
+- [x] Given no user actions occurred, when I view, then I see "No user actions recorded"
 
 ### Error Handling
-- [ ] Given the API fails, when I load, then I see "Failed to load audit trail"
+- [x] Given the API fails, when I load, then I see "Failed to load audit trail"
 
 ## Implementation Notes
 - API: GET /v1/user-audit-trail?batchDate={date}

@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I view file process logs, when I click a Download button, then the file downloads to my computer
-- [ ] Given I download a file, when I open it, then I see the original uploaded data
-- [ ] Given the file is large, when I download, then I see a progress indicator
+- [x] Given I view file process logs, when I click a Download button, then the file downloads to my computer
+- [x] Given I download a file, when I open it, then I see the original uploaded data
+- [x] Given the file is large, when I download, then I see a progress indicator
 
 ### Edge Cases
-- [ ] Given the file is no longer available, when I click Download, then I see "File not found or has been archived"
+- [x] Given the file is no longer available, when I click Download, then I see "File not found or has been archived"
 
 ### Error Handling
-- [ ] Given download fails, when I click Download, then I see "Download failed. Please try again."
+- [x] Given download fails, when I click Download, then I see "Download failed. Please try again."
 
 ## Implementation Notes
 - API: GET /v1/file-process-logs/{id}/download

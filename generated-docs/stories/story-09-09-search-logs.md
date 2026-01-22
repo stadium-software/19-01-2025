@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I am on any logs page, when I type in the search box, then matching logs filter
-- [ ] Given I search for "validation error", when I search, then I see all logs containing that phrase
-- [ ] Given I search by process name, when I type, then matching processes filter
+- [x] Given I am on any logs page, when I type in the search box, then matching logs filter
+- [x] Given I search for "validation error", when I search, then I see all logs containing that phrase
+- [x] Given I search by process name, when I type, then matching processes filter
 
 ### Edge Cases
-- [ ] Given no logs match my search, when I search, then I see "No results found for '{search term}'"
+- [x] Given no logs match my search, when I search, then I see "No results found for '{search term}'"
 
 ### Error Handling
-- [ ] Given search service fails, when I search, then I see "Search failed. Please try again."
+- [x] Given search service fails, when I search, then I see "Search failed. Please try again."
 
 ## Implementation Notes
 - Client-side filtering for small datasets (<1000 rows)

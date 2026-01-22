@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I navigate to Calculation Log Errors, when the page loads, then I see: Calculation Name, Error Type, Error Message, Affected Record, Timestamp
-- [ ] Given I filter by calculation name, when I apply filter, then I see errors for that calculation only
-- [ ] Given I click an error, when I select it, then I see full stack trace and context
+- [x] Given I navigate to Calculation Log Errors, when the page loads, then I see: Calculation Name, Error Type, Error Message, Affected Record, Timestamp
+- [x] Given I filter by calculation name, when I apply filter, then I see errors for that calculation only
+- [x] Given I click an error, when I select it, then I see full stack trace and context
 
 ### Edge Cases
-- [ ] Given no errors exist, when I load the page, then I see "No calculation errors found - all calculations successful"
+- [x] Given no errors exist, when I load the page, then I see "No calculation errors found - all calculations successful"
 
 ### Error Handling
-- [ ] Given the API fails, when I load, then I see "Failed to load errors"
+- [x] Given the API fails, when I load, then I see "Failed to load errors"
 
 ## Implementation Notes
 - API: GET /v1/calculation-log-errors

@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I navigate to Monthly Process Logs, when the page loads, then I see: Report Date filter, Process Logs grid, Approval Logs grid
-- [ ] Given I filter by date, when I apply, then I see logs for that month
-- [ ] Given I view process logs, when I see a row, then I see: Process Name, Start Time, End Time, Duration, Status, Error Count
+- [x] Given I navigate to Monthly Process Logs, when the page loads, then I see: Report Date filter, Process Logs grid, Approval Logs grid
+- [x] Given I filter by date, when I apply, then I see logs for that month
+- [x] Given I view process logs, when I see a row, then I see: Process Name, Start Time, End Time, Duration, Status, Error Count
 
 ### Edge Cases
-- [ ] Given no logs exist for selected month, when I view, then I see "No logs found"
+- [x] Given no logs exist for selected month, when I view, then I see "No logs found"
 
 ### Error Handling
-- [ ] Given the API fails, when I load, then I see "Failed to load monthly logs"
+- [x] Given the API fails, when I load, then I see "Failed to load monthly logs"
 
 ## Implementation Notes
 - API: GET /v1/monthly-process-logs?reportDate={date}

@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I navigate to Weekly Process Logs, when the page loads, then I see: Report Batch Date dropdown, two grids (Process Logs, User Audit Trail)
-- [ ] Given I select a batch date, when I apply, then I see logs for that week
-- [ ] Given I view process logs, when I see a row, then I see: Process Name, Start Time, End Time, Duration, Status, Error Count
+- [x] Given I navigate to Weekly Process Logs, when the page loads, then I see: Report Batch Date dropdown, two grids (Process Logs, User Audit Trail)
+- [x] Given I select a batch date, when I apply, then I see logs for that week
+- [x] Given I view process logs, when I see a row, then I see: Process Name, Start Time, End Time, Duration, Status, Error Count
 
 ### Edge Cases
-- [ ] Given no logs exist for selected date, when I view, then I see "No logs found for this date"
+- [x] Given no logs exist for selected date, when I view, then I see "No logs found for this date"
 
 ### Error Handling
-- [ ] Given the API fails, when I load, then I see "Failed to load weekly logs"
+- [x] Given the API fails, when I load, then I see "Failed to load weekly logs"
 
 ## Implementation Notes
 - API: GET /v1/weekly-process-logs?batchDate={date}

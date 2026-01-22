@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I navigate to File Process Logs, when the page loads, then I see: File Name, Type, Status, Upload Date, Processed Date, Records Count
-- [ ] Given I filter by report batch date, when I apply filter, then I see files for that batch
-- [ ] Given I click a file row, when I select it, then I see detailed processing log
+- [x] Given I navigate to File Process Logs, when the page loads, then I see: File Name, Type, Status, Upload Date, Processed Date, Records Count
+- [x] Given I filter by report batch date, when I apply filter, then I see files for that batch
+- [x] Given I click a file row, when I select it, then I see detailed processing log
 
 ### Edge Cases
-- [ ] Given no files have been processed, when I load the page, then I see "No file logs found"
+- [x] Given no files have been processed, when I load the page, then I see "No file logs found"
 
 ### Error Handling
-- [ ] Given the API fails, when I load, then I see "Failed to load file logs"
+- [x] Given the API fails, when I load, then I see "Failed to load file logs"
 
 ## Implementation Notes
 - API: GET /v1/file-process-logs

@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I navigate to File Faults, when the page loads, then I see: File Name, Row Number, Column, Error Message, Timestamp
-- [ ] Given I filter by file name, when I apply filter, then I see faults for that file only
-- [ ] Given I click a fault row, when I select it, then I see detailed error context
+- [x] Given I navigate to File Faults, when the page loads, then I see: File Name, Row Number, Column, Error Message, Timestamp
+- [x] Given I filter by file name, when I apply filter, then I see faults for that file only
+- [x] Given I click a fault row, when I select it, then I see detailed error context
 
 ### Edge Cases
-- [ ] Given no faults exist, when I load the page, then I see "No faults found - all files processed successfully"
+- [x] Given no faults exist, when I load the page, then I see "No faults found - all files processed successfully"
 
 ### Error Handling
-- [ ] Given the API fails, when I load, then I see "Failed to load faults"
+- [x] Given the API fails, when I load, then I see "Failed to load faults"
 
 ## Implementation Notes
 - API: GET /v1/file-faults

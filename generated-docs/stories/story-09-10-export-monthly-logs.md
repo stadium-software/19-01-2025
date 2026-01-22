@@ -12,12 +12,12 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I am on Monthly Process Logs page, when I click "Export to Excel", then I download an Excel file
-- [ ] Given I open the export, when I review it, then I see sheets: Process Logs, Approval Logs
-- [ ] Given I filter before export, when I export, then only filtered data is included
+- [x] Given I am on Monthly Process Logs page, when I click "Export to Excel", then I download an Excel file
+- [x] Given I open the export, when I review it, then I see sheets: Process Logs, Approval Logs
+- [x] Given I filter before export, when I export, then only filtered data is included
 
 ### Error Handling
-- [ ] Given export fails, when I click Export, then I see "Export failed"
+- [x] Given export fails, when I click Export, then I see "Export failed"
 
 ## Implementation Notes
 - API: GET /v1/monthly-process-logs/export?reportDate={date}

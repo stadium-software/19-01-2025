@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I am on any logs page, when I select "Failed" from status dropdown, then I see only failed processes
-- [ ] Given I select "Success", when I apply filter, then I see only successful processes
-- [ ] Given I select "All", when I apply, then I see all statuses
+- [x] Given I am on any logs page, when I select "Failed" from status dropdown, then I see only failed processes
+- [x] Given I select "Success", when I apply filter, then I see only successful processes
+- [x] Given I select "All", when I apply, then I see all statuses
 
 ### Edge Cases
-- [ ] Given no logs match the selected status, when I filter, then I see "No logs found with status '{status}'"
+- [x] Given no logs match the selected status, when I filter, then I see "No logs found with status '{status}'"
 
 ### Error Handling
-- [ ] Given filter fails to apply, when I select a status, then I see "Failed to apply filter"
+- [x] Given filter fails to apply, when I select a status, then I see "Failed to apply filter"
 
 ## Implementation Notes
 - Status options: All, Success, Failed, Warning, In Progress

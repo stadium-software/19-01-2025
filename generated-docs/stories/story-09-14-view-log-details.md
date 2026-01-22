@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I click a log row, when I select it, then I see a detail panel with: Full Process Log, Parameters Used, Input/Output Counts, Error Details (if any)
-- [ ] Given I view details, when I see the panel, then I can expand/collapse log sections
-- [ ] Given I view details, when I click "Copy Log", then the log text is copied to clipboard
+- [x] Given I click a log row, when I select it, then I see a detail panel with: Full Process Log, Parameters Used, Input/Output Counts, Error Details (if any)
+- [x] Given I view details, when I see the panel, then I can expand/collapse log sections
+- [x] Given I view details, when I click "Copy Log", then the log text is copied to clipboard
 
 ### Edge Cases
-- [ ] Given a log has no errors, when I view details, then Error Details section is hidden
+- [x] Given a log has no errors, when I view details, then Error Details section is hidden
 
 ### Error Handling
-- [ ] Given the API fails, when I load details, then I see "Failed to load log details"
+- [x] Given the API fails, when I load details, then I see "Failed to load log details"
 
 ## Implementation Notes
 - API: GET /v1/process-logs/{id}/details
