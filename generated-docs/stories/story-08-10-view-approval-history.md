@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I am on any approval page, when I click "View History", then I see chronological list of approval actions
-- [ ] Given I view history, when I see a record, then I see: Level, Action (Approved/Rejected), User, Timestamp, Reason (if rejected)
-- [ ] Given multiple rejections occurred, when I view history, then I see all attempts
+- [x] Given I am on any approval page, when I click "View History", then I see chronological list of approval actions
+- [x] Given I view history, when I see a record, then I see: Level, Action (Approved/Rejected), User, Timestamp, Reason (if rejected)
+- [x] Given multiple rejections occurred, when I view history, then I see all attempts
 
 ### Edge Cases
-- [ ] Given no approvals yet, when I view history, then I see "No approval actions recorded"
+- [x] Given no approvals yet, when I view history, then I see "No approval actions recorded"
 
 ### Error Handling
-- [ ] Given the API fails, when I load history, then I see "Failed to load history"
+- [x] Given the API fails, when I load history, then I see "Failed to load history"
 
 ## Implementation Notes
 - API: GET /v1/approvals/{batchId}/history

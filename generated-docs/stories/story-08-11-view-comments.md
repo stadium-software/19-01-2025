@@ -12,12 +12,12 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given comments exist for the batch, when I view approval page, then I see a Comments section
-- [ ] Given I view comments, when I see the list, then I see: Author, Timestamp, Comment Text
-- [ ] Given no comments exist, when I view approval page, then I see "No comments added"
+- [x] Given comments exist for the batch, when I view approval page, then I see a Comments section
+- [x] Given I view comments, when I see the list, then I see: Author, Timestamp, Comment Text
+- [x] Given no comments exist, when I view approval page, then I see "No comments added"
 
 ### Error Handling
-- [ ] Given the API fails, when I load comments, then I see "Failed to load comments"
+- [x] Given the API fails, when I load comments, then I see "Failed to load comments"
 
 ## Implementation Notes
 - API: GET /v1/report-comments?batchId={batchId}

@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given Level 1 is approved, when I navigate to Level 2 approval, then I see: Report Summary, Level 1 Approval Details (who/when), Portfolio-Level Checks
-- [ ] Given all checks pass, when I view the page, then I see Approve and Reject buttons enabled
-- [ ] Given I am a Level 2 approver, when I view the page, then I see approval controls
+- [x] Given Level 1 is approved, when I navigate to Level 2 approval, then I see: Report Summary, Level 1 Approval Details (who/when), Portfolio-Level Checks
+- [x] Given all checks pass, when I view the page, then I see Approve and Reject buttons enabled
+- [x] Given I am a Level 2 approver, when I view the page, then I see approval controls
 
 ### Edge Cases
-- [ ] Given Level 1 is not approved, when I access Level 2, then I see "Level 1 approval required first"
+- [x] Given Level 1 is not approved, when I access Level 2, then I see "Level 1 approval required first"
 
 ### Error Handling
-- [ ] Given the API fails, when I load, then I see "Failed to load approval data"
+- [x] Given the API fails, when I load, then I see "Failed to load approval data"
 
 ## Implementation Notes
 - API: GET /v1/approvals/level2/{batchId}

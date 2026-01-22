@@ -12,12 +12,12 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I am on approval logs page, when I click "Export to Excel", then I download an Excel file
-- [ ] Given I open the file, when I review it, then I see columns: Batch Date, Level, Approver, Action, Timestamp, Reason
-- [ ] Given I filter logs before export, when I export, then only filtered records are included
+- [x] Given I am on approval logs page, when I click "Export to Excel", then I download an Excel file
+- [x] Given I open the file, when I review it, then I see columns: Batch Date, Level, Approver, Action, Timestamp, Reason
+- [x] Given I filter logs before export, when I export, then only filtered records are included
 
 ### Error Handling
-- [ ] Given export fails, when I click Export, then I see "Export failed"
+- [x] Given export fails, when I click Export, then I see "Export failed"
 
 ## Implementation Notes
 - API: GET /v1/monthly-process-logs/approval-logs/export

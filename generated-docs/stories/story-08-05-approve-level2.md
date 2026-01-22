@@ -12,12 +12,12 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I am on Level 2 approval page, when I click Approve, then I see confirmation dialog
-- [ ] Given I confirm, when I approve, then I see "Level 2 approval successful"
-- [ ] Given I approve, when approval completes, then batch status updates to "L2_APPROVED"
+- [x] Given I am on Level 2 approval page, when I click Approve, then I see confirmation dialog
+- [x] Given I confirm, when I approve, then I see "Level 2 approval successful"
+- [x] Given I approve, when approval completes, then batch status updates to "L2_APPROVED"
 
 ### Error Handling
-- [ ] Given the API fails, when I approve, then I see "Approval failed"
+- [x] Given the API fails, when I approve, then I see "Approval failed"
 
 ## Implementation Notes
 - API: POST /v1/approvals/level2/{batchId}/approve

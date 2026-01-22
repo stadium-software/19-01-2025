@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I am on an approval page, when I click "Add Comment", then I see a text field
-- [ ] Given I enter a comment, when I save, then I see "Comment added successfully"
-- [ ] Given I add a comment, when I refresh, then my comment appears in the comments list
+- [x] Given I am on an approval page, when I click "Add Comment", then I see a text field
+- [x] Given I enter a comment, when I save, then I see "Comment added successfully"
+- [x] Given I add a comment, when I refresh, then my comment appears in the comments list
 
 ### Edge Cases
-- [ ] Given I leave comment empty, when I save, then I see "Comment cannot be empty"
+- [x] Given I leave comment empty, when I save, then I see "Comment cannot be empty"
 
 ### Error Handling
-- [ ] Given the API fails, when I save, then I see "Failed to add comment"
+- [x] Given the API fails, when I save, then I see "Failed to add comment"
 
 ## Implementation Notes
 - API: POST /v1/report-comments

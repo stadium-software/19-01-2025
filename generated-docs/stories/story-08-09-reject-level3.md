@@ -12,12 +12,12 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I click Reject, when the dialog opens, then I see Reason text field (required, min 20 chars for L3)
-- [ ] Given I enter reason, when I submit, then I see "Level 3 rejection recorded"
-- [ ] Given I reject, when rejection completes, then batch status changes to "L3_REJECTED"
+- [x] Given I click Reject, when the dialog opens, then I see Reason text field (required, min 20 chars for L3)
+- [x] Given I enter reason, when I submit, then I see "Level 3 rejection recorded"
+- [x] Given I reject, when rejection completes, then batch status changes to "L3_REJECTED"
 
 ### Error Handling
-- [ ] Given reason is too short, when I submit, then I see "Minimum 20 characters required"
+- [x] Given reason is too short, when I submit, then I see "Minimum 20 characters required"
 
 ## Implementation Notes
 - API: POST /v1/approvals/level3/{batchId}/reject

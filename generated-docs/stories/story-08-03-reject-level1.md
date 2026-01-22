@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I am on Level 1 approval page, when I click Reject, then I see a dialog with "Reason" text field (required)
-- [ ] Given I enter a rejection reason, when I submit, then I see "Level 1 rejection recorded"
-- [ ] Given I reject, when rejection completes, then batch status changes to "L1_REJECTED"
+- [x] Given I am on Level 1 approval page, when I click Reject, then I see a dialog with "Reason" text field (required)
+- [x] Given I enter a rejection reason, when I submit, then I see "Level 1 rejection recorded"
+- [x] Given I reject, when rejection completes, then batch status changes to "L1_REJECTED"
 
 ### Edge Cases
-- [ ] Given I leave reason blank, when I submit, then I see "Rejection reason is required"
+- [x] Given I leave reason blank, when I submit, then I see "Rejection reason is required"
 
 ### Error Handling
-- [ ] Given the API fails, when I reject, then I see "Rejection failed. Please try again."
+- [x] Given the API fails, when I reject, then I see "Rejection failed. Please try again."
 
 ## Implementation Notes
 - API: POST /v1/approvals/level1/{batchId}/reject

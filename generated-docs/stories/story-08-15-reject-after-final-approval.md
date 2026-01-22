@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given a batch is fully approved (L3), when I navigate to Reject Final Reports, then I see the batch in the list
-- [ ] Given I select a batch, when I click Reject, then I see Reason dialog (required, min 30 chars)
-- [ ] Given I enter reason and confirm, when I submit, then I see "Batch rejected - returned to preparation"
+- [x] Given a batch is fully approved (L3), when I navigate to Reject Final Reports, then I see the batch in the list
+- [x] Given I select a batch, when I click Reject, then I see Reason dialog (required, min 30 chars)
+- [x] Given I enter reason and confirm, when I submit, then I see "Batch rejected - returned to preparation"
 
 ### Edge Cases
-- [ ] Given reason is too short, when I submit, then I see "Minimum 30 characters required for post-approval rejection"
+- [x] Given reason is too short, when I submit, then I see "Minimum 30 characters required for post-approval rejection"
 
 ### Error Handling
-- [ ] Given the API fails, when I reject, then I see "Rejection failed"
+- [x] Given the API fails, when I reject, then I see "Rejection failed"
 
 ## Implementation Notes
 - API: POST /v1/approvals/reject-final/{batchId}

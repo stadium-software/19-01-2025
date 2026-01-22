@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given Level 2 is approved, when I navigate to Level 3, then I see: Full Report Summary, L1 & L2 Approval Details, Final Checks
-- [ ] Given all checks pass, when I view, then I see Approve and Reject buttons
-- [ ] Given I am a Level 3 approver, when I view, then I see approval controls
+- [x] Given Level 2 is approved, when I navigate to Level 3, then I see: Full Report Summary, L1 & L2 Approval Details, Final Checks
+- [x] Given all checks pass, when I view, then I see Approve and Reject buttons
+- [x] Given I am a Level 3 approver, when I view, then I see approval controls
 
 ### Edge Cases
-- [ ] Given L2 is not approved, when I access L3, then I see "Level 2 approval required first"
+- [x] Given L2 is not approved, when I access L3, then I see "Level 2 approval required first"
 
 ### Error Handling
-- [ ] Given the API fails, when I load, then I see "Failed to load"
+- [x] Given the API fails, when I load, then I see "Failed to load"
 
 ## Implementation Notes
 - API: GET /v1/approvals/level3/{batchId}

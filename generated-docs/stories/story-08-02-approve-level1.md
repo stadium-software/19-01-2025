@@ -12,15 +12,15 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I am on Level 1 approval page, when I click Approve, then I see confirmation dialog "Confirm approval for this batch?"
-- [ ] Given I confirm approval, when I click Yes, then I see "Level 1 approval successful"
-- [ ] Given I approve, when approval completes, then audit log records my username and timestamp
+- [x] Given I am on Level 1 approval page, when I click Approve, then I see confirmation dialog "Confirm approval for this batch?"
+- [x] Given I confirm approval, when I click Yes, then I see "Level 1 approval successful"
+- [x] Given I approve, when approval completes, then audit log records my username and timestamp
 
 ### Edge Cases
-- [ ] Given the batch is already approved at L1, when I view the page, then Approve button is disabled with "Already approved" tooltip
+- [x] Given the batch is already approved at L1, when I view the page, then Approve button is disabled with "Already approved" tooltip
 
 ### Error Handling
-- [ ] Given the API fails, when I approve, then I see "Approval failed. Please try again."
+- [x] Given the API fails, when I approve, then I see "Approval failed. Please try again."
 
 ## Implementation Notes
 - API: POST /v1/approvals/level1/{batchId}/approve

@@ -12,12 +12,12 @@
 ## Acceptance Tests
 
 ### Happy Path
-- [ ] Given I am on Level 3 page, when I click Approve, then I see confirmation "This is final approval. Confirm?"
-- [ ] Given I confirm, when I approve, then I see "Level 3 approval successful - Batch complete"
-- [ ] Given I approve, when approval completes, then batch status updates to "APPROVED_FINAL"
+- [x] Given I am on Level 3 page, when I click Approve, then I see confirmation "This is final approval. Confirm?"
+- [x] Given I confirm, when I approve, then I see "Level 3 approval successful - Batch complete"
+- [x] Given I approve, when approval completes, then batch status updates to "APPROVED_FINAL"
 
 ### Error Handling
-- [ ] Given the API fails, when I approve, then I see "Approval failed"
+- [x] Given the API fails, when I approve, then I see "Approval failed"
 
 ## Implementation Notes
 - API: POST /v1/approvals/level3/{batchId}/approve
